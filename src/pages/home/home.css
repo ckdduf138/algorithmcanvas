@@ -1,3 +1,9 @@
 .home {
     background-color: blue;
 }
+
+.boxes {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
