@@ -1,18 +1,26 @@
-import React from 'react'
-import Header from './header'
-import Main from './main'
-import Footer from './footer'
+import React, { Component } from 'react';
+import Header from './header';
+import Main from './main';
+import Footer from './footer';
 
-export default function Layout(props: {
-    children: React.ReactNode
-}) {
-    return (
-        <div>
-            <Header />
-            <Main>
-                {props.children}
-            </Main>
-            <Footer />
-        </div>
-    )
+interface LayoutProps {
+    children: React.ReactNode;
 }
+
+class Layout extends Component<LayoutProps> {
+    render() {
+        const { children } = this.props;
+
+        return (
+            <div>
+                <Header />
+                <Main>
+                    {children}
+                </Main>
+                <Footer />
+            </div>
+        );
+    }
+}
+
+export default Layout;

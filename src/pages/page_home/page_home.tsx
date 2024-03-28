@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Box from '../../components/home/box';
-import './home.css';
+import './page_home.css';
+import Layout from '../../components/layout/layout';
 
 const boxes = [
     {
         title: "BFS",
         imgSrc: "/images/bfs.jpg",
-        tags: ['태그1', '태그2', '태그3'],
+        tags: ['bfs', '그래프탐색'],
         link: "/bfs"
     },
     {
@@ -18,7 +19,7 @@ const boxes = [
     {
         title: "BFS",
         imgSrc: "/images/bfs.jpg",
-        tags: ['태그1', '태그2', '태그3'],
+        tags: ['태그1', '태그2', '태그3', '태그4', '태그5', '태그6'],
         link: "/bfs"
     },
     {
@@ -63,21 +64,28 @@ const boxes = [
         tags: ['태그1', '태그2', '태그3'],
         link: "/bfs"
     },
-    // 추가적으로 필요한 박스 정보를 배열에 추가하세요
 ];
 
-export default function Home() {
-    return (
-        <div className='home'>
-            {boxes.map((box, index) => (
-                <Box
-                    key={index}
-                    title={box.title}
-                    imgSrc={box.imgSrc}
-                    tags={box.tags}
-                    link={box.link}
-                />
-            ))}
-        </div>
-    );
+class Home extends Component {
+    render() {
+        return (
+            <Layout>
+                <div className='page_home'>
+                    <div className='boxes'>
+                        {boxes.map((box, index) => (
+                            <Box
+                                key={index}
+                                title={box.title}
+                                imgSrc={box.imgSrc}
+                                tags={box.tags}
+                                link={box.link}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </Layout>
+        );
+    }
 }
+
+export default Home;

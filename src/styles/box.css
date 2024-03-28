@@ -22,13 +22,20 @@
 }
 
 .box_tagParent {
-    margin: 3%;
+    display: flex;
+    margin: 2%;
+    height: 27px;
+    overflow: hidden;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .box_tag {
     font-size: 18px;
-    background-color: aqua;
+    background-color: #F0F1F2;
+    color: #666;
     border-radius: 30%;
-    margin: 2%;
-    padding: 1%;
+    padding: 2px 5px 0;
 }
