@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Box from '../../components/home/box';
-import './home.css';
+import './page_home.css';
+import Layout from '../../components/layout/layout';
 
 const boxes = [
     {
@@ -65,20 +66,26 @@ const boxes = [
     },
 ];
 
-export default function Home() {
-    return (
-        <div className='home'>
-            <div className='boxes'>
-                {boxes.map((box, index) => (
-                    <Box
-                        key={index}
-                        title={box.title}
-                        imgSrc={box.imgSrc}
-                        tags={box.tags}
-                        link={box.link}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+class Home extends Component {
+    render() {
+        return (
+            <Layout>
+                <div className='page_home'>
+                    <div className='boxes'>
+                        {boxes.map((box, index) => (
+                            <Box
+                                key={index}
+                                title={box.title}
+                                imgSrc={box.imgSrc}
+                                tags={box.tags}
+                                link={box.link}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </Layout>
+        );
+    }
 }
+
+export default Home;

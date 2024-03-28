@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 import '../../styles/main.css';
 
-export default function Main(props: {
-    children: React.ReactNode
-}) {
-    return (
-        <div className='main'>
-            {props.children}
-        </div>
-    )
+interface MainProps {
+    children: React.ReactNode;
 }
+
+class Main extends Component<MainProps> {
+    render() {
+        const { children } = this.props;
+
+        return (
+            <div className='main'>
+                {children}
+            </div>
+        );
+    }
+}
+
+export default Main;
