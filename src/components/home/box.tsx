@@ -6,7 +6,6 @@ interface BoxProps {
     imgSrc: string;
     tags: string[];
     link: string;
-    children?: React.ReactNode; // children 속성 추가
 }
 
 class Box extends Component<BoxProps> {
@@ -20,7 +19,7 @@ class Box extends Component<BoxProps> {
         return (
             <div className='box_main' onClick={this.handleClick}>
                 <div className='box_title'>{title}</div>
-                <img className='box_image' src={imgSrc} />
+                <img className='box_image' src={imgSrc} alt="box_image" />
                 <div className='box_tagParent'>
                     {tags.map((tag, index) => (
                         <span className='box_tag' key={index}>{tag}</span>

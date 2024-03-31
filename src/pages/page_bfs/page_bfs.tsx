@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import './page_bfs.css';
+import Layout from '../../components/layout/layout';
 
 class Page_Bfs extends Component {
     render() {
         return (
             <div className='page_bfs'>
-                bfs 페이지
+                <Layout>
+                    <div>bfs 메인</div>
+                </Layout>
             </div>
         );
     }
