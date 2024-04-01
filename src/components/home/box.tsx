@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../styles/box.css';
+import '../../styles/home/box.css';
 
 interface BoxProps {
     title: string;
@@ -9,7 +9,7 @@ interface BoxProps {
 }
 
 class Box extends Component<BoxProps> {
-    handleClick = () => {
+    box_onClicked = () => {
         window.location.href = this.props.link;
     };
 
@@ -17,7 +17,7 @@ class Box extends Component<BoxProps> {
         const { title, imgSrc, tags } = this.props;
 
         return (
-            <div className='box_main' onClick={this.handleClick}>
+            <div className='box_main' onClick={this.box_onClicked}>
                 <div className='box_title'>{title}</div>
                 <img className='box_image' src={imgSrc} alt="box_image" />
                 <div className='box_tagParent'>

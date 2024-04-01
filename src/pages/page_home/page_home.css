@@ -1,8 +1,15 @@
 .page_home {
-    background-color: blue;
+    background-color: #15202b;
 }
 
-.boxes {
+.home_search {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.home_boxes {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

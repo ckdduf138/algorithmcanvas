@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Box from '../../components/home/box';
 import './page_home.css';
 import Layout from '../../components/layout/layout';
+import Search from '../../components/home/search';
 
 const boxes = [
     {
@@ -67,11 +68,19 @@ const boxes = [
 ];
 
 class Home extends Component {
+
+    home_onSearch = (query: string) => {
+        console.log('검색어:', query);
+    };
+
     render() {
         return (
             <Layout>
                 <div className='page_home'>
-                    <div className='boxes'>
+                    <div className='home_search'>
+                        <Search onSearch={this.home_onSearch} />
+                    </div>
+                    <div className='home_boxes'>
                         {boxes.map((box, index) => (
                             <Box
                                 key={index}
