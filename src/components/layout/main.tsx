@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../styles/main.css';
+import '../../styles/layout/main.css';
 
 interface MainProps {
     children: React.ReactNode;
