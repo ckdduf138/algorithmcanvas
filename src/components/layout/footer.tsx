@@ -1,13 +1,17 @@
-import '../../styles/footer.css';
+import React, { Component } from 'react';
+import '../../styles/layout/footer.css';
 
-const Footer = () => {
-    return (
-        <footer className='footer'>
-            <div>
-                footer
-            </div>
-        </footer>
-    )
+class Footer extends Component {
+    render() {
+        return (
+            <footer className='footer'>
+                <div className='footer_text'>
+                    <div>Algo-Canvas</div>
+                    <div>© 2024 - 2024</div>
+                </div>
+            </footer>
+        );
+    }
 }
 
-export default Footer
+export default Footer;

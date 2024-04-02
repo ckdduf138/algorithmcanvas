@@ -1,11 +1,19 @@
-import '../../styles/header.css';
+import React, { Component } from 'react';
+import '../../styles/layout/header.css';
 
-const Header = () => {
-    return (
-        <header className='header'>
-            <div className='title'>header 영역</div>
-        </header>
-    )
+class Header extends Component {
+
+    header_onClicked = () => {
+        window.location.href = "./";
+    };
+
+    render() {
+        return (
+            <header className='header'>
+                <div className='head_title' onClick={this.header_onClicked}>Algo-Canvas</div>
+            </header>
+        );
+    }
 }
 
-export default Header
+export default Header;

@@ -1,13 +1,20 @@
-import '../../styles/main.css';
+import React, { Component } from 'react';
+import '../../styles/layout/main.css';
 
-const Main = (props: {
-    children: React.ReactNode
-}) => {
-    return (
-        <div className='main'>
-            {props.children}
-        </div>
-    )
+interface MainProps {
+    children: React.ReactNode;
 }
 
-export default Main
+class Main extends Component<MainProps> {
+    render() {
+        const { children } = this.props;
+
+        return (
+            <div className='main'>
+                {children}
+            </div>
+        );
+    }
+}
+
+export default Main;
