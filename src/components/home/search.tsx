@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../../styles/home/search.css'
 
 interface SearchProps {
     onSearch: (query: string) => void;
@@ -32,16 +33,16 @@ class Search extends Component<SearchProps, SearchState> {
 
     render() {
         return (
-            <div>
-                <input
+            <>
+                <input className='search_bar'
                     type="text"
                     placeholder="검색어를 입력하세요..."
                     value={this.state.query}
                     onChange={this.handleInputChange}
                     onKeyPress={this.handleKeyPress}
                 />
-                <button onClick={this.handleSearch}>검색</button>
-            </div>
+                <button className='search_btn' onClick={this.handleSearch}>검색</button>
+            </>
         );
     }
 }
