@@ -4,9 +4,8 @@
 
 .home_search {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 20px;
+    justify-content: center;
+    padding: 10px;
 }
 
 .home_boxes {
