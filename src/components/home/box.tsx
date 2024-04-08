@@ -16,6 +16,7 @@ class Box extends Component<BoxProps> {
     render() {
         const { title, imgSrc, tags } = this.props;
 
+        console.log(this.props)
         return (
             <div className='box_main' onClick={this.box_onClicked}>
                 <div className='box_title'>{title}</div>
