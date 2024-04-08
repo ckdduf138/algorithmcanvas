@@ -7,63 +7,63 @@ import Search from '../../components/home/search';
 const boxes = [
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['bfs', '그래프탐색'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "DFS",
-        imgSrc: "/images/dfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
         tags: ['태그1'],
-        link: "/dfs"
+        link: `${process.env.PUBLIC_URL}/dfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3', '태그4', '태그5', '태그6'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
     {
         title: "BFS",
-        imgSrc: "/images/bfs.jpg",
+        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
         tags: ['태그1', '태그2', '태그3'],
-        link: "/bfs"
+        link: `${process.env.PUBLIC_URL}/bfs`
     },
 ];
 
