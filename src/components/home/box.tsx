@@ -1,5 +1,49 @@
 import React, { Component } from 'react';
-import '../../styles/home/box.css';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+const MainBox = styled.div`
+    background: #fff;
+    border-radius: 10%;
+    display: inline-block;
+    height: 300px;
+    width: 300px;
+    margin: 30px;
+    position: relative;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+    text-align: center;
+    cursor: pointer;
+`;
+
+const BoxTitle = styled.div`
+    font-size: 30px;
+    border: 10%;
+`;
+
+const BoxImage = styled.img`
+    width: 70%;
+    height: 70%;
+    border-radius: 10%;
+`;
+
+const TagParent = styled.div`
+    display: flex;
+    margin: 2%;
+    height: 27px;
+    overflow: hidden;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Tag = styled.span`
+    font-size: 18px;
+    background-color: #F0F1F2;
+    color: #666;
+    border-radius: 30%;
+    padding: 2px 5px 0;
+`;
 
 interface BoxProps {
     title: string;
@@ -8,27 +52,24 @@ interface BoxProps {
     link: string;
 }
 
-class Box extends Component<BoxProps> {
-    box_onClicked = () => {
-        window.location.href = this.props.link;
+const Box: React.FC<BoxProps> = ({ title, imgSrc, tags, link }) => {
+    const navigate = useNavigate();
+
+    const box_onClicked = () => {
+        navigate(link);
     };
 
-    render() {
-        const { title, imgSrc, tags } = this.props;
-
-        console.log(this.props)
-        return (
-            <div className='box_main' onClick={this.box_onClicked}>
-                <div className='box_title'>{title}</div>
-                <img className='box_image' src={imgSrc} alt="box_image" />
-                <div className='box_tagParent'>
-                    {tags.map((tag, index) => (
-                        <span className='box_tag' key={index}>{tag}</span>
-                    ))}
-                </div>
-            </div>
-        );
-    }
-}
+    return (
+        <MainBox onClick={box_onClicked}>
+            <BoxTitle>{title}</BoxTitle>
+            <BoxImage src={imgSrc} alt="box_image" />
+            <TagParent>
+                {tags.map((tag, index) => (
+                    <Tag key={index}>{tag}</Tag>
+                ))}
+            </TagParent>
+        </MainBox>
+    );
+};
 
 export default Box;
