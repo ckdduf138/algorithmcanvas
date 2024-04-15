@@ -1,50 +1,51 @@
-import React, { Component } from 'react';
-import '../../styles/home/search.css'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+
+const SearchBar = styled.input`
+    width: 400px;
+    height: 40px;
+    border-radius: 5px;
+`;
+
+const SearchButton = styled.button`
+    width: 80px;
+    border-radius: 10%;
+    cursor: pointer;
+`;
 
 interface SearchProps {
     onSearch: (query: string) => void;
 }
 
-interface SearchState {
-    query: string;
-}
+const Search: React.FC<SearchProps> = ({ onSearch }) => {
+    const [query, setQuery] = useState<string>('');
 
-class Search extends Component<SearchProps, SearchState> {
-    constructor(props: SearchProps) {
-        super(props);
-        this.state = {
-            query: '',
-        };
-    }
-
-    handleSearch = () => {
-        this.props.onSearch(this.state.query);
+    const handleSearch = () => {
+        onSearch(query);
     };
 
-    handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ query: event.target.value });
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(event.target.value);
     };
 
-    handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            this.handleSearch();
+            handleSearch();
         }
     };
 
-    render() {
-        return (
-            <>
-                <input className='search_bar'
-                    type="text"
-                    placeholder="검색어를 입력하세요..."
-                    value={this.state.query}
-                    onChange={this.handleInputChange}
-                    onKeyPress={this.handleKeyPress}
-                />
-                <button className='search_btn' onClick={this.handleSearch}>검색</button>
-            </>
-        );
-    }
-}
+    return (
+        <>
+            <SearchBar
+                type="text"
+                placeholder="검색어를 입력하세요..."
+                value={query}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPress}
+            />
+            <SearchButton onClick={handleSearch}>검색</SearchButton>
+        </>
+    );
+};
 
 export default Search;

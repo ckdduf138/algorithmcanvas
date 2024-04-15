@@ -1,19 +1,37 @@
-import React, { Component } from 'react';
-import '../../styles/layout/header.css';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-class Header extends Component {
+const StyledHeader = styled.header`
+    background-color: #15202b;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Raleway', cursive;
+    position: relative;
+`;
 
-    header_onClicked = () => {
-        window.location.href = "./";
+const HeadTitle = styled.div`
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    letter-spacing: 30px;
+    color: white;
+    cursor: pointer;
+`;
+
+const Header: React.FC = () => {
+
+    const navigate = useNavigate();
+
+    const header_onClicked = () => {
+        navigate('/');
     };
 
-    render() {
-        return (
-            <header className='header'>
-                <div className='head_title' onClick={this.header_onClicked}>Algo-Canvas</div>
-            </header>
-        );
-    }
-}
+    return (
+        <StyledHeader>
+            <HeadTitle onClick={header_onClicked}>Algo-Canvas</HeadTitle>
+        </StyledHeader>
+    );
+};
 
 export default Header;

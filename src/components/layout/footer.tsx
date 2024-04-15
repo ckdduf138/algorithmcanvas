@@ -1,17 +1,26 @@
-import React, { Component } from 'react';
-import '../../styles/layout/footer.css';
+import React from 'react';
+import styled from 'styled-components';
 
-class Footer extends Component {
-    render() {
-        return (
-            <footer className='footer'>
-                <div className='footer_text'>
-                    <div>Algo-Canvas</div>
-                    <div>© 2024 - 2024</div>
-                </div>
-            </footer>
-        );
-    }
-}
+const StyledFooter = styled.footer`
+    background-color: #0b131b;
+    height: 100px;
+`;
+
+const FooterText = styled.div`
+    padding: 10px;
+    color: #b8bcbf;
+    text-align: center;
+`;
+
+const Footer: React.FC = () => {
+    return (
+        <StyledFooter>
+            <FooterText>
+                <div>Algo-Canvas</div>
+                <div>© 2024 - 2024</div>
+            </FooterText>
+        </StyledFooter>
+    );
+};
 
 export default Footer;
