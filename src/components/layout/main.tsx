@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
-import '../../styles/layout/main.css';
+import React from 'react';
+import styled from 'styled-components';
 
 interface MainProps {
     children: React.ReactNode;
 }
 
-class Main extends Component<MainProps> {
-    render() {
-        const { children } = this.props;
+const StyleMain = styled.div`
+    width:100%;
+    height:80%;
+    background-color: #15202b;
+`
 
-        return (
-            <div className='main'>
-                {children}
-            </div>
-        );
-    }
-}
+const Main: React.FC<MainProps> = ({ children }) => {
+    return (
+        <StyleMain>
+            {children}
+        </StyleMain>
+    );
+};
 
 export default Main;
