@@ -1,0 +1,39 @@
+// Node.tsx
+import React from 'react';
+import styled from 'styled-components';
+import Draggable from 'react-draggable';
+
+const StyledNode = styled.div`
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    position: absolute;
+    cursor: move;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3), 0px 3px 6px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+`
+
+interface NodeProps {
+    position: { x: number, y: number };
+}
+
+const Node: React.FC<NodeProps> = ({ position }) => {
+    const handleDrag = (e: any, data: any) => {
+        console.log("Node dragged to:", { x: data.x, y: data.y });
+    };
+
+    return (
+        <Draggable
+            defaultPosition={position}
+            onStop={handleDrag}
+        >
+            <StyledNode />
+        </Draggable>
+    );
+};
+
+export default Node;

@@ -9,13 +9,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <div>
+        <>
             <Header />
             <Main>
                 {children}
             </Main>
             <Footer />
-        </div>
+        </>
     );
 };
 

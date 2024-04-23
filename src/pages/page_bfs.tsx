@@ -1,13 +1,12 @@
 import React from 'react';
 import Layout from '../components/layout/layout';
+import Bfs_canvas from '../components/algorithm/bfs';
 
 const Page_Bfs = () => {
     return (
-        <div className='page_bfs'>
-            <Layout>
-                <div>bfs 메인</div>
-            </Layout>
-        </div>
+        <Layout>
+            <Bfs_canvas />
+        </Layout>
     );
 };
 

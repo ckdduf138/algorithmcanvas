@@ -3,7 +3,9 @@ import styled from 'styled-components';
 
 const StyledFooter = styled.footer`
     background-color: #0b131b;
-    height: 100px;
+
+    width:100%;
+    height: 10%;
 `;
 
 const FooterText = styled.div`

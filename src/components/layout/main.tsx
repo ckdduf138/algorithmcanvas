@@ -1,14 +1,21 @@
 import React from 'react';
+import styled from 'styled-components';
 
 interface MainProps {
     children: React.ReactNode;
 }
 
+const StyleMain = styled.div`
+    width:100%;
+    height:80%;
+    background-color: #15202b;
+`
+
 const Main: React.FC<MainProps> = ({ children }) => {
     return (
-        <div className='main'>
+        <StyleMain>
             {children}
-        </div>
+        </StyleMain>
     );
 };
 
