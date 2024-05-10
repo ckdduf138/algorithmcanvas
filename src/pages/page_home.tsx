@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import Box from '../components/home/box';
@@ -19,8 +19,15 @@ const HomeBoxes = styled.div`
 `;
 
 const Home = () => {
+    const [filteredBoxes, setFilteredBoxes] = useState(boxes);
+    
     const home_onSearch = (query: string) => {
-        console.log('검색어:', query);
+        if (query.trim() === '') {
+            setFilteredBoxes(boxes);
+        } else {
+            const filtered = boxes.filter(box => box.tags.includes(query));
+            setFilteredBoxes(filtered);
+        }
     };
 
     return (
@@ -29,7 +36,7 @@ const Home = () => {
                 <Search onSearch={home_onSearch} />
             </HomeSearch>
             <HomeBoxes>
-                {boxes.map((box, index) => (
+                {filteredBoxes.map((box, index) => (
                     <Box
                         key={index}
                         title={box.title}
