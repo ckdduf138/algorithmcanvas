@@ -3,9 +3,11 @@ import React from 'react';
 import styled from 'styled-components';
 import Draggable from 'react-draggable';
 
+export const node_size = 100;
+
 const StyledNode = styled.div`
-    width: 100px;
-    height: 100px;
+    width: ${node_size}px;
+    height: ${node_size}px;
     border-radius: 50%;
     background-color: #ffffff;
     position: absolute;

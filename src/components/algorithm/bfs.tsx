@@ -1,10 +1,10 @@
 import React from 'react';
-import Canvas from '../canvas/canvas';
+import GraphCanvas from '../common/graph_canvas';
 
-const Bfs_canvas = () => {
+const Bfs_Canvas = () => {
     return (
-        <Canvas />
+        <GraphCanvas />
     )
 }
 
-export default Bfs_canvas
+export default Bfs_Canvas

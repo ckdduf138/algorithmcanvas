@@ -1,7 +1,7 @@
 // Canvas.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Node from './node';
+import Node, { node_size } from './node';
 
 const StyleCanvasMain = styled.div`
     width: 100%;
@@ -26,7 +26,7 @@ const ToolButton = styled.button`
     cursor: pointer;
 `
 
-const Canvas = () => {
+const GraphCanvas = () => {
     const [nodes, setNodes] = useState<any[]>([]);
 
     const addNode = (position: { x: number, y: number }) => {
@@ -35,8 +35,8 @@ const Canvas = () => {
 
     const handleToolClick = () => {
         // 도구 클릭 시, 중앙에 노드 추가
-        const canvasCenterX = window.innerWidth / 2;
-        const canvasCenterY = window.innerHeight * 0.85 / 2;
+        const canvasCenterX = (window.innerWidth / 2) - (node_size / 2);
+        const canvasCenterY = (window.innerHeight / 2) - (node_size / 2);
         addNode({ x: canvasCenterX, y: canvasCenterY });
     };
 
@@ -55,4 +55,4 @@ const Canvas = () => {
     );
 };
 
-export default Canvas;
+export default GraphCanvas;

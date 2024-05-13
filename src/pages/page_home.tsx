@@ -10,12 +10,17 @@ const HomeSearch = styled.div`
     display: flex;
     justify-content: center;
     padding: 10px;
+    top: 12.5%;
+    position: absolute;
 `;
 
 const HomeBoxes = styled.div`
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    top: 20%;
+    position: absolute;
+    width:100%;
 `;
 
 const Home = () => {
