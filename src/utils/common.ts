@@ -5,3 +5,7 @@ export const getRandomColor = (): string => {
   const b = Math.floor(Math.random() * 256);
   return `rgb(${r}, ${g}, ${b})`;
 };
+
+export const getLogScale = (value: number) => {
+    return Math.log10(value + 2);
+};

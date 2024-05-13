@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import BarCanvas from '../common/bar_canvas';
 import { useWindowSize } from '../../hooks/getWindowSize';
+import InputForm from '../common/bar_input';
 
 const StyleCanvasMain = styled.div`
     width: 100%;
@@ -17,68 +18,44 @@ const StyleCanvasUI = styled.div`
     
     display: flex;
     align-items: center;
-    flex-direction: column;
+    justify-content: center;
+
+    gap: 1%;
 `
 
-const InputBox = styled.input`
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-`;
-
-const Button = styled.button`
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &:hover {
-        background-color: #0056b3;
-    }
-`;
-
-interface InputFormProps {
-    handleSubmit: (inputValue: string) => void;
-}
-
-const InputForm: React.FC<InputFormProps> = ({ handleSubmit }) => {
-
-    const [inputValue, setInputValue] = useState<string>('');
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value);
-    };
-
-    const handleFormSubmit = () => {
-        handleSubmit(inputValue);
-    };
-
-    return (
-        <>
-            <InputBox
-                type="text"
-                placeholder="Enter something..."
-                value={inputValue}
-                onChange={handleInputChange}
-            />
-            <Button onClick={handleFormSubmit}>Add</Button>
-        </>
-    );
-};
-
 const Selection_Sort_Canvas: React.FC = () => {
-    const { width, height } = useWindowSize();
+    const {width, height} = useWindowSize();
     const [data, setData] = useState<number[]>([]);
+    const [delay, setDelay] = useState<number>(1000);
     
-    const handleSubmit = (inputValue: string) => {
+    const handleAdd = (inputValue: string) => {
         const newData = [...data, parseInt(inputValue)];
         setData(newData);
+    };
+
+    const handleReset = () => {
+        setData([]);
+    };
+
+    const handleStart = async () => {
+        for (let i = 0; i < data.length - 1; i++) {
+            let minIndex = i;
+
+            for (let j = i + 1; j < data.length; j++) {
+                if (data[j] < data[minIndex]) {
+                minIndex = j;
+                }
+            }
+
+            if (minIndex !== i) {
+                const temp = data[i];
+                data[i] = data[minIndex];
+                data[minIndex] = temp;
+
+                await new Promise(resolve => setTimeout(resolve, delay));
+                setData([...data]);
+            }
+        }
     };
 
     return (
@@ -87,7 +64,7 @@ const Selection_Sort_Canvas: React.FC = () => {
                 <BarCanvas data={data} width={width * 0.8} height={height * 0.7} />
             </StyleCanvasMain>
             <StyleCanvasUI>
-                <InputForm handleSubmit={handleSubmit} />
+                <InputForm handleAdd={handleAdd} handleReset={handleReset} handleStart={handleStart} />
             </StyleCanvasUI>
         </>
     );
