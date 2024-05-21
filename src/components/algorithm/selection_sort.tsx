@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import BarCanvas from '../barCanvas/barCanvas';
 import { useWindowSize } from '../../hooks/getWindowSize';
-import InputForm from '../common/bar_input';
+import InputForm from '../barCanvas/barInput';
 import { BarGraphData } from '../../utils/Data';
 
 const StyleCanvasMain = styled.div`
