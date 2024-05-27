@@ -1,13 +1,16 @@
 
 import React from 'react';
 import { AxisBottom } from '@visx/axis';
+import { useTheme } from '../../context/themeContext';
 
 type AxisComponentProps = {
   xScale: any;
   yMax: number;
 };
 
-const AxisComponent: React.FC<AxisComponentProps> = ({ xScale, yMax }) => {
+const BarCanvasBottom: React.FC<AxisComponentProps> = ({ xScale, yMax }) => {
+  const { theme } = useTheme();
+
   return (
     <AxisBottom
       top={yMax + 70}
@@ -18,7 +21,7 @@ const AxisComponent: React.FC<AxisComponentProps> = ({ xScale, yMax }) => {
       hideTicks
       tickFormat={(index) => `[${index}]`}
       tickLabelProps={() => ({
-        fill: '#ffffff',
+        fill: theme === 'light' ? '#15202b' : '#ffffff',
         fontSize: '30px',
         textAnchor: 'middle',
       })}
@@ -26,4 +29,4 @@ const AxisComponent: React.FC<AxisComponentProps> = ({ xScale, yMax }) => {
   );
 };
 
-export default AxisComponent;
+export default BarCanvasBottom;

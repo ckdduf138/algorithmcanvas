@@ -6,7 +6,7 @@ interface MainProps {
     children: React.ReactNode;
 }
 
-const StyleMain = styled.div<{ theme: string }>` // themeType props 추가
+const StyleMain = styled.div<{ theme: string }>`
     width: 100%;
     height: 80%;
     background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#ffffff' : '#15202b')};
