@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import Button from "../common/buttons";
 import RadioButton from "../common/radioButton";
 
 const InputBox = styled.input`
     display: flex;
-    width: 40%;
+    width: 10%;
     height: 10%;
     padding: 1%;
     border: 1px solid #ccc;
@@ -31,6 +30,7 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
     const [isValidBtnReset, setIsValidBtnReset] = useState<boolean>(false);
     const [isAscending, setIsAscending] = useState<boolean>(false);
+    const [delay, setDelay] = useState<number>(1000); // Default delay set to 1000 ms
 
     useEffect(() => {
         setIsValidBtnReset(dataLength > 0);
@@ -65,9 +65,13 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     };
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter' && inputValue) {
+        if (event.key === 'Enter' && isValidBtnAdd) {
             onclickBtnAdd();
         }
+    };
+
+    const handleDelayChange = (value: number) => {
+        setDelay(value);
     };
 
     return (

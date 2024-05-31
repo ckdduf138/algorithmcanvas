@@ -4,7 +4,7 @@ import { useTheme } from '../../context/themeContext';
 import Text from '../common/text';
 
 const StyledFooter = styled.footer<{ theme: string }>`
-    background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#ffffff' : '#0b131b')};
+    background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#f7f8f9' : '#0b131b')};
     width: 100%;
     height: 10%;
 `;

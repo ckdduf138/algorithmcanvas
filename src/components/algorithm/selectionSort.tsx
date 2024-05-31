@@ -5,14 +5,14 @@ import BarCanvasUI from '../barCanvas/barCanvas.UI';
 import BarCanvas from '../barCanvas/barCanvas';
 import { useWindowSize } from '../../hooks/getWindowSize';
 import { BarGraphData } from '../../utils/Data';
+import { useTheme } from '../../context/themeContext';
 
 const StyleCanvasMain = styled.div`
     width: 100%;
-    height: 85%;
 
     display: flex;
     justify-content: center;
-`
+`;
 
 const StyleCanvasUI = styled.div`
     width: 100%;
@@ -23,14 +23,31 @@ const StyleCanvasUI = styled.div`
     justify-content: center;
 
     gap: 1%;
-`
+    position: relative; /* 추가 */
+`;
+
+const Overlay = styled.div<{ isVisible: boolean, theme: string }>`
+    display: ${props => (props.isVisible ? "flex" : "none")};
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: ${({ theme: themeType }) => (themeType === 'light' ? 'rgba(11, 19, 27, 0.5)' : 'rgba(247, 248, 249, 0.5)')};
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+`;
 
 const SelectionSortCanvas: React.FC = () => {
+    const { theme } = useTheme();
+
     const { width, height } = useWindowSize();
     
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [delay, setDelay] = useState<number>(500);
+    const [isBlocking, setIsBlocking] = useState<boolean>(false);
     
     const handleAdd = (inputValue: string) => {
         const newValue: BarGraphData = {
@@ -39,7 +56,7 @@ const SelectionSortCanvas: React.FC = () => {
         };
         
         const newData = [...barGraphData, newValue];
-         setBarGraphData(newData);
+        setBarGraphData(newData);
     };
 
     const handleReset = () => {
@@ -47,13 +64,18 @@ const SelectionSortCanvas: React.FC = () => {
     };
 
     const handleStart = async () => {
+        setIsBlocking(true);
+        
         const dataLength = barGraphData.length;
 
+        barGraphData.forEach(data => {
+            data.focus = 'inactive';
+        });
+        
         for (let i = 0; i < dataLength; i++) {
             let index = i;
 
-            if (barGraphData[i].focus !== 'completed') 
-            {
+            if (barGraphData[i].focus !== 'completed') {
                 barGraphData[i].focus = 'active';
                 setBarGraphData([...barGraphData]);
             }
@@ -85,8 +107,9 @@ const SelectionSortCanvas: React.FC = () => {
             
             await new Promise(resolve => setTimeout(resolve, delay));
         }
-    };
 
+        setIsBlocking(false);
+    };
 
     return (
         <>
@@ -95,6 +118,8 @@ const SelectionSortCanvas: React.FC = () => {
             </StyleCanvasMain>
             <StyleCanvasUI>
                 <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} />
+                <Overlay isVisible={isBlocking} theme={theme}>
+                </Overlay>
             </StyleCanvasUI>
         </>
     );
