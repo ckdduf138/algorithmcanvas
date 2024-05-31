@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BoxProps } from '../../utils/box';
@@ -7,16 +7,13 @@ const MainBox = styled.div`
     background: #fff;
     border-radius: 10%;
     display: inline-block;
-    height: 30%;
-    width: 30%;
-    margin: 30px;
+    width: 270px;
+    height: 270px;
+    margin: 20px;
     position: relative;
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
     text-align: center;
     cursor: pointer;
-
-    max-width: 280px;
-    max-height: 280px;
 `;
 
 const BoxTitle = styled.div`
