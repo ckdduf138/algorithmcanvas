@@ -1,16 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../context/themeContext';
+import Text from '../common/text';
 
 const StyledFooter = styled.footer<{ theme: string }>`
-    background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#ffffff' : '#0b131b')};
+    background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#f7f8f9' : '#0b131b')};
     width: 100%;
     height: 10%;
 `;
 
-const FooterText = styled.div<{ theme: string }>`
+const FooterText = styled.div`
     padding: 10px;
-    color: ${({ theme: themeType }) => (themeType === 'light' ? '#8A8F95' : '#b8bcbf')};
+    display: flex;
+    flex-direction: column;
     text-align: center;
 `;
 
@@ -19,9 +21,9 @@ const Footer: React.FC = () => {
 
     return (
         <StyledFooter theme={theme}>
-            <FooterText theme={theme}>
-                <div>Algo-Canvas</div>
-                <div>© 2024 - 2024</div>
+            <FooterText>
+                <Text theme={theme}>Algo-Canvas</Text>
+                <Text theme={theme}>© 2024 - 2024</Text>
             </FooterText>
         </StyledFooter>
     );

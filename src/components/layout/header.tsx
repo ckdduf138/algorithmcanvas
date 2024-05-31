@@ -19,8 +19,6 @@ const StyledHeader = styled.header<{ theme: string }>`
 `;
 
 const HeadTitle = styled.div`
-    padding: 20px;
-    text-decoration: none;
     letter-spacing: 30px;
     cursor: pointer;
     font-size: 30px;
@@ -28,8 +26,7 @@ const HeadTitle = styled.div`
 
 const ToggleContainer = styled.div`
     position: absolute;
-    top: 20px;
-    right: 20px;
+    right: 2%;
     display: flex;
     align-items: center;
 `;

@@ -3,8 +3,8 @@ import { Group } from '@visx/group';
 import { GradientTealBlue } from '@visx/gradient';
 import { scaleBand, scaleLinear } from '@visx/scale';
 
-import BarComponent from './barComponent';
-import AxisComponent from './AxisxComponent';
+import BarCanvasMain from './barCanvas.Main';
+import BarCanvasBottom from './barCanvas.Bottom';
 
 import { getLogScale } from '../../utils/common';
 import { BarGraphData } from '../../utils/Data';
@@ -57,7 +57,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ width, height, barGraphData, even
       <GradientTealBlue id='barCanvas' />
       <rect width={width} height={height} fill="none"/>
       <Group top={verticalMargin / 2}>
-        <BarComponent
+        <BarCanvasMain
           data={data}
           prevData={prevData}
           transformedData={transformedData}
@@ -67,7 +67,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ width, height, barGraphData, even
           events={events}
         />
       </Group>
-      <AxisComponent xScale={xScale} yMax={yMax} />
+      <BarCanvasBottom xScale={xScale} yMax={yMax} />
     </svg>
   );
 };
