@@ -36,7 +36,7 @@ const HomePagination = styled.div`
 
 const Home = () => {
     const itemsPerPage = 8; // Default items per page
-    const { currentPage, totalPages, nextPage, prevPage, currentItems, setCurrentPage } = usePagination(boxes.length, itemsPerPage); // setCurrentPage 추가
+    const { currentPage, totalPages, currentItems, setCurrentPage } = usePagination(boxes.length, itemsPerPage); // setCurrentPage 추가
 
     const home_onSearch = (query: string) => {
         console.log('검색어:', query);
@@ -68,9 +68,7 @@ const Home = () => {
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    goToPage={goToPage} // goToPage 함수를 Pagination 컴포넌트에 전달
+                    goToPage={goToPage}
                 />
             </HomePagination>
         </Layout>

@@ -8,14 +8,13 @@ const usePagination = (totalItems: number, itemsPerPage: number) => {
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
-            const height = window.innerHeight;
-            const boxWidth = 300;
-            const boxHeight = 280; 
+            const height = 620;
+            const boxWidth = 270;
+            const boxHeight = 270; 
             const boxMargin = 20;
 
-            // 페이지당 표시할 아이템의 수 계산
-            let newItemsPerRow = Math.floor((width - boxMargin) / (boxWidth + boxMargin));
-            let newRowsPerPage = Math.floor((height - boxMargin) / (boxHeight + boxMargin));
+            let newItemsPerRow = Math.floor(width / (boxWidth + 2 * boxMargin));
+            let newRowsPerPage = Math.floor(height / (boxHeight + 2 * boxMargin));
             let newItemsPerPage = newItemsPerRow * newRowsPerPage;
 
             if (newItemsPerPage < 1) {
@@ -26,8 +25,8 @@ const usePagination = (totalItems: number, itemsPerPage: number) => {
         };
 
         window.addEventListener('resize', handleResize);
-        handleResize(); // Call initially to set the correct value
-
+        handleResize();
+        
         return () => {
             window.removeEventListener('resize', handleResize);
         };

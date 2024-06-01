@@ -14,6 +14,8 @@ const StyleMain = styled.div<{ theme: string }>`
     display: flex;
     align-items: center;
     flex-direction: column;
+
+    min-hieh
 `;
 
 const Main: React.FC<MainProps> = ({ children }) => {
