@@ -5,10 +5,8 @@ import { useTheme } from '../../context/themeContext';
 interface PaginationProps {
     currentPage: number;
     totalPages: number;
-    nextPage: () => void;
-    prevPage: () => void;
     goToPage: (page: number) => void;
-}
+};
 
 const PaginationContainer = styled.div`
     display: flex;
@@ -16,22 +14,15 @@ const PaginationContainer = styled.div`
     width: 100%;
 `;
 
-const PaginationButton = styled.button`
-    background-color: transparent;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    margin: 0 5px;
-    padding: 5px;
-`;
-
 const PageNumber = styled.div<{ theme: string }>`
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 40px;
-
+    height: 40px;
     font-size: 22px;
     cursor: pointer;
+
     color: ${({ theme: themeType }) => (themeType === 'light' ? '#000' : '#fff')};
 
     &:hover {
@@ -44,7 +35,7 @@ const PageNumber = styled.div<{ theme: string }>`
     }
 `;
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, nextPage, prevPage, goToPage }) => {
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, goToPage }) => {
     const { theme } = useTheme();
     
     const pageNumbers = [];
@@ -54,7 +45,6 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, nextPa
 
     return (
         <PaginationContainer>
-            <PaginationButton onClick={prevPage} disabled={currentPage === 0}>{'<'}</PaginationButton>
             {pageNumbers.map((pageNumber) => (
                 <PageNumber
                     theme = {theme}
@@ -65,7 +55,6 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, nextPa
                     {pageNumber}
                 </PageNumber>
             ))}
-            <PaginationButton onClick={nextPage} disabled={currentPage === totalPages - 1}>{'>'}</PaginationButton>
         </PaginationContainer>
     );
 };
