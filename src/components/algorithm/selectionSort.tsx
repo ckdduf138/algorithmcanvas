@@ -26,8 +26,8 @@ const StyleCanvasUI = styled.div`
     position: relative; /* 추가 */
 `;
 
-const Overlay = styled.div<{ isVisible: boolean, theme: string }>`
-    display: ${props => (props.isVisible ? "flex" : "none")};
+const Overlay = styled.div<{ $isVisible: boolean, theme: string }>`
+    display: ${props => (props.$isVisible ? "flex" : "none")};
     position: absolute;
     top: 0;
     left: 0;
@@ -111,14 +111,18 @@ const SelectionSortCanvas: React.FC = () => {
         setIsBlocking(false);
     };
 
+    const handleDelay = (delay: number) => {
+        setDelay(500 / delay);
+    };
+
     return (
         <>
             <StyleCanvasMain>
                 <BarCanvas barGraphData={barGraphData} width={width * 0.8} height={height * 0.7} />
             </StyleCanvasMain>
             <StyleCanvasUI>
-                <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} />
-                <Overlay isVisible={isBlocking} theme={theme}>
+                <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} handleDelay={handleDelay} />
+                <Overlay $isVisible={isBlocking} theme={theme}>
                 </Overlay>
             </StyleCanvasUI>
         </>

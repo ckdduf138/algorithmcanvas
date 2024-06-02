@@ -4,7 +4,7 @@ import SelectionSortCanvas from '../components/algorithm/selectionSort';
 
 const Page_Selection_Sort = () => {
     return (
-        <Layout>
+        <Layout subTitle='선택정렬'>
             <SelectionSortCanvas />
         </Layout>
     );

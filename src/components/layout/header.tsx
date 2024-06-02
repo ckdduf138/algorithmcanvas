@@ -8,14 +8,14 @@ const StyledHeader = styled.header<{ theme: string }>`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#ffffff' : '#15202b')};
+    background-color: ${({ theme }) => (theme === 'light' ? '#ffffff' : '#15202b')};
     text-align: center;
     text-transform: uppercase;
     font-family: 'Raleway', cursive;
     position: relative;
     width: 100%;
     height: 10%;
-    color: ${({ theme: themeType }) => (themeType === 'light' ? '#000' : '#fff')};
+    color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
 `;
 
 const HeadTitle = styled.div`
@@ -31,7 +31,19 @@ const ToggleContainer = styled.div`
     align-items: center;
 `;
 
-const Header: React.FC = () => {
+const Subtitle = styled.div<{ theme: string }>`
+    position: absolute;
+    left: 2%;
+    font-size: 20px;
+    color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
+`;
+
+
+interface HeaderProps {
+    subTitle: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ subTitle }) => {
     const navigate = useNavigate();
     const { theme, toggleTheme } = useTheme();
 
@@ -41,6 +53,7 @@ const Header: React.FC = () => {
 
     return (
         <StyledHeader theme={theme}>
+            <Subtitle theme={theme}>{subTitle}</Subtitle>
             <HeadTitle onClick={header_onClicked}>Algo-Canvas</HeadTitle>
             <ToggleContainer>
                 <ToggleSwitch onToggle={toggleTheme} />

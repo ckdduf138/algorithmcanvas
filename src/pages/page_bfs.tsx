@@ -4,7 +4,7 @@ import BfsCanvas from '../components/algorithm/bfs';
 
 const Page_Bfs = () => {
     return (
-        <Layout>
+        <Layout subTitle='BFS'>
             <BfsCanvas />
         </Layout>
     );

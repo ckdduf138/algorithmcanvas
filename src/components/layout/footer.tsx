@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { useTheme } from '../../context/themeContext';
 import Text from '../common/text';
 
@@ -22,8 +23,8 @@ const Footer: React.FC = () => {
     return (
         <StyledFooter theme={theme}>
             <FooterText>
-                <Text theme={theme}>Algo-Canvas</Text>
-                <Text theme={theme}>© 2024 - 2024</Text>
+                <Text>Algo-Canvas</Text>
+                <Text>© 2024 - 2024</Text>
             </FooterText>
         </StyledFooter>
     );
