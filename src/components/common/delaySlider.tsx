@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
 import { useTheme } from '../../context/themeContext';
 import Text from './text';
 

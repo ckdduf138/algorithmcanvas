@@ -6,7 +6,6 @@ import BarCanvas from '../barCanvas/barCanvas';
 import { useWindowSize } from '../../hooks/getWindowSize';
 import { BarGraphData } from '../../utils/Data';
 import { useTheme } from '../../context/themeContext';
-import DelaySlider from '../common/delaySlider';
 
 const StyleCanvasMain = styled.div`
     width: 100%;

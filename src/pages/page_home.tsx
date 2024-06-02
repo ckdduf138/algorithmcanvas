@@ -47,7 +47,7 @@ const Home = () => {
     };
 
     return (
-        <Layout>
+        <Layout subTitle=''>
             <HomeSearch>
                 <Search onSearch={home_onSearch} />
             </HomeSearch>
