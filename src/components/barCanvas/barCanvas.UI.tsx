@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "../common/buttons";
 import RadioButton from "../common/radioButton";
+import DelaySlider from "../common/delaySlider";
 
 const InputBox = styled.input`
     display: flex;
@@ -22,15 +23,15 @@ interface CanvasUIProps {
     handleReset: () => void;
     setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>;
     handleStart: () => void;
+    handleDelay: (delay: number) => void;
 }
 
-const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart }) => {
+const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleDelay }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [dataLength, setDataLength] = useState<number>(0);
     const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
     const [isValidBtnReset, setIsValidBtnReset] = useState<boolean>(false);
     const [isAscending, setIsAscending] = useState<boolean>(false);
-    const [delay, setDelay] = useState<number>(1000); // Default delay set to 1000 ms
 
     useEffect(() => {
         setIsValidBtnReset(dataLength > 0);
@@ -71,7 +72,7 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     };
 
     const handleDelayChange = (value: number) => {
-        setDelay(value);
+        handleDelay(value);
     };
 
     return (
@@ -90,6 +91,7 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
                 <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" />
                 <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" />
             </RadioContainer>
+            <DelaySlider onDelayChange={handleDelayChange}/>            
         </>
     );
 };
