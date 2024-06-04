@@ -13,8 +13,7 @@ const StyleMain = styled.div<{ theme: string }>`
     display: flex;
     align-items: center;
     flex-direction: column;
-
-    min-height: 620px;
+    min-height: 80%;
 `;
 
 const Main: React.FC<MainProps> = ({ children }) => {
