@@ -30,9 +30,11 @@ interface CanvasUIProps {
 const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleDelay }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [dataLength, setDataLength] = useState<number>(0);
+    const [isAscending, setIsAscending] = useState<boolean>(false);
+
     const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
     const [isValidBtnReset, setIsValidBtnReset] = useState<boolean>(false);
-    const [isAscending, setIsAscending] = useState<boolean>(false);
+
 
     useEffect(() => {
         setIsValidBtnReset(dataLength > 0);
@@ -56,8 +58,14 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
         setDataLength(0);
     };
 
-    const onclickBtnStart = () => {
-        handleStart();
+    const onclickBtnStart = async () => {
+        setIsValidBtnAdd(false);
+        setIsValidBtnReset(false);
+
+        await handleStart();
+
+        setIsValidBtnReset(true);
+
     };
 
     const handleSetSort = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,8 +97,8 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
             <Button onClick={onclickBtnReset} disabled={!isValidBtnReset}>Reset</Button>
             <Button onClick={onclickBtnStart} disabled={!isValidBtnReset}>Start</Button>
             <RadioContainer>
-                <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" />
-                <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" />
+                <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" disabled={!isValidBtnReset}/>
+                <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" disabled={!isValidBtnReset}/>
             </RadioContainer>
             <DelaySlider onDelayChange={handleDelayChange}/>            
         </>

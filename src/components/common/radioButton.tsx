@@ -7,6 +7,7 @@ interface RadioButtonProps {
     checked: boolean;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     label: string;
+    disabled?: boolean;
 }
 
 const RadioInput = styled.input`
@@ -34,12 +35,12 @@ const RadioLabel = styled.label`
     cursor: pointer;
 `;
 
-const RadioButton: React.FC<RadioButtonProps> = ({ value, checked, onChange, label }) => {
+const RadioButton: React.FC<RadioButtonProps> = ({ value, checked, onChange, label, disabled = false }) => {
     const { theme } = useTheme();
 
     return (
         <RadioLabel>
-            <RadioInput type="radio" value={value} checked={checked} onChange={onChange} />
+            <RadioInput type="radio" value={value} checked={checked} onChange={onChange} disabled={disabled}/>
             <span style={{ color: theme === 'light' ? '#000' : '#fff' }}>{label}</span>
         </RadioLabel>
     );
