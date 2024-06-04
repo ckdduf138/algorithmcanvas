@@ -7,7 +7,7 @@ import Text from '../common/text';
 const StyledFooter = styled.footer<{ theme: string }>`
     background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#f7f8f9' : '#0b131b')};
     width: 100%;
-    height: 10%;
+    min-height: 10%;
 `;
 
 const FooterText = styled.div`
@@ -25,6 +25,7 @@ const Footer: React.FC = () => {
             <FooterText>
                 <Text fontSize='20px'>Algo-Canvas</Text>
                 <Text>© 2024 - 2024</Text>
+                <Text>한국어 | English</Text>
             </FooterText>
         </StyledFooter>
     );

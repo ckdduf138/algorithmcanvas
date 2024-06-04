@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import BarCanvasUI from '../barCanvas/barCanvas.UI';
@@ -9,7 +9,6 @@ import { useTheme } from '../../context/themeContext';
 
 const StyleCanvasMain = styled.div`
     width: 100%;
-
     display: flex;
     justify-content: center;
 `;
@@ -17,46 +16,30 @@ const StyleCanvasMain = styled.div`
 const StyleCanvasUI = styled.div`
     width: 100%;
     height: 15%;
-    
     display: flex;
     align-items: center;
     justify-content: center;
-
     gap: 1%;
-    position: relative; /* 추가 */
-`;
-
-const Overlay = styled.div<{ $isVisible: boolean, theme: string }>`
-    display: ${props => (props.$isVisible ? "flex" : "none")};
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: ${({ theme: themeType }) => (themeType === 'light' ? 'rgba(11, 19, 27, 0.5)' : 'rgba(247, 248, 249, 0.5)')};
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    position: relative;
 `;
 
 const SelectionSortCanvas: React.FC = () => {
-    const { theme } = useTheme();
-
     const { width, height } = useWindowSize();
-    
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [delay, setDelay] = useState<number>(500);
-    const [isBlocking, setIsBlocking] = useState<boolean>(false);
-    
+    const delayRef = useRef(delay);
+
+    useEffect(() => {
+        delayRef.current = delay;
+    }, [delay]);
+
     const handleAdd = (inputValue: string) => {
         const newValue: BarGraphData = {
             data: parseInt(inputValue),
             focus: 'inactive'
         };
-        
-        const newData = [...barGraphData, newValue];
-        setBarGraphData(newData);
+        setBarGraphData(prevData => [...prevData, newValue]);
     };
 
     const handleReset = () => {
@@ -64,66 +47,61 @@ const SelectionSortCanvas: React.FC = () => {
     };
 
     const handleStart = async () => {
-        setIsBlocking(true);
-        
         const dataLength = barGraphData.length;
+        const sortedData = [...barGraphData];
 
-        barGraphData.forEach(data => {
+        sortedData.forEach(data => {
             data.focus = 'inactive';
         });
         
         for (let i = 0; i < dataLength; i++) {
             let index = i;
 
-            if (barGraphData[i].focus !== 'completed') {
-                barGraphData[i].focus = 'active';
-                setBarGraphData([...barGraphData]);
+            if (sortedData[i].focus !== 'completed') {
+                sortedData[i].focus = 'active';
+                setBarGraphData([...sortedData]);
             }
 
             for (let j = i + 1; j < dataLength; j++) {
-                barGraphData[j].focus = 'active';
-                setBarGraphData([...barGraphData]);
+                sortedData[j].focus = 'active';
+                setBarGraphData([...sortedData]);
 
-                if (sortOrder === 'asc' && barGraphData[j].data < barGraphData[index].data) {
+                if (sortOrder === 'asc' && sortedData[j].data < sortedData[index].data) {
                     index = j;
-                } else if (sortOrder === 'desc' && barGraphData[j].data > barGraphData[index].data) {
+                } else if (sortOrder === 'desc' && sortedData[j].data > sortedData[index].data) {
                     index = j;
                 }
 
-                await new Promise(resolve => setTimeout(resolve, delay));
+                await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
-                barGraphData[j].focus = 'inactive';
-                setBarGraphData([...barGraphData]);
+                sortedData[j].focus = 'inactive';
+                setBarGraphData([...sortedData]);
             }
 
             if (index !== i) {
-                const temp = barGraphData[i].data;
-                barGraphData[i].data = barGraphData[index].data;
-                barGraphData[index].data = temp;
+                const temp = sortedData[i].data;
+                sortedData[i].data = sortedData[index].data;
+                sortedData[index].data = temp;
             }
 
-            barGraphData[i].focus = 'completed';
-            setBarGraphData([...barGraphData]);
+            sortedData[i].focus = 'completed';
+            setBarGraphData([...sortedData]);
             
-            await new Promise(resolve => setTimeout(resolve, delay));
+            await new Promise(resolve => setTimeout(resolve, delayRef.current));
         }
-
-        setIsBlocking(false);
     };
 
     const handleDelay = (delay: number) => {
-        setDelay(500 / delay);
+        setDelay(100 / delay);
     };
 
     return (
         <>
             <StyleCanvasMain>
-                <BarCanvas barGraphData={barGraphData} width={width * 0.8} height={height * 0.7} />
+                <BarCanvas barGraphData={barGraphData} width={width} height={height * 0.7} />
             </StyleCanvasMain>
             <StyleCanvasUI>
                 <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} handleDelay={handleDelay} />
-                <Overlay $isVisible={isBlocking} theme={theme}>
-                </Overlay>
             </StyleCanvasUI>
         </>
     );
