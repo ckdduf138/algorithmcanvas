@@ -3,9 +3,7 @@ import styled from 'styled-components';
 
 import BarCanvasUI from '../barCanvas/barCanvas.UI';
 import BarCanvas from '../barCanvas/barCanvas';
-import { useWindowSize } from '../../hooks/getWindowSize';
 import { BarGraphData } from '../../utils/Data';
-import { useTheme } from '../../context/themeContext';
 
 const StyleCanvasMain = styled.div`
     width: 100%;
@@ -24,7 +22,6 @@ const StyleCanvasUI = styled.div`
 `;
 
 const SelectionSortCanvas: React.FC = () => {
-    const { width, height } = useWindowSize();
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [delay, setDelay] = useState<number>(500);
@@ -98,7 +95,7 @@ const SelectionSortCanvas: React.FC = () => {
     return (
         <>
             <StyleCanvasMain>
-                <BarCanvas barGraphData={barGraphData} width={width} height={height * 0.7} />
+                <BarCanvas barGraphData={barGraphData} />
             </StyleCanvasMain>
             <StyleCanvasUI>
                 <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} handleDelay={handleDelay} />

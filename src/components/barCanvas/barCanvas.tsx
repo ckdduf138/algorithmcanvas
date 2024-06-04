@@ -8,18 +8,18 @@ import BarCanvasBottom from './barCanvas.Bottom';
 
 import { getLogScale } from '../../utils/common';
 import { BarGraphData } from '../../utils/Data';
+import { useWindowSize } from '../../hooks/getWindowSize';
 
 const verticalMargin = 100;
 const maxBarWidth = 100;
 
 type BarCanvasProps = {
-  width: number;
-  height: number;
   barGraphData: BarGraphData[];
   events?: boolean;
 };
 
-const BarCanvas: React.FC<BarCanvasProps> = ({ width, height, barGraphData, events = false }) => {
+const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) => {
+  const { width, height } = useWindowSize();
   const [data, setData] = useState(barGraphData);
   const [prevData, setPrevData] = useState(barGraphData);
 
