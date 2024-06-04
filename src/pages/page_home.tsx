@@ -4,8 +4,6 @@ import Box from '../components/home/box';
 import Layout from '../components/layout/layout';
 import Search from '../components/home/search';
 import { boxes } from '../utils/box';
-import usePagination from '../hooks/usePagination';
-import Pagination from '../components/home/pagination ';
 
 const HomeSearch = styled.div`
     display: flex;
@@ -28,22 +26,9 @@ const HomeBoxes = styled.div`
     flex-wrap: wrap;
 `;
 
-const HomePagination = styled.div`
-    display: flex;
-    width: 100%;
-    margin-bottom: 1%;
-`;
-
 const Home = () => {
-    const itemsPerPage = 8; // Default items per page
-    const { currentPage, totalPages, currentItems, setCurrentPage } = usePagination(boxes.length, itemsPerPage); // setCurrentPage 추가
-
     const home_onSearch = (query: string) => {
         console.log('검색어:', query);
-    };
-
-    const goToPage = (page: number) => { // goToPage 함수 정의
-        setCurrentPage(page);
     };
 
     return (
@@ -53,7 +38,7 @@ const Home = () => {
             </HomeSearch>
             <HomeContent>
                 <HomeBoxes>
-                    {currentItems(boxes).map((box, index) => (
+                    {boxes.map((box, index) => (
                         <Box
                             key={index}
                             title={box.title}
@@ -64,13 +49,6 @@ const Home = () => {
                     ))}
                 </HomeBoxes>
             </HomeContent>
-            <HomePagination>
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    goToPage={goToPage}
-                />
-            </HomePagination>
         </Layout>
     );
 };

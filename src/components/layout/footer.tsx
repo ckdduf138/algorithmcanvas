@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
     return (
         <StyledFooter theme={theme}>
             <FooterText>
-                <Text>Algo-Canvas</Text>
+                <Text fontSize='20px'>Algo-Canvas</Text>
                 <Text>© 2024 - 2024</Text>
             </FooterText>
         </StyledFooter>
