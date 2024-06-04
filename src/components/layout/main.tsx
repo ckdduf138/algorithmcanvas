@@ -8,14 +8,13 @@ interface MainProps {
 
 const StyleMain = styled.div<{ theme: string }>`
     width: 100%;
-    height: 80%;
     background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#ffffff' : '#15202b')};
 
     display: flex;
     align-items: center;
     flex-direction: column;
 
-    min-hieh
+    min-height: 620px;
 `;
 
 const Main: React.FC<MainProps> = ({ children }) => {
