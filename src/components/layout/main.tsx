@@ -13,7 +13,6 @@ const StyleMain = styled.div<{ theme: string }>`
     display: flex;
     align-items: center;
     flex-direction: column;
-
     min-height: 80%;
 `;
 
