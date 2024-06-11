@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { Group } from '@visx/group';
 import { GradientTealBlue } from '@visx/gradient';
 import { scaleBand, scaleLinear } from '@visx/scale';
+import styled from 'styled-components';
 
 import BarCanvasMain from './barCanvas.Main';
 import BarCanvasBottom from './barCanvas.Bottom';
@@ -9,6 +10,13 @@ import BarCanvasBottom from './barCanvas.Bottom';
 import { getLogScale } from '../../utils/common';
 import { BarGraphData } from '../../utils/Data';
 import { useWindowSize } from '../../hooks/getWindowSize';
+
+
+const StyleCanvasMain = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+`;
 
 const verticalMargin = 100;
 const maxBarWidth = 100;
@@ -53,22 +61,22 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
   }), [transformedData, yMax]);
 
   return (
-    <svg width={width} height={height}>
-      <GradientTealBlue id='barCanvas' />
-      <rect width={width} height={height} fill="none"/>
-      <Group top={verticalMargin / 2}>
-        <BarCanvasMain
-          data={data}
-          prevData={prevData}
-          transformedData={transformedData}
-          xScale={xScale}
-          yScale={yScale}
-          yMax={yMax}
-          events={events}
-        />
-      </Group>
-      <BarCanvasBottom xScale={xScale} yMax={yMax} />
-    </svg>
+    <StyleCanvasMain>
+      <svg width={width} height={height}>
+        <Group top={verticalMargin / 2}>
+          <BarCanvasMain
+            data={data}
+            prevData={prevData}
+            transformedData={transformedData}
+            xScale={xScale}
+            yScale={yScale}
+            yMax={yMax}
+            events={events}
+          />
+        </Group>
+        <BarCanvasBottom xScale={xScale} yMax={yMax} />
+        </svg>
+      </StyleCanvasMain>
   );
 };
 

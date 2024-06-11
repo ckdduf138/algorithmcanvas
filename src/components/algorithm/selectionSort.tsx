@@ -1,25 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 
 import BarCanvasUI from '../barCanvas/barCanvas.UI';
 import BarCanvas from '../barCanvas/barCanvas';
 import { BarGraphData } from '../../utils/Data';
-
-const StyleCanvasMain = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-`;
-
-const StyleCanvasUI = styled.div`
-    width: 100%;
-    height: 15%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1%;
-    position: relative;
-`;
 
 const SelectionSortCanvas: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
@@ -94,12 +77,8 @@ const SelectionSortCanvas: React.FC = () => {
 
     return (
         <>
-            <StyleCanvasMain>
-                <BarCanvas barGraphData={barGraphData} />
-            </StyleCanvasMain>
-            <StyleCanvasUI>
-                <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} handleDelay={handleDelay} />
-            </StyleCanvasUI>
+            <BarCanvas barGraphData={barGraphData} />
+            <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} handleDelay={handleDelay} />
         </>
     );
 };

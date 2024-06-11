@@ -5,11 +5,24 @@ import Button from "../common/buttons";
 import RadioButton from "../common/radioButton";
 import DelaySlider from "../common/delaySlider";
 
+const StyleCanvasUI = styled.div`
+    width: 100%;
+    height: 15%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1%;
+    position: relative;
+    row-gap: 20px;
+    padding-bottom: 10px;
+`;
+
 const InputBox = styled.input`
     display: flex;
     width: 10%;
-    height: 10%;
-    padding: 1%;
+    min-width: 120px;
+    min-height: 52px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
@@ -85,10 +98,10 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     };
 
     return (
-        <>
+        <StyleCanvasUI>
             <InputBox
                 type="text"
-                placeholder="정수 입력..."
+                placeholder="숫자 입력"
                 value={inputValue}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
@@ -97,11 +110,11 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
             <Button onClick={onclickBtnReset} disabled={!isValidBtnReset}>Reset</Button>
             <Button onClick={onclickBtnStart} disabled={!isValidBtnReset}>Start</Button>
             <RadioContainer>
-                <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" disabled={!isValidBtnReset}/>
-                <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" disabled={!isValidBtnReset}/>
+                <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" />
+                <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" />
             </RadioContainer>
             <DelaySlider onDelayChange={handleDelayChange}/>            
-        </>
+        </ StyleCanvasUI>
     );
 };
 
