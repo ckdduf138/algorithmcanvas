@@ -56,7 +56,8 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
 
     const onclickBtnAdd = () => {
         if (isValidBtnAdd === false) return;
-
+        if (dataLength !== 0 && isValidBtnStart === false) return;
+        
         handleAdd(inputValue);
         setInputValue('');
         setIsValidBtnAdd(false);
