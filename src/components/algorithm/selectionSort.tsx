@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import BarCanvasUI from '../barCanvas/barCanvas.UI';
 import BarCanvas from '../barCanvas/barCanvas';
 import { BarGraphData } from '../../utils/Data';
+import { generateRandomNumbers } from '../../utils/common';
 
 const SelectionSortCanvas: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
@@ -24,6 +25,17 @@ const SelectionSortCanvas: React.FC = () => {
 
     const handleReset = () => {
         setBarGraphData([]);
+    };
+
+    const handleRandom = () => {
+        const randomValues: number[] = generateRandomNumbers(0, 100, 20);
+        
+        const randomData: BarGraphData[] = randomValues.map((value) => ({
+            data: value,
+            focus: 'inactive'
+        }));
+
+        setBarGraphData(randomData);
     };
 
     const handleStart = async () => {
@@ -78,7 +90,14 @@ const SelectionSortCanvas: React.FC = () => {
     return (
         <>
             <BarCanvas barGraphData={barGraphData} />
-            <BarCanvasUI handleAdd={handleAdd} handleReset={handleReset} setSortOrder={setSortOrder} handleStart={handleStart} handleDelay={handleDelay} />
+            <BarCanvasUI
+                handleAdd={handleAdd}
+                handleReset={handleReset}
+                handleRandom={handleRandom}
+                setSortOrder={setSortOrder}
+                handleStart={handleStart}
+                handleDelay={handleDelay}
+            />
         </>
     );
 };
