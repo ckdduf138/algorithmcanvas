@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "../common/buttons";
 import RadioButton from "../common/radioButton";
 import DelaySlider from "../common/delaySlider";
+import InputBox from "../common/InputBox";
 
 const StyleCanvasUI = styled.div`
     width: 100%;
@@ -16,16 +17,6 @@ const StyleCanvasUI = styled.div`
     position: relative;
     row-gap: 20px;
     padding-bottom: 10px;
-`;
-
-const InputBox = styled.input`
-    display: flex;
-    width: 10%;
-    min-width: 120px;
-    min-height: 52px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
 `;
 
 const RadioContainer = styled.div`
@@ -60,6 +51,8 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     };
 
     const onclickBtnAdd = () => {
+        if (isValidBtnAdd === false) return;
+
         handleAdd(inputValue);
         setInputValue('');
         setIsValidBtnAdd(false);
@@ -100,13 +93,12 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     return (
         <StyleCanvasUI>
             <InputBox
-                type="text"
-                placeholder="숫자 입력"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
+                inputValue={inputValue}
+                handleInputChange={handleInputChange}
+                onclickBtnAdd={onclickBtnAdd}
+                handleKeyPress={handleKeyPress}
+                isValidBtnAdd={isValidBtnAdd}
             />
-            <Button onClick={onclickBtnAdd} disabled={!isValidBtnAdd}>Add</Button>
             <Button onClick={onclickBtnReset} disabled={!isValidBtnReset}>Reset</Button>
             <Button onClick={onclickBtnStart} disabled={!isValidBtnReset}>Start</Button>
             <RadioContainer>
