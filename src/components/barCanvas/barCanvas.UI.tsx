@@ -17,6 +17,8 @@ const StyleCanvasUI = styled.div`
     position: relative;
     row-gap: 20px;
     padding-bottom: 10px;
+    padding-top: 2%;
+    padding-bottom: 2%;
 `;
 
 const RadioContainer = styled.div`

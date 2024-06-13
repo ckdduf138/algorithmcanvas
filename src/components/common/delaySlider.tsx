@@ -24,7 +24,7 @@ const Slider = styled.input<{ theme: string }>`
         appearance: none;
         width: 25px;
         height: 25px;
-        background: ${props => props.theme === 'light' ? '#8A8F95' : '#b8bcbf'};;
+        background: ${props => props.theme === 'light' ? '#8A8F95' : '#b8bcbf'};
         cursor: pointer;
         border-radius: 50%;
     }
