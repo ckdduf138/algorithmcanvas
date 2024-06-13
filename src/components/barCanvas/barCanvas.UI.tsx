@@ -4,15 +4,21 @@ import styled from "styled-components";
 import Button from "../common/buttons";
 import RadioButton from "../common/radioButton";
 import DelaySlider from "../common/delaySlider";
+import InputBox from "../common/InputBox";
 
-const InputBox = styled.input`
+const StyleCanvasUI = styled.div`
+    width: 100%;
+    height: 15%;
     display: flex;
-    width: 10%;
-    height: 10%;
-    padding: 1%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1%;
+    position: relative;
+    row-gap: 20px;
+    padding-bottom: 10px;
+    padding-top: 2%;
+    padding-bottom: 2%;
 `;
 
 const RadioContainer = styled.div`
@@ -24,17 +30,19 @@ interface CanvasUIProps {
     handleReset: () => void;
     setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>;
     handleStart: () => void;
+    handleRandom: () => void;
     handleDelay: (delay: number) => void;
 }
 
-const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleDelay }) => {
+const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleRandom, handleDelay }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [dataLength, setDataLength] = useState<number>(0);
     const [isAscending, setIsAscending] = useState<boolean>(false);
 
     const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
     const [isValidBtnReset, setIsValidBtnReset] = useState<boolean>(false);
-
+    const [isValidBtnRandom, setIsValidBtnRandom] = useState<boolean>(true);
+    const [isValidBtnStart, setIsValidBtnStart] = useState<boolean>(false);
 
     useEffect(() => {
         setIsValidBtnReset(dataLength > 0);
@@ -47,6 +55,8 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     };
 
     const onclickBtnAdd = () => {
+        if (isValidBtnAdd === false) return;
+
         handleAdd(inputValue);
         setInputValue('');
         setIsValidBtnAdd(false);
@@ -61,13 +71,22 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     const onclickBtnStart = async () => {
         setIsValidBtnAdd(false);
         setIsValidBtnReset(false);
+        setIsValidBtnStart(false);
+        setIsValidBtnRandom(false);
 
         await handleStart();
 
-        setIsValidBtnReset(true);
-
+        setIsValidBtnRandom(true);
+        setIsValidBtnStart(true);
     };
 
+    const onclickBtnRandom = async () => {
+        handleRandom();
+
+        setIsValidBtnReset(true);
+        setIsValidBtnStart(true);
+    };
+    
     const handleSetSort = (event: React.ChangeEvent<HTMLInputElement>) => {
         const sortOrder = event.target.value as "asc" | "desc";
         setSortOrder(sortOrder);
@@ -85,23 +104,23 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     };
 
     return (
-        <>
+        <StyleCanvasUI>
             <InputBox
-                type="text"
-                placeholder="정수 입력..."
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
+                inputValue={inputValue}
+                handleInputChange={handleInputChange}
+                onclickBtnAdd={onclickBtnAdd}
+                handleKeyPress={handleKeyPress}
+                isValidBtnAdd={isValidBtnAdd}
             />
-            <Button onClick={onclickBtnAdd} disabled={!isValidBtnAdd}>Add</Button>
             <Button onClick={onclickBtnReset} disabled={!isValidBtnReset}>Reset</Button>
-            <Button onClick={onclickBtnStart} disabled={!isValidBtnReset}>Start</Button>
+            <Button onClick={onclickBtnRandom} disabled={!isValidBtnRandom}>Random</Button>
+            <Button onClick={onclickBtnStart} disabled={!isValidBtnStart}>Start</Button>
             <RadioContainer>
-                <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" disabled={!isValidBtnReset}/>
-                <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" disabled={!isValidBtnReset}/>
+                <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" />
+                <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" />
             </RadioContainer>
             <DelaySlider onDelayChange={handleDelayChange}/>            
-        </>
+        </ StyleCanvasUI>
     );
 };
 

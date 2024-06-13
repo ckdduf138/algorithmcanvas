@@ -11,6 +11,8 @@ const StyledButton = styled.button`
   display: flex;
   justify-content: center;
   width: 10%;
+  min-width: 120px;
+  min-height: 42px;
   padding: 1%;
   background-color: ${(props) => (props.disabled ? "#ccc" : "#007bff")};
   color: #fff;
@@ -19,6 +21,7 @@ const StyledButton = styled.button`
   font-size: 16px;
   cursor: ${(props) => (props.disabled ? "normal" : "pointer")};
   transition: background-color 0.3s;
+  align-items: center;
 
   &:hover {
     background-color: ${(props) => (props.disabled ? "#ccc" : "#0056b3")};
