@@ -1,6 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Group } from '@visx/group';
-import { GradientTealBlue } from '@visx/gradient';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import styled from 'styled-components';
 
