@@ -55,7 +55,7 @@ const Tag = styled.span<{ color: string }>`
     font-size: 18px;
     background-color: ${({ color }) => color || '#F0F1F2'};
     color: ${({ color }) => color ? '#000' : '#666'};
-    border-radius: 30%;
+    border-radius: 4px;
     padding: 2px 5px 0;
 `;
 
