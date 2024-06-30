@@ -34,7 +34,13 @@ const Home = () => {
             setFilteredBoxes(boxes);
         } else {
             const filtered = boxes.filter(box =>
-                box.tags.some(tag => tag.includes(query))
+                box.tags.some(tag => 
+                    {
+                        const reg = new RegExp(query.split("").join(".*?"), "i");
+                        const exp = new RegExp(tag.split("").join(".*?"), "i");
+                        return reg.test(tag) || exp.test(query);
+                    }
+                )
             );
             setFilteredBoxes(filtered);
         }
