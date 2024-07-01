@@ -1,7 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { BoxProps } from '../../utils/box';
+import { BoxProps, boxes } from '../../utils/box';
+
+const allTags: string[] = Array.from(new Set(boxes.flatMap(box => box.tags)));
+
+const tagColors: { [key: string]: string } = {
+    '정렬': '#E6E6FA',
+    '그래프탐색': '#7FFFD4',
+};
+
+allTags.forEach(tag => {
+    if (!tagColors[tag]) {
+        tagColors[tag] = `#ffffff`; // 기본 색상 설정
+    }
+});
 
 const MainBox = styled.div`
     background: #fff;
@@ -38,11 +51,11 @@ const TagParent = styled.div`
     justify-content: center;
 `;
 
-const Tag = styled.span`
+const Tag = styled.span<{ color: string }>`
     font-size: 18px;
-    background-color: #F0F1F2;
-    color: #666;
-    border-radius: 30%;
+    background-color: ${({ color }) => color || '#F0F1F2'};
+    color: ${({ color }) => color ? '#000' : '#666'};
+    border-radius: 4px;
     padding: 2px 5px 0;
 `;
 
@@ -59,7 +72,7 @@ const Box: React.FC<BoxProps> = ({ title, imgSrc, tags, link }) => {
             <BoxImage src={imgSrc} alt="box_image" />
             <TagParent>
                 {tags.map((tag, index) => (
-                    <Tag key={index}>{tag}</Tag>
+                    <Tag key={index} color={tagColors[tag]}>{tag}</Tag>
                 ))}
             </TagParent>
         </MainBox>
