@@ -12,7 +12,7 @@ const tagColors: { [key: string]: string } = {
 
 allTags.forEach(tag => {
     if (!tagColors[tag]) {
-        tagColors[tag] = '#ffffff'; // 기본 색상 설정
+        tagColors[tag] = '#E6E6FA'; // 기본 색상 설정
     }
 });
 
@@ -45,26 +45,32 @@ const BoxWapper = styled.div`
 `;
 
 const FrontBox = styled.div`
+    display: flex;
     position: absolute;
     width: 100%;
     height: 100%;
     border-radius: 10%;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
     backface-visibility: hidden;
 `
 
 const BackBox = styled.div`
+    display: flex;
     position: absolute;
     width: 100%;
     height: 100%;
     border-radius: 10%;
-
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
     backface-visibility: hidden;
     transform: rotateY(180deg);
 `
 
 const BoxTitle = styled.div`
     font-size: 30px;
-    border: 10%;
 `;
 
 const BoxImage = styled.img`
@@ -74,7 +80,7 @@ const BoxImage = styled.img`
 `;
 
 const BoxDescription = styled.div`
-    width: 65%;
+    width: 90%;
     height: 65%;
     border-radius: 10%;
 `;
