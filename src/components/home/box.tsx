@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { BoxProps, boxes } from '../../utils/box';
 
 const allTags: string[] = Array.from(new Set(boxes.flatMap(box => box.tags)));
@@ -12,22 +12,55 @@ const tagColors: { [key: string]: string } = {
 
 allTags.forEach(tag => {
     if (!tagColors[tag]) {
-        tagColors[tag] = `#ffffff`; // 기본 색상 설정
+        tagColors[tag] = '#ffffff'; // 기본 색상 설정
     }
 });
 
-const MainBox = styled.div`
-    background: #fff;
-    border-radius: 10%;
-    display: inline-block;
+const Flip = styled.div`
     width: 270px;
     height: 270px;
     margin: 20px;
+
+    perspective: 1100px;
+`;
+
+const BoxWapper = styled.div`
+    display: inline-block;
+    width: 100%;
+    height: 100%;
     position: relative;
+    background: #fff;
+    border-radius: 10%;
+
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
     text-align: center;
     cursor: pointer;
+
+    transform-style: preserve-3d;
+    transition: 1s;
+
+    &:hover {
+        transform: rotateY(180deg);
+    }
 `;
+
+const FrontBox = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10%;
+    backface-visibility: hidden;
+`
+
+const BackBox = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10%;
+
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+`
 
 const BoxTitle = styled.div`
     font-size: 30px;
@@ -35,6 +68,12 @@ const BoxTitle = styled.div`
 `;
 
 const BoxImage = styled.img`
+    width: 65%;
+    height: 65%;
+    border-radius: 10%;
+`;
+
+const BoxDescription = styled.div`
     width: 65%;
     height: 65%;
     border-radius: 10%;
@@ -59,7 +98,7 @@ const Tag = styled.span<{ color: string }>`
     padding: 2px 5px 0;
 `;
 
-const Box: React.FC<BoxProps> = ({ title, imgSrc, tags, link }) => {
+const Box: React.FC<BoxProps> = ({ title, imgSrc, tags, link, description }) => {
     const navigate = useNavigate();
 
     const box_onClicked = () => {
@@ -67,15 +106,29 @@ const Box: React.FC<BoxProps> = ({ title, imgSrc, tags, link }) => {
     };
 
     return (
-        <MainBox onClick={box_onClicked}>
-            <BoxTitle>{title}</BoxTitle>
-            <BoxImage src={imgSrc} alt="box_image" />
-            <TagParent>
-                {tags.map((tag, index) => (
-                    <Tag key={index} color={tagColors[tag]}>{tag}</Tag>
-                ))}
-            </TagParent>
-        </MainBox>
+        <Flip>
+            <BoxWapper onClick={box_onClicked}>
+            <FrontBox>
+                <BoxTitle>{title}</BoxTitle>
+                <BoxImage src={imgSrc} alt="box_image" />
+                <TagParent>
+                    {tags.map((tag, index) => (
+                        <Tag key={index} color={tagColors[tag]}>{tag}</Tag>
+                    ))}
+                </TagParent>
+            </FrontBox>
+
+            <BackBox>
+                <BoxTitle>{title}</BoxTitle>
+                <BoxDescription>{description}</BoxDescription>
+                <TagParent>
+                    {tags.map((tag, index) => (
+                        <Tag key={index} color={tagColors[tag]}>{tag}</Tag>
+                    ))}
+                </TagParent>
+                </BackBox>
+            </BoxWapper>
+        </Flip>
     );
 };
 
