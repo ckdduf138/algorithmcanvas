@@ -1,20 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { css, keyframes } from 'styled-components';
-import { BoxProps, boxes } from '../../utils/box';
-
-const allTags: string[] = Array.from(new Set(boxes.flatMap(box => box.tags)));
-
-const tagColors: { [key: string]: string } = {
-    '정렬': '#E6E6FA',
-    '그래프탐색': '#7FFFD4',
-};
-
-allTags.forEach(tag => {
-    if (!tagColors[tag]) {
-        tagColors[tag] = '#E6E6FA'; // 기본 색상 설정
-    }
-});
+import styled from 'styled-components';
+import { BoxProps, tagColors } from '../../utils/box';
 
 const Flip = styled.div`
     width: 270px;
@@ -50,10 +37,11 @@ const FrontBox = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 10%;
-    align-content: center;
-    flex-wrap: wrap;
-    flex-direction: column;
     backface-visibility: hidden;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `
 
 const BackBox = styled.div`
@@ -62,10 +50,11 @@ const BackBox = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 10%;
-    align-content: center;
-    flex-wrap: wrap;
-    flex-direction: column;
     backface-visibility: hidden;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transform: rotateY(180deg);
 `
 
@@ -87,8 +76,9 @@ const BoxDescription = styled.div`
 
 const TagParent = styled.div`
     display: flex;
-    margin: 2%;
+    width: 90%;
     height: 27px;
+    margin: 2%;
     overflow: hidden;
     gap: 10px;
     flex-wrap: wrap;
@@ -99,7 +89,7 @@ const TagParent = styled.div`
 const Tag = styled.span<{ color: string }>`
     font-size: 18px;
     background-color: ${({ color }) => color || '#F0F1F2'};
-    color: ${({ color }) => color ? '#000' : '#666'};
+    color: #000;
     border-radius: 4px;
     padding: 2px 5px 0;
 `;

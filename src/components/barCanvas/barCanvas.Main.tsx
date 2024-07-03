@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from '@visx/shape';
 import { useTheme } from '../../context/themeContext';
-import { BarGraphData } from '../../utils/Data';
+import { BarGraphData } from '../../utils/data';
 
 type BarComponentProps = {
   data: BarGraphData[];
