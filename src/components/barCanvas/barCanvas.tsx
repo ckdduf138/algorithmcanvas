@@ -7,7 +7,7 @@ import BarCanvasMain from './barCanvas.Main';
 import BarCanvasBottom from './barCanvas.Bottom';
 
 import { getLogScale } from '../../utils/common';
-import { BarGraphData } from '../../utils/data';
+import { BarGraphData } from '../../utils/graphData';
 import { useWindowSize } from '../../hooks/getWindowSize';
 
 

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import BarCanvasUI from '../barCanvas/barCanvas.UI';
 import BarCanvas from '../barCanvas/barCanvas';
-import { BarGraphData } from '../../utils/data';
+import { BarGraphData } from '../../utils/graphData';
 import { generateRandomNumbers } from '../../utils/common';
 
 const SelectionSortCanvas: React.FC = () => {
@@ -49,25 +49,31 @@ const SelectionSortCanvas: React.FC = () => {
         for (let i = 0; i < dataLength; i++) {
             let index = i;
 
-            if (sortedData[i].focus !== 'completed') {
-                sortedData[i].focus = 'active';
-                setBarGraphData([...sortedData]);
-            }
+            sortedData[i].focus = 'highlight';
+            setBarGraphData([...sortedData]);
 
             for (let j = i + 1; j < dataLength; j++) {
-                sortedData[j].focus = 'active';
-                setBarGraphData([...sortedData]);
-
-                if (sortOrder === 'asc' && sortedData[j].data < sortedData[index].data) {
-                    index = j;
-                } else if (sortOrder === 'desc' && sortedData[j].data > sortedData[index].data) {
-                    index = j;
+                if (index !== j) {
+                    sortedData[j].focus = 'active';
+                    setBarGraphData([...sortedData]);
                 }
 
+                const shouldHighlightAsc = sortOrder === 'asc' && sortedData[j].data < sortedData[index].data;
+                const shouldHighlightDesc = sortOrder === 'desc' && sortedData[j].data > sortedData[index].data;
+                
                 await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
-                sortedData[j].focus = 'inactive';
-                setBarGraphData([...sortedData]);
+                if (shouldHighlightAsc || shouldHighlightDesc) {
+                    sortedData[index].focus = 'inactive';
+                    index = j;
+                    sortedData[j].focus = 'highlight';
+                    setBarGraphData([...sortedData]);
+                }
+                else
+                {
+                    sortedData[j].focus = 'inactive';
+                    setBarGraphData([...sortedData]);
+                }
             }
 
             if (index !== i) {
@@ -76,6 +82,7 @@ const SelectionSortCanvas: React.FC = () => {
                 sortedData[index].data = temp;
             }
 
+            sortedData[index].focus = 'inactive';
             sortedData[i].focus = 'completed';
             setBarGraphData([...sortedData]);
             

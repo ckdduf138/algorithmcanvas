@@ -1,4 +1,4 @@
-type FocusStatus = 'inactive' | 'active' | 'completed';
+type FocusStatus = 'inactive' | 'active' | 'highlight' | 'completed';
 
 export interface BarGraphData {
     data: number;
