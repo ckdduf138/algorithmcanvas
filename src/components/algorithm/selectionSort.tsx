@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import BarCanvasUI from '../barCanvas/barCanvas.UI';
 import BarCanvas from '../barCanvas/barCanvas';
-import { BarGraphData } from '../../utils/Data';
+import { BarGraphData } from '../../utils/data';
 import { generateRandomNumbers } from '../../utils/common';
 
 const SelectionSortCanvas: React.FC = () => {

@@ -60,6 +60,7 @@ const Home = () => {
                             imgSrc={box.imgSrc}
                             tags={box.tags}
                             link={box.link}
+                            description={box.description}
                         />
                     ))}
                 </HomeBoxes>
