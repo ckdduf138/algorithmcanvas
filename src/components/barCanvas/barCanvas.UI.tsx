@@ -60,29 +60,38 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
         
         handleAdd(inputValue);
         setInputValue('');
+
         setIsValidBtnAdd(false);
+        setIsValidBtnStart(true);
+
         setDataLength(prev => prev + 1);
     };
 
     const onclickBtnReset = () => {
         handleReset();
         setDataLength(0);
+
+        setIsValidBtnReset(false);
+        setIsValidBtnStart(false);
     };
 
     const onclickBtnStart = async () => {
         setIsValidBtnAdd(false);
+
         setIsValidBtnReset(false);
-        setIsValidBtnStart(false);
         setIsValidBtnRandom(false);
+        setIsValidBtnStart(false);
 
         await handleStart();
 
+        setIsValidBtnReset(true);
         setIsValidBtnRandom(true);
         setIsValidBtnStart(true);
     };
 
     const onclickBtnRandom = async () => {
         handleRandom();
+        setDataLength(20);
 
         setIsValidBtnReset(true);
         setIsValidBtnStart(true);
