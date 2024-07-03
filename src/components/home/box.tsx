@@ -63,7 +63,7 @@ const BoxTitle = styled.div`
 `;
 
 const BoxImage = styled.img`
-    width: 65%;
+    width: 90%;
     height: 65%;
     border-radius: 10%;
 `;
