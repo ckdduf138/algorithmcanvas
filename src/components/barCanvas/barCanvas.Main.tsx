@@ -48,7 +48,8 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transforme
               y={barY + barHeight - 10}
               fontSize="24px"
               textAnchor="middle"
-              fill= {theme === 'light' ? '#ffffff' : '#15202b'}
+              fill={theme === 'light' ? '#ffffff' : '#15202b'}
+              style={{ transition: isChanged ? 'all 0.5s ease' : 'none' }}
             >
               {data[index].data}
             </text>

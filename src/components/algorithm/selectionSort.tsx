@@ -40,53 +40,54 @@ const SelectionSortCanvas: React.FC = () => {
 
     const handleStart = async () => {
         const dataLength = barGraphData.length;
-        const sortedData = [...barGraphData];
 
-        sortedData.forEach(data => {
+        barGraphData.forEach(data => {
             data.focus = 'inactive';
         });
         
         for (let i = 0; i < dataLength; i++) {
             let index = i;
 
-            sortedData[i].focus = 'highlight';
-            setBarGraphData([...sortedData]);
+            barGraphData[i].focus = 'highlight';
+            setBarGraphData([...barGraphData]);
 
             for (let j = i + 1; j < dataLength; j++) {
                 if (index !== j) {
-                    sortedData[j].focus = 'active';
-                    setBarGraphData([...sortedData]);
+                    barGraphData[j].focus = 'active';
+                    setBarGraphData([...barGraphData]);
                 }
 
-                const shouldHighlightAsc = sortOrder === 'asc' && sortedData[j].data < sortedData[index].data;
-                const shouldHighlightDesc = sortOrder === 'desc' && sortedData[j].data > sortedData[index].data;
+                const shouldHighlightAsc = sortOrder === 'asc' && barGraphData[j].data < barGraphData[index].data;
+                const shouldHighlightDesc = sortOrder === 'desc' && barGraphData[j].data > barGraphData[index].data;
                 
                 await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
                 if (shouldHighlightAsc || shouldHighlightDesc) {
-                    sortedData[index].focus = 'inactive';
+                    barGraphData[index].focus = 'inactive';
+                    barGraphData[i].focus = 'active';
+                    barGraphData[j].focus = 'highlight';
+                    setBarGraphData([...barGraphData]);
+
                     index = j;
-                    sortedData[j].focus = 'highlight';
-                    setBarGraphData([...sortedData]);
                 }
                 else
                 {
-                    sortedData[j].focus = 'inactive';
-                    setBarGraphData([...sortedData]);
+                    barGraphData[j].focus = 'inactive';
+                    setBarGraphData([...barGraphData]);
                 }
             }
 
+            await new Promise(resolve => setTimeout(resolve, delayRef.current));
+
             if (index !== i) {
-                const temp = sortedData[i].data;
-                sortedData[i].data = sortedData[index].data;
-                sortedData[index].data = temp;
+                const temp = barGraphData[i].data;
+                barGraphData[i].data = barGraphData[index].data;
+                barGraphData[index].data = temp;
             }
 
-            sortedData[index].focus = 'inactive';
-            sortedData[i].focus = 'completed';
-            setBarGraphData([...sortedData]);
-            
-            await new Promise(resolve => setTimeout(resolve, delayRef.current));
+            barGraphData[index].focus = 'inactive';
+            barGraphData[i].focus = 'completed';
+            setBarGraphData([...barGraphData]);
         }
     };
 
