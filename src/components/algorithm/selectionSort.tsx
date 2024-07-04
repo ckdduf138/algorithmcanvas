@@ -79,11 +79,7 @@ const SelectionSortCanvas: React.FC = () => {
 
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
-            if (index !== i) {
-                const temp = barGraphData[i].data;
-                barGraphData[i].data = barGraphData[index].data;
-                barGraphData[index].data = temp;
-            }
+            [barGraphData[i].data, barGraphData[index].data] = [barGraphData[index].data, barGraphData[i].data];
 
             barGraphData[index].focus = 'inactive';
             barGraphData[i].focus = 'completed';

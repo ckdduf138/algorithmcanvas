@@ -5,24 +5,28 @@ import { useTheme } from '../../context/themeContext';
 
 type AxisComponentProps = {
   xScale: any;
-  yMax: number;
+  postionY: number;
+  dataLength: number
 };
 
-const BarCanvasBottom: React.FC<AxisComponentProps> = ({ xScale, yMax }) => {
+const BarCanvasBottom: React.FC<AxisComponentProps> = ({ xScale, postionY: yMax, dataLength }) => {
   const { theme } = useTheme();
+
+  dataLength = dataLength > 30 ? dataLength / (dataLength / 30 + 1) : dataLength;
 
   return (
     <AxisBottom
-      top={yMax + 70}
+      top={yMax}
       scale={xScale}
       stroke="#ffffff"
+      numTicks={dataLength}
       tickStroke="#ffffff"
       hideAxisLine
       hideTicks
       tickFormat={(index) => `[${index}]`}
       tickLabelProps={() => ({
         fill: theme === 'light' ? '#15202b' : '#ffffff',
-        fontSize: '30px',
+        fontSize: `${Math.min(Math.max(xScale.bandwidth(), 30), 30)}px`,
         textAnchor: 'middle',
       })}
     />
