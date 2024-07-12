@@ -58,6 +58,7 @@ const Home = () => {
                             key={index}
                             title={box.title}
                             imgSrc={box.imgSrc}
+                            gifSrc={box.gifSrc}
                             tags={box.tags}
                             link={box.link}
                             description={box.description}

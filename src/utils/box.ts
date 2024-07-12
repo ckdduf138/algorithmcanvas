@@ -7,6 +7,7 @@ export const tagColors: { [key: string]: string } = {
 export interface BoxProps {
     title: string;
     imgSrc: string;
+    gifSrc: string;
     tags: string[];
     link: string;
     description: string;
@@ -15,7 +16,8 @@ export interface BoxProps {
 export const boxes: BoxProps[] = [
     {
         title: "선택정렬",
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['정렬', '배열'],
         link: `selection_sort`,
         description: '배열을 순회하면서 가장 작은(또는 큰) 원소를 선택하여 맨 앞부터 차례대로 정렬하는 방식입니다.' +
@@ -23,7 +25,8 @@ export const boxes: BoxProps[] = [
     },
     {
         title: "삽입정렬",
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['정렬', '배열'],
         link: `bfs`,
         description: '배열을 정렬된 부분과 정렬되지 않은 부분으로 나누고, 정렬되지 않은 부분의 원소를 정렬된 부분에 삽입하여 정렬하는 방식입니다.' + 
@@ -31,7 +34,8 @@ export const boxes: BoxProps[] = [
     },
     {
         title: "버블정렬",
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['정렬', '배열'],
         link: `bfs`,
         description: '인접한 두 원소를 비교하며 큰 값을 뒤로 보내면서 정렬하는 방식입니다.' +
@@ -39,7 +43,8 @@ export const boxes: BoxProps[] = [
     },
     {
         title: "병합정렬",
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['정렬', '배열'],
         link: `bfs`,
         description: '배열을 반으로 나눈 후 각 부분을 재귀적으로 정렬하고, 정렬된 부분을 합병하여 전체를 정렬하는 방식입니다.' +
@@ -47,7 +52,8 @@ export const boxes: BoxProps[] = [
     },
     {
         title: "힙정렬",
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['정렬', '배열'],
         link: `bfs`,
         description: '최대 힙 또는 최소 힙을 구성하여 정렬하는 방식으로, 힙을 구성하는 시간이 O(n)이고, 정렬하는 시간이 O(n log n)입니다.' +
@@ -55,7 +61,8 @@ export const boxes: BoxProps[] = [
     },
     {
         title: "퀵정렬",
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['정렬', '배열'],
         link: `bfs`,
         description: '피벗을 기준으로 작은 값은 왼쪽, 큰 값은 오른쪽으로 분할하여 정렬하는 방식입니다.' +
@@ -64,6 +71,7 @@ export const boxes: BoxProps[] = [
         {
         title: "BFS",
         imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['그래프'],
         link: `bfs`,
         description: '루트 노드에서 시작하여 인접한 노드를 먼저 탐색하는 그래프 탐색 알고리즘입니다.' +
@@ -72,6 +80,7 @@ export const boxes: BoxProps[] = [
     {
         title: "DFS",
         imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['그래프'],
         link: `bfs`,
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
