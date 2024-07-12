@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BoxProps, tagColors } from '../../utils/box';
@@ -11,7 +11,7 @@ const Flip = styled.div`
     perspective: 1100px;
 `;
 
-const BoxWapper = styled.div`
+const BoxWapper = styled.div<{isTurn: boolean}>`
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -26,9 +26,7 @@ const BoxWapper = styled.div`
     transform-style: preserve-3d;
     transition: 1s;
 
-    &:hover {
-        transform: rotateY(180deg);
-    }
+    transform: ${({isTurn}) => isTurn === true ? '' : 'rotateY(180deg);'}  
 `;
 
 const FrontBox = styled.div`
@@ -60,6 +58,14 @@ const BackBox = styled.div`
 
 const BoxTitle = styled.div`
     font-size: 30px;
+`;
+
+const TurnImage = styled.img`
+    width: 10%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 15px;
 `;
 
 const BoxImage = styled.img`
@@ -94,19 +100,28 @@ const Tag = styled.span<{ color: string }>`
     padding: 2px 5px 0;
 `;
 
-const Box: React.FC<BoxProps> = ({ title, imgSrc, tags, link, description }) => {
+const Box: React.FC<BoxProps> = ({ title, imgSrc, gifSrc, tags, link, description }) => {
+    const [isFront, setIsFront] = useState(true);
+    const [isHover, setIsHover] = useState(false);
+
     const navigate = useNavigate();
 
-    const box_onClicked = () => {
+    const onclickedBox = () => {
         navigate(link);
     };
 
     return (
         <Flip>
-            <BoxWapper onClick={box_onClicked}>
+            <BoxWapper isTurn={isFront} onClick={onclickedBox} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
             <FrontBox>
                 <BoxTitle>{title}</BoxTitle>
-                <BoxImage src={imgSrc} alt="box_image" />
+                <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.png`} 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsFront(false);
+                    }}
+                />
+                <BoxImage src={isHover ? gifSrc : imgSrc} alt="boximage" />
                 <TagParent>
                     {tags.map((tag, index) => (
                         <Tag key={index} color={tagColors[tag]}>{tag}</Tag>
@@ -116,6 +131,12 @@ const Box: React.FC<BoxProps> = ({ title, imgSrc, tags, link, description }) => 
 
             <BackBox>
                 <BoxTitle>{title}</BoxTitle>
+                <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.png`} 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsFront(true);
+                    }}
+                />
                 <BoxDescription>{description}</BoxDescription>
                 <TagParent>
                     {tags.map((tag, index) => (

@@ -7,7 +7,7 @@ import BarCanvasMain from './barCanvas.Main';
 import BarCanvasBottom from './barCanvas.Bottom';
 
 import { getLogScale } from '../../utils/common';
-import { BarGraphData } from '../../utils/data';
+import { BarGraphData } from '../../utils/graphData';
 import { useWindowSize } from '../../hooks/getWindowSize';
 
 
@@ -61,7 +61,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
 
   return (
     <StyleCanvasMain>
-      <svg width={width} height={height}>
+      <svg width={width} height={height + 50}>
         <Group top={verticalMargin / 2}>
           <BarCanvasMain
             data={data}
@@ -73,9 +73,9 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
             events={events}
           />
         </Group>
-        <BarCanvasBottom xScale={xScale} yMax={yMax} />
-        </svg>
-      </StyleCanvasMain>
+        <BarCanvasBottom xScale={xScale} postionY={height} dataLength={data.length} />
+      </svg>
+    </StyleCanvasMain>
   );
 };
 

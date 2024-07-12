@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from '@visx/shape';
 import { useTheme } from '../../context/themeContext';
-import { BarGraphData } from '../../utils/data';
+import { BarGraphData } from '../../utils/graphData';
 
 type BarComponentProps = {
   data: BarGraphData[];
@@ -15,7 +15,7 @@ type BarComponentProps = {
 
 const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transformedData, xScale, yScale, yMax, events }) => {
   const { theme } = useTheme();
-  
+
   return (
     <>
       {transformedData.map((d, index) => {
@@ -23,9 +23,10 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transforme
         const barHeight = yMax - (yScale(d) ?? 0);
         const barX = (xScale(index.toString()) ?? 0) + (xScale.bandwidth() - barWidth) / 2;
         const barY = yMax - barHeight;
-        const fill = data[index].focus === 'active' ? '#F5005A' 
-             : data[index].focus === 'completed' ? '#00FF00' 
-             : theme === 'light' ? '#15202b' : '#ffffff';
+        const fill = data[index].focus === 'active' ? '#F5005A'
+              : data[index].focus === 'completed' ? '#00FF00'   
+              : data[index].focus === 'highlight' ? '#0000FF' 
+              : theme === 'light' ? '#15202b' : '#ffffff';
         const isChanged = prevData[index] && prevData[index].data !== data[index].data;
 
         return (
@@ -47,7 +48,8 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transforme
               y={barY + barHeight - 10}
               fontSize="24px"
               textAnchor="middle"
-              fill= {theme === 'light' ? '#ffffff' : '#15202b'}
+              fill={theme === 'light' ? '#ffffff' : '#15202b'}
+              style={{ transition: isChanged ? 'all 0.5s ease' : 'none' }}
             >
               {data[index].data}
             </text>

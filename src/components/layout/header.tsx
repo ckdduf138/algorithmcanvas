@@ -11,7 +11,7 @@ const StyledHeader = styled.header<{ theme: string }>`
     background-color: ${({ theme }) => (theme === 'light' ? '#ffffff' : '#15202b')};
     text-align: center;
     text-transform: uppercase;
-    font-family: 'Raleway', cursive;
+    font-family: 'Raleway', fantasy;
     position: relative;
     width: 100%;
     height: 10%;
