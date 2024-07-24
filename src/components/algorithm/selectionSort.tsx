@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import BarCanvasUI from '../barCanvas/barCanvas.UI';
 import BarCanvas from '../barCanvas/barCanvas';
@@ -8,12 +8,7 @@ import { generateRandomNumbers } from '../../utils/common';
 const SelectionSortCanvas: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [delay, setDelay] = useState<number>(500);
-    const delayRef = useRef(delay);
-
-    useEffect(() => {
-        delayRef.current = delay;
-    }, [delay]);
+    const delayRef = useRef(500);
 
     const handleAdd = (inputValue: string) => {
         const newValue: BarGraphData = {
@@ -88,7 +83,7 @@ const SelectionSortCanvas: React.FC = () => {
     };
 
     const handleDelay = (delay: number) => {
-        setDelay(100 / delay);
+        delayRef.current = 100 / delay;
     };
 
     return (
