@@ -26,7 +26,7 @@ const HomeBoxes = styled.div`
     flex-wrap: wrap;
 `;
 
-const Home = () => {
+const HomePage = () => {
     const [filteredBoxes, setFilteredBoxes] = useState(boxes);
     
     const home_onSearch = (query: string) => {
@@ -70,4 +70,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default HomePage;

@@ -1,11 +1,12 @@
 import React from 'react';
+
 import { Bar } from '@visx/shape';
+
 import { useTheme } from '../../context/themeContext';
 import { BarGraphData } from '../../utils/graphData';
 
 type BarComponentProps = {
   data: BarGraphData[];
-  prevData: BarGraphData[];
   transformedData: number[];
   xScale: any;
   yScale: any;
@@ -13,7 +14,7 @@ type BarComponentProps = {
   events: boolean;
 };
 
-const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transformedData, xScale, yScale, yMax, events }) => {
+const BarCanvasMain: React.FC<BarComponentProps> = ({ data, transformedData, xScale, yScale, yMax, events }) => {
   const { theme } = useTheme();
 
   return (
@@ -27,7 +28,6 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transforme
               : data[index].focus === 'completed' ? '#00FF00'   
               : data[index].focus === 'highlight' ? '#0000FF' 
               : theme === 'light' ? '#15202b' : '#ffffff';
-        const isChanged = prevData[index] && prevData[index].data !== data[index].data;
 
         return (
           <React.Fragment key={index}>
@@ -37,9 +37,7 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transforme
               width={barWidth}
               height={barHeight}
               fill={fill}
-              style={{ transition: isChanged ? 'all 0.5s ease' : 'none' }}
               onClick={() => {
-                console.log("clicked data: " + data[index].data);
                 if (events) alert(`clicked: ${JSON.stringify({ index, value: data[index].data })}`);
               }}
             />
@@ -49,7 +47,6 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, prevData, transforme
               fontSize="24px"
               textAnchor="middle"
               fill={theme === 'light' ? '#ffffff' : '#15202b'}
-              style={{ transition: isChanged ? 'all 0.5s ease' : 'none' }}
             >
               {data[index].data}
             </text>

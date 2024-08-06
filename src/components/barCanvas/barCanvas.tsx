@@ -1,15 +1,14 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
+
+import styled from 'styled-components';
 import { Group } from '@visx/group';
 import { scaleBand, scaleLinear } from '@visx/scale';
-import styled from 'styled-components';
 
 import BarCanvasMain from './barCanvas.Main';
 import BarCanvasBottom from './barCanvas.Bottom';
-
 import { getLogScale } from '../../utils/common';
 import { BarGraphData } from '../../utils/graphData';
 import { useWindowSize } from '../../hooks/getWindowSize';
-
 
 const StyleCanvasMain = styled.div`
     width: 100%;
@@ -27,18 +26,13 @@ type BarCanvasProps = {
 
 const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) => {
   const { width, height } = useWindowSize();
-  const [data, setData] = useState(barGraphData);
-  const [prevData, setPrevData] = useState(barGraphData);
-
-  useEffect(() => {
-    setPrevData(data);
-    setData(barGraphData);
-  }, [barGraphData]);
 
   const xMax = width;
   const yMax = height - verticalMargin;
 
-  const transformedData = useMemo(() => data.map(item => getLogScale(item.data)), [data]);
+  const transformedData = useMemo(() => { 
+      return barGraphData.map(item => getLogScale(item.data));
+    },[barGraphData]);
 
   const xScale = useMemo(() => {
     const scale = scaleBand<string>({
@@ -64,8 +58,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
       <svg width={width} height={height + 50}>
         <Group top={verticalMargin / 2}>
           <BarCanvasMain
-            data={data}
-            prevData={prevData}
+            data={barGraphData}
             transformedData={transformedData}
             xScale={xScale}
             yScale={yScale}
@@ -73,7 +66,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
             events={events}
           />
         </Group>
-        <BarCanvasBottom xScale={xScale} postionY={height} dataLength={data.length} />
+        <BarCanvasBottom xScale={xScale} postionY={height} dataLength={barGraphData.length} />
       </svg>
     </StyleCanvasMain>
   );
