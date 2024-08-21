@@ -8,13 +8,13 @@ import InsertionSortPage from './pages/sort/page.insertionSort';
 import BubbleSortPage from './pages/sort/page.bubbleSort';
 import MergeSortPage from './pages/sort/page.mergeSort';
 import HeapSortPage from './pages/sort/page.heapSort';
+import QuickSortPage from './pages/sort/page.quickSort';
 
 import BFSPage from './pages/page.bfs';
 
 import NotFoundPage from './pages/page.notFound';
 
 import { ThemeProvider } from './context/themeContext';
-
 
 const App = () => {
     return (
@@ -30,6 +30,7 @@ const App = () => {
                     <Route path="bubble_sort" element={<BubbleSortPage />} />
                     <Route path="merge_sort" element={<MergeSortPage />} />
                     <Route path="heap_sort" element={<HeapSortPage />} />
+                    <Route path="quick_sort" element={<QuickSortPage />} />
 
                     {/* 그래프 */}
                     <Route path="bfs" element={<BFSPage />} />

@@ -6,7 +6,7 @@ import { useAdd, useDelay, useRandom, useReset } from '../../hooks/sort/sort';
 import BarCanvas from '../../components/barCanvas/barCanvas';
 import BarCanvasUI from '../../components/barCanvas/barCanvas.UI';
 
-const HeapSortPage: React.FC = () => {
+const QuickSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const delayRef = useRef(500);
@@ -17,12 +17,14 @@ const HeapSortPage: React.FC = () => {
     const handleDelay = useDelay(delayRef);
     
     const handleStart = async () => {
+        const dataLength = barGraphData.length;
+
         barGraphData.forEach(data => {
             data.focus = 'inactive';
         });
         setBarGraphData([...barGraphData]);
 
-        await heapSort(barGraphData);
+        await quickSort(barGraphData, 0, dataLength - 1);
 
         barGraphData.forEach(data => {
             data.focus = 'completed';
@@ -30,61 +32,57 @@ const HeapSortPage: React.FC = () => {
         setBarGraphData([...barGraphData]);
     };
 
-    const heapSort = async (array: BarGraphData[]) => {
-        const n = array.length;
+    const quickSort = async (array: BarGraphData[], low: number, high: number) => {
+        if (low < high) {
+            const pi = await partition(array, low, high);
 
-        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-            await heapify(array, n, i);
+            await quickSort(array, low, pi - 1);
+
+            await quickSort(array, pi + 1, high);
         }
-
-        for (let i = n - 1; i > 0; i--) {
-            [array[0].data, array[i].data] = [array[i].data, array[0].data];
-            array[i].focus = 'completed';
-            setBarGraphData([...array]);
-
-            await new Promise(resolve => setTimeout(resolve, delayRef.current));
-
-            await heapify(array, i, 0);
-        }
-
-        array[0].focus = 'completed';
-        setBarGraphData([...array]);
     };
 
-    const heapify = async (array: BarGraphData[], n: number, i: number) => {
-        let largest = i;
-        const left = 2 * i + 1;
-        const right = 2 * i + 2;
+    const partition = async (array: BarGraphData[], low: number, high: number): Promise<number> => {
+        const pivotIndex = high;
+        const pivotValue = array[pivotIndex].data;
 
-        array[i].focus = 'active';
+        array[pivotIndex].focus = 'highlight';
         setBarGraphData([...array]);
 
         await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
-        if (left < n && (sortOrder === 'asc' ? array[left].data > array[largest].data : array[left].data < array[largest].data)) {
-            largest = left;
-        }
-
-        if (right < n && (sortOrder === 'asc' ? array[right].data > array[largest].data : array[right].data < array[largest].data)) {
-            largest = right;
-        }
-
-        if (largest !== i) {
-            [array[i].data, array[largest].data] = [array[largest].data, array[i].data];
-            array[largest].focus = 'completed';
+        let i = low - 1;
+        for (let j = low; j < high; j++) {
+            array[j].focus = 'active';
             setBarGraphData([...array]);
 
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
-            await heapify(array, n, largest);
+            if (sortOrder === 'asc' ? array[j].data <= pivotValue : array[j].data >= pivotValue) {
+                i++;
+                [array[i].data, array[j].data] = [array[j].data, array[i].data];
+                setBarGraphData([...array]);
+
+                array[i].focus = 'completed';
+            }
+
+            if(array[j].focus != 'completed') {
+                array[j].focus = 'inactive';
+            }
+            setBarGraphData([...array]);
         }
 
-        array[i].focus = 'inactive';
+        [array[i + 1].data, array[pivotIndex].data] = [array[pivotIndex].data, array[i + 1].data];
+        array[i + 1].focus = 'completed';
         setBarGraphData([...array]);
+
+        await new Promise(resolve => setTimeout(resolve, delayRef.current));
+
+        return i + 1;
     };
 
     return (
-        <Layout subTitle='힙정렬'>
+        <Layout subTitle='퀵정렬'>
             <BarCanvas barGraphData={barGraphData} />
             <BarCanvasUI
                 handleAdd={handleAdd}
@@ -98,4 +96,4 @@ const HeapSortPage: React.FC = () => {
     );
 };
 
-export default HeapSortPage;
+export default QuickSortPage;
