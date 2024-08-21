@@ -6,7 +6,7 @@ import { useAdd, useDelay, useRandom, useReset } from '../../hooks/sort/sort';
 import BarCanvas from '../../components/barCanvas/barCanvas';
 import BarCanvasUI from '../../components/barCanvas/barCanvas.UI';
 
-const InsertionSortPage = () => {
+const InsertionSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const delayRef = useRef(500);
@@ -41,12 +41,12 @@ const InsertionSortPage = () => {
                 barGraphData[j - 1].focus = 'active';
                 setBarGraphData([...barGraphData]);
 
-                const shouldHighlightAsc = sortOrder === 'asc' && barGraphData[j].data < barGraphData[j - 1].data;
-                const shouldHighlightDesc = sortOrder === 'desc' && barGraphData[j].data > barGraphData[j - 1].data;
+                const shouldSwapAsc = sortOrder === 'asc' && barGraphData[j].data < barGraphData[j - 1].data;
+                const shouldSwapDesc = sortOrder === 'desc' && barGraphData[j].data > barGraphData[j - 1].data;
 
                 await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
-                if (shouldHighlightAsc || shouldHighlightDesc) {
+                if (shouldSwapAsc || shouldSwapDesc) {
                     [barGraphData[j].data, barGraphData[j - 1].data] = [barGraphData[j - 1].data, barGraphData[j].data];
                     
                     barGraphData[j].focus = 'inactive';

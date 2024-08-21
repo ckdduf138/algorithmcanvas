@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '../components/layout/layout';
 
-const Page_Bfs = () => {
+const BFSPage = () => {
     return (
         <Layout subTitle='BFS'>
             BFS
@@ -9,4 +9,4 @@ const Page_Bfs = () => {
     );
 };
 
-export default Page_Bfs;
+export default BFSPage;
