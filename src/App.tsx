@@ -6,12 +6,14 @@ import HomePage from './pages/page.home';
 import SelectionSortPage from './pages/sort/page.selectionSort';
 import InsertionSortPage from './pages/sort/page.insertionSort';
 import BubbleSortPage from './pages/sort/page.bubbleSort';
+import MergeSortPage from './pages/sort/page.mergeSort';
 
 import BFSPage from './pages/page.bfs';
 
 import NotFoundPage from './pages/page.notFound';
 
 import { ThemeProvider } from './context/themeContext';
+
 
 const App = () => {
     return (
@@ -25,6 +27,7 @@ const App = () => {
                     <Route path="selection_sort" element={<SelectionSortPage />} />
                     <Route path="insertion_sort" element={<InsertionSortPage />} />
                     <Route path="bubble_sort" element={<BubbleSortPage />} />
+                    <Route path="merge_sort" element={<MergeSortPage />} />
 
                     {/* 그래프 */}
                     <Route path="bfs" element={<BFSPage />} />
