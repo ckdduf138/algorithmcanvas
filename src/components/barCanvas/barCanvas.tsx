@@ -10,7 +10,7 @@ import { getLogScale } from '../../utils/common';
 import { BarGraphData } from '../../utils/graphData';
 import { useWindowSize } from '../../hooks/getWindowSize';
 
-const StyleCanvasMain = styled.div`
+const BarCanvasWapper = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
@@ -54,7 +54,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
   }), [transformedData, yMax]);
 
   return (
-    <StyleCanvasMain>
+    <BarCanvasWapper>
       <svg width={width} height={height + 50}>
         <Group top={verticalMargin / 2}>
           <BarCanvasMain
@@ -68,7 +68,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
         </Group>
         <BarCanvasBottom xScale={xScale} postionY={height} dataLength={barGraphData.length} />
       </svg>
-    </StyleCanvasMain>
+    </BarCanvasWapper>
   );
 };
 

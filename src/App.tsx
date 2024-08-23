@@ -10,7 +10,7 @@ import MergeSortPage from './pages/sort/page.mergeSort';
 import HeapSortPage from './pages/sort/page.heapSort';
 import QuickSortPage from './pages/sort/page.quickSort';
 
-import BFSPage from './pages/page.bfs';
+import BFSPage from './pages/graph/page.bfs';
 
 import NotFoundPage from './pages/page.notFound';
 
