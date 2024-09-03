@@ -1,0 +1,42 @@
+.box_main {
+    background: #fff;
+    border-radius: 10%;
+    display: inline-block;
+    height: 300px;
+    width: 300px;
+    margin: 30px;
+    position: relative;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+    text-align: center;
+    cursor: pointer;
+}
+
+.box_title {
+    font-size: 30px;
+    border: 10%;
+}
+
+.box_image {
+    width: 70%;
+    height: 70%;
+    border-radius: 10%;
+}
+
+.box_tagParent {
+    display: flex;
+    margin: 2%;
+    height: 27px;
+    overflow: hidden;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.box_tag {
+    font-size: 18px;
+    background-color: #F0F1F2;
+    color: #666;
+    border-radius: 30%;
+    padding: 2px 5px 0;
+}
