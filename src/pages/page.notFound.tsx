@@ -46,7 +46,7 @@ const NotFoundPage = () => {
         <PageNotFoundContainer>
             <Image src={`${process.env.PUBLIC_URL}/images/404.png`}/>
             <Heading>404 - Not Found</Heading>
-            <Message>준비중..</Message>
+            <Message>공사 중..</Message>
             <HomeLink to="/">Go back to Home</HomeLink>
         </PageNotFoundContainer>
     );
