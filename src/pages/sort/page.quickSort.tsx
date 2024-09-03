@@ -66,7 +66,7 @@ const QuickSortPage: React.FC = () => {
                 array[i].focus = 'completed';
             }
 
-            if(array[j].focus != 'completed') {
+            if(array[j].focus !== 'completed') {
                 array[j].focus = 'inactive';
             }
             setBarGraphData([...array]);
