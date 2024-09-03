@@ -57,7 +57,7 @@ const BackBox = styled.div`
 `
 
 const BoxTitle = styled.div`
-    font-size: 30px;
+    font-size: 26px;
 `;
 
 const TurnImage = styled.img`

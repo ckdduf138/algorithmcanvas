@@ -2,10 +2,10 @@ import React from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
-const BFSPage: React.FC = () => (
-  <Layout subTitle='너비 우선 탐색(BFS)'>
+const DijkstraPage: React.FC = () => (
+  <Layout subTitle='다익스트라(Dijkstra)'>
     <GraphCanvas />
   </Layout>
 );
 
-export default BFSPage;
+export default DijkstraPage;

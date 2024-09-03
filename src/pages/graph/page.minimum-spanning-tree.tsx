@@ -2,10 +2,10 @@ import React from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
-const BFSPage: React.FC = () => (
-  <Layout subTitle='너비 우선 탐색(BFS)'>
+const MinimumSpanningTreePage: React.FC = () => (
+  <Layout subTitle='최소 신장 트리(Minimum Spanning Tree)'>
     <GraphCanvas />
   </Layout>
 );
 
-export default BFSPage;
+export default MinimumSpanningTreePage;

@@ -86,4 +86,40 @@ export const boxes: BoxProps[] = [
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
         '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
     },
+    {
+        title: "다익스트라",
+        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['그래프'],
+        link: `dijkstra`,
+        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
+        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+    },
+    {
+        title: "벨만-포드",
+        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['그래프'],
+        link: `bellman-ford`,
+        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
+        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+    },
+    {
+        title: "플로이드",
+        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['그래프'],
+        link: `Floyd`,
+        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
+        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+    },
+    {
+        title: "최소 신장 트리",
+        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['그래프'],
+        link: `minimum-spanning-tree`,
+        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
+        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+    },
 ];
