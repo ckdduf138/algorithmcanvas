@@ -11,15 +11,15 @@ import HeapSortPage from './pages/sort/page.heapSort';
 import QuickSortPage from './pages/sort/page.quickSort';
 
 import BFSPage from './pages/graph/page.bfs';
-
-import NotFoundPage from './pages/page.notFound';
-
-import { ThemeProvider } from './context/themeContext';
 // import DFSPage from './pages/graph/page.dfs';
 // import DijkstraPage from './pages/graph/page.dijkstra';
 // import BellmanFordPage from './pages/graph/page.bellman-ford';
 // import FloydPage from './pages/graph/page.floyd';
 // import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
+
+import NotFoundPage from './pages/page.notFound';
+
+import { ThemeProvider } from './context/themeContext';
 
 const App = () => {
     return (
@@ -48,6 +48,7 @@ const App = () => {
                     <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} /> */}
 
                     {/* 404 */}
+                    <Route path="404" element={<NotFoundPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </BrowserRouter>
