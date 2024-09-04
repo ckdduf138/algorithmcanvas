@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <script type="text/typescript">
-            (function (l: Location) {
-                if (l.search) {
-                    const q: { [key: string]: string } = {};
-                    l.search.slice(1).split('&').forEach((v: string) => {
-                        const a = v.split('=');
-                        q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-                    });
-                    if (q.p !== undefined) {
-                        window.history.replaceState(null, null,
-                            l.pathname.slice(0, -1) + (q.p || '') +
-                            (q.q ? ('?' + q.q) : '') +
-                            l.hash
-                        );
-                    }
+        <script type="text/javascript">
+            (function() {
+                var redirected = window.location.search.match(/^\?p=([^&]*)&q=(.*)$/);
+                if (redirected) {
+                    var target = redirected[1];
+                    var query = redirected[2].replace(/~and~/g, '&');
+                    window.history.replaceState(
+                        null, 
+                        null,
+                        window.location.pathname.slice(0, -5) + target + (query ? '?' + query : '') + window.location.hash
+                    );
                 }
-            }(window.location));
-
+            })();
         </script>
     
     </head>
