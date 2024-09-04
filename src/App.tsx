@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import HomePage from './pages/page.home';
 
@@ -48,7 +48,8 @@ const App = () => {
                     <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} /> */}
 
                     {/* 404 */}
-                    <Route path="*" element={<NotFoundPage />} />
+                    <Route path="404" element={<NotFoundPage />} />
+                    <Route path="*" element={<Navigate to="404" />} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>
