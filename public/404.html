@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
-    <title>algocanvas</title>
+    <title>SPA Redirect for GitHub Pages</title>
 </head>
+
 <body>
     <script type="text/javascript">
         var l = window.location;
         var basename = '/algocanvas';
-
-        if (l.pathname.startsWith(basename) && !l.pathname.includes('/404')) {
-            var newUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + basename + '/';
-            window.history.replaceState(null, null, newUrl);
-        }
+        var newUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + basename + '/index.html' + l.search + l.hash;
+        window.history.replaceState(null, null, newUrl);
+        window.location.replace(newUrl);
     </script>
-    <p>If you are not redirected automatically, follow this <a href="/">link</a>.</p>
 </body>
+
 </html>
