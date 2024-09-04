@@ -6,9 +6,11 @@
     <title>Single Page Apps for GitHub Pages</title>
     <script type="text/javascript">
         var segmentCount = 1;
+
         var l = window.location;
         var pathSegments = l.pathname.split('/').slice(0, 1 + segmentCount);
         var newPath = pathSegments.join('/') + '/404';
+
         var remainingPath = l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~');
 
         l.replace(
