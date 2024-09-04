@@ -1,29 +1,19 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
-    <title>Single Page Apps for GitHub Pages</title>
-    <script type="text/javascript">
-        var segmentCount = 1;
-
-        var l = window.location;
-        var pathSegments = l.pathname.split('/').slice(0, 1 + segmentCount);
-        var newPath = pathSegments.join('/') + '/404';
-
-        var remainingPath = l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~');
-
-        l.replace(
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            newPath +
-            (remainingPath ? '/' + remainingPath : '') +
-            (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-            l.hash
-        );
-    </script>
+    <title>algocanvas</title>
 </head>
-
 <body>
-</body>
+    <script type="text/javascript">
+        var l = window.location;
+        var basename = '/algocanvas';
 
+        if (l.pathname.startsWith(basename) && !l.pathname.includes('/404')) {
+            var newUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + basename + '/';
+            window.history.replaceState(null, null, newUrl);
+        }
+    </script>
+    <p>If you are not redirected automatically, follow this <a href="/">link</a>.</p>
+</body>
 </html>

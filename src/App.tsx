@@ -48,8 +48,7 @@ const App = () => {
                     <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} /> */}
 
                     {/* 404 */}
-                    <Route path="404" element={<NotFoundPage />} />
-                    <Route path="*" element={<Navigate to="404" />} />
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>
