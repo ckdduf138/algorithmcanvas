@@ -56,18 +56,22 @@ const HomePage = () => {
             </HomeSearch>
             <HomeContent>
                 <HomeBoxes>
-                    {filteredBoxes.map((box, index) => (
-                        <Box
-                            key={index}
-                            title={box.title}
-                            imgSrc={box.imgSrc}
-                            gifSrc={box.gifSrc}
-                            tags={box.tags}
-                            link={box.link}
-                            description={box.description}
-                            onTagClick={handleTagClick}
-                        />
-                    ))}
+                    {filteredBoxes.length > 0 ? (
+                        filteredBoxes.map((box, index) => (
+                            <Box
+                                key={index}
+                                title={box.title}
+                                imgSrc={box.imgSrc}
+                                gifSrc={box.gifSrc}
+                                tags={box.tags}
+                                link={box.link}
+                                description={box.description}
+                                onTagClick={handleTagClick}
+                            />
+                        ))
+                    ) : (
+                        <h2>검색 결과가 없습니다.</h2>
+                    )}
                 </HomeBoxes>
             </HomeContent>
         </Layout>
