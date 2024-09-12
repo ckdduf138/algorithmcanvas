@@ -30,17 +30,18 @@ const HomePage = () => {
     const [filteredBoxes, setFilteredBoxes] = useState(boxes);
     
     const home_onSearch = (query: string) => {
-        if (query.trim() === '') {
-            setFilteredBoxes(boxes);
+        const lowerCaseQuery = query.toLowerCase();
+        const exactMatchBoxes = boxes.filter(box => box.title.toLowerCase() === lowerCaseQuery);
+    
+        if (exactMatchBoxes.length > 0) {
+            setFilteredBoxes(exactMatchBoxes);
         } else {
             const filtered = boxes.filter(box =>
-                box.tags.some(tag => 
-                    {
-                        const reg = new RegExp(query.split("").join(".*?"), "i");
-                        const exp = new RegExp(tag.split("").join(".*?"), "i");
-                        return reg.test(tag) || exp.test(query);
-                    }
-                )
+                box.tags.some(tag => {
+                    const reg = new RegExp(query.split("").join(".*?"), "i");
+                    const exp = new RegExp(tag.split("").join(".*?"), "i");
+                    return reg.test(tag) || exp.test(query);
+                })
             );
             setFilteredBoxes(filtered);
         }
