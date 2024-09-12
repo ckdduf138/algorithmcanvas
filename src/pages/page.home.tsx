@@ -46,7 +46,9 @@ const HomePage = () => {
             setFilteredBoxes(filtered);
         }
     };
-
+    const handleTagClick = (tag: string) => {
+        home_onSearch(tag);
+    };
     return (
         <Layout subTitle=''>
             <HomeSearch>
@@ -63,6 +65,7 @@ const HomePage = () => {
                             tags={box.tags}
                             link={box.link}
                             description={box.description}
+                            onTagClick={handleTagClick}
                         />
                     ))}
                 </HomeBoxes>
