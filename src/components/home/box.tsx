@@ -100,7 +100,7 @@ const Tag = styled.span<{ color: string }>`
     padding: 2px 5px 0;
 `;
 
-const Box: React.FC<BoxProps> = ({ title, imgSrc, gifSrc, tags, link, description }) => {
+const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title, imgSrc, gifSrc, tags, link, description, onTagClick }) => {
     const [isFront, setIsFront] = useState(true);
     const [isHover, setIsHover] = useState(false);
 
@@ -108,6 +108,10 @@ const Box: React.FC<BoxProps> = ({ title, imgSrc, gifSrc, tags, link, descriptio
 
     const onclickedBox = () => {
         navigate(link);
+    };
+    const handleTagClick = (tag: string, event: React.MouseEvent<HTMLSpanElement>) => {
+        event.stopPropagation();
+        onTagClick(tag);
     };
 
     return (
@@ -124,7 +128,11 @@ const Box: React.FC<BoxProps> = ({ title, imgSrc, gifSrc, tags, link, descriptio
                 <BoxImage src={isHover ? gifSrc : imgSrc} alt="boximage" />
                 <TagParent>
                     {tags.map((tag, index) => (
-                        <Tag key={index} color={tagColors[tag]}>{tag}</Tag>
+                        <Tag
+                        key={index}
+                        color={tagColors[tag]}
+                        onClick={(e) => handleTagClick(tag, e)}
+                    >{tag}</Tag>
                     ))}
                 </TagParent>
             </FrontBox>
@@ -140,7 +148,11 @@ const Box: React.FC<BoxProps> = ({ title, imgSrc, gifSrc, tags, link, descriptio
                 <BoxDescription>{description}</BoxDescription>
                 <TagParent>
                     {tags.map((tag, index) => (
-                        <Tag key={index} color={tagColors[tag]}>{tag}</Tag>
+                        <Tag
+                        key={index}
+                        color={tagColors[tag]}
+                        onClick={(e) => handleTagClick(tag, e)}
+                        >{tag}</Tag>
                     ))}
                 </TagParent>
                 </BackBox>
