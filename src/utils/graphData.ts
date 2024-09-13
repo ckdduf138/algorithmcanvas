@@ -7,8 +7,14 @@ export interface BarGraphData {
 
 export const NodeRadius = 50;
 
+export interface NodeGraphData {
+    node: Node;
+    focus: FocusStatus;
+}
+
 export interface Node {
     id: string;
     x: number;
     y: number;
+    r: number;
 };

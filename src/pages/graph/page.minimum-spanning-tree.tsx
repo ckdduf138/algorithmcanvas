@@ -4,7 +4,7 @@ import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 const MinimumSpanningTreePage: React.FC = () => (
   <Layout subTitle='최소 신장 트리(Minimum Spanning Tree)'>
-    <GraphCanvas />
+    최소 신장 트리(Minimum Spanning Tree)
   </Layout>
 );
 
