@@ -9,11 +9,11 @@ const SearchBar = styled.input`
 
 interface SearchProps {
     onSearch: (query: string) => void;
+    query: string;
+    setQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Search: React.FC<SearchProps> = ({ onSearch }) => {
-    const [query, setQuery] = useState<string>('');
-
+const Search: React.FC<SearchProps> = ({ onSearch, query, setQuery }) => {
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = event.target.value;
         setQuery(newQuery);
