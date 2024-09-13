@@ -4,6 +4,7 @@ import Box from '../components/home/box';
 import Layout from '../components/layout/layout';
 import Search from '../components/home/search';
 import { boxes } from '../utils/box';
+import { useTheme } from '../context/themeContext';
 
 const HomeSearch = styled.div`
     display: flex;
@@ -25,11 +26,21 @@ const HomeBoxes = styled.div`
     justify-content: center;
     flex-wrap: wrap;
 `;
+const NoSearch = styled.div<{ theme: string }>`
+    text-align: center;
+    font-family: 'Raleway', fantasy;
+    font-size: 30px;
+    line-height: 200px;
+    width: 100%;
+    height: 10%;
+    color: ${({ theme }) => (theme === 'light' ? '#0b131b' : '#f7f8f9')};
+`;
 
 const HomePage = () => {
     const [filteredBoxes, setFilteredBoxes] = useState(boxes);
     const [query, setQuery] = useState('');
-    
+    const { theme } = useTheme();
+
     const home_onSearch = (query: string) => {
         const lowerCaseQuery = query.toLowerCase();
         const exactMatchBoxes = boxes.filter(box => box.title.toLowerCase() === lowerCaseQuery);
@@ -74,7 +85,7 @@ const HomePage = () => {
                             />
                         ))
                     ) : (
-                        <h2>검색 결과가 없습니다.</h2>
+                        <NoSearch theme={theme}>검색 결과가 없습니다.</NoSearch>
                     )}
                 </HomeBoxes>
             </HomeContent>
