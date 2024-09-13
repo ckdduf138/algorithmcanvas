@@ -28,6 +28,7 @@ const HomeBoxes = styled.div`
 
 const HomePage = () => {
     const [filteredBoxes, setFilteredBoxes] = useState(boxes);
+    const [query, setQuery] = useState('');
     
     const home_onSearch = (query: string) => {
         const lowerCaseQuery = query.toLowerCase();
@@ -47,12 +48,13 @@ const HomePage = () => {
         }
     };
     const handleTagClick = (tag: string) => {
+        setQuery(tag);
         home_onSearch(tag);
     };
     return (
         <Layout subTitle=''>
             <HomeSearch>
-                <Search onSearch={home_onSearch} />
+                <Search onSearch={home_onSearch} query={query} setQuery={setQuery} />
             </HomeSearch>
             <HomeContent>
                 <HomeBoxes>
