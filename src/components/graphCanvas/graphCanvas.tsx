@@ -1,8 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+
 import styled from 'styled-components';
-import { Node, NodeGraphData } from '../../utils/graphData';
+import { Graph } from '@visx/network';
+
+import { Link, Node, NodeGraphData } from '../../utils/graphData';
 import { useWindowSize } from '../../hooks/getWindowSize';
-import { useDragCopy } from '../../hooks/graph/useDragCopy ';
+import { useDragCopy } from '../../hooks/graph/useDrag';
 
 const GraphCanvasWapper = styled.svg`
   width: 100%;
@@ -17,32 +20,96 @@ const Circle = styled.circle`
   stroke-width: 2;
 `;
 
+const Line = styled.line`
+  stroke: black;
+  stroke-width: 2;
+`;
+
+const NodeRadius = 50;
+
 interface GraphCanvasProps {
-  nodeGraphData: NodeGraphData[];
-  handleDrop: (circle: { cx: number, cy: number, r: number }) => void;
+
 }
 
-const GraphCanvas: React.FC<GraphCanvasProps> = ({ nodeGraphData, handleDrop }) => {
-  const { width, height } = useWindowSize();
+const GraphCanvas: React.FC<GraphCanvasProps> = ({ }) => {
+  const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData[]>([]);
 
+  const { width, height } = useWindowSize();
+  const { draggingCircle, handleMouseDown, handleMouseDownNode, handleMouseMove, handleMouseUp } = useDragCopy();
+  
   const adjustedHeight = height * 0.8;
   const headerHeight = height * 0.1;
 
-  const { draggingCircle, handleMouseDown, handleMouseMove, handleMouseUp } = useDragCopy();
+  const handleDrop = (circle: { cx: number, cy: number, r: number }) => {
+    const newNode: Node = {
+      id: nodeGraphData.length.toString(),
+      x: circle.cx,
+      y: circle.cy,
+      r: circle.r,
+    };
 
+    const newLink: Link = {
+      source: (nodeGraphData.length - 1).toString(), 
+      target: nodeGraphData.length.toString(),
+    };
+
+    const newData: NodeGraphData = {node: newNode, link: newLink, focus: 'inactive'};
+
+    setNodeGraphData((prevData) => [
+      ...prevData, newData]);
+  };
+
+  const nodeGraphDatas = {
+    nodes: nodeGraphData.map(data => data.node),
+    links: nodeGraphData.map(data => data.link),
+  };
+
+  const CustomNode: React.FC<{ node: Node }> = ({ node }) => {
+    const nodeData = nodeGraphData.find(graph => graph.node.id === node.id);
+
+    return (
+      <Circle
+        cx={0}
+        cy={0}
+        r={NodeRadius}
+        onMouseDown={() => handleMouseDownNode(nodeData)}
+      />
+    );
+  };
+
+  const CustomLink: React.FC<{ link: { source: string; target: string } }> = ({ link }) => {
+    const nodes = nodeGraphData.map(data => data.node);
+    const sourceNode = nodes.find(node => node.id === link.source);
+    const targetNode = nodes.find(node => node.id === link.target);
+
+    if (!sourceNode || !targetNode) return null;
+
+    return (
+        <Line 
+            x1={sourceNode.x}
+            y1={sourceNode.y} 
+            x2={targetNode.x} 
+            y2={targetNode.y} 
+        />
+    );
+  };
+  
   return (
     <GraphCanvasWapper
       width={width} 
       height={adjustedHeight}
       onMouseMove={handleMouseMove} 
       onMouseUp={() => handleMouseUp(handleDrop)}>
-      {nodeGraphData.map((data) => (
-        <Circle key={data.node.id} cx={data.node.x} cy={data.node.y} r={data.node.r} />
-      ))}
+
+      <Graph
+        graph={nodeGraphDatas}
+        linkComponent={CustomLink}
+        nodeComponent={CustomNode}
+      />
 
       {/* 복사용 노드 */}
-      <Circle cx={width / 2} cy={adjustedHeight - headerHeight} r='50' 
-        onMouseDown={() => handleMouseDown({ id: Date.now(), cx: width / 2, cy: adjustedHeight - headerHeight, r: 50 })}
+      <Circle cx={width / 2} cy={adjustedHeight - headerHeight} r={NodeRadius} 
+        onMouseDown={() => handleMouseDown({ id: nodeGraphData.length.toString(), cx: width / 2, cy: adjustedHeight - headerHeight, r: NodeRadius })}
       />
       
       {/* 복사 중인 노드 */}

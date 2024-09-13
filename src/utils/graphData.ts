@@ -9,6 +9,7 @@ export const NodeRadius = 50;
 
 export interface NodeGraphData {
     node: Node;
+    link: Link;
     focus: FocusStatus;
 }
 
@@ -17,4 +18,9 @@ export interface Node {
     x: number;
     y: number;
     r: number;
+};
+
+export interface Link {
+    source: string;
+    target: string;
 };
