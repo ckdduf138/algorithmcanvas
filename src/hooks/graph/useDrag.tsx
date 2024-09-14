@@ -11,7 +11,7 @@ interface CirclePosition {
 
 export const useDragCopy = () => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);
-  const [draggingNode, setDraggingNode] = useState<NodeGraphData | undefined>();
+  const [draggingNode, setDraggingNode] = useState<NodeGraphData>();
 
   const [isDragging, setIsDragging] = useState(false);
 
@@ -24,13 +24,13 @@ export const useDragCopy = () => {
     setIsDragging(true);
   };
 
-  const handleMouseDownNode = (nodeData: NodeGraphData | undefined) => {
+  const handleMouseDownNode = (nodeData: NodeGraphData) => {
     setDraggingNode(nodeData);
     setIsDragging(true);
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGElement>) => {
-    if (!isDragging) return;
+    if (isDragging === false) return;
 
     const newCx = e.clientX;
     const newCy = e.clientY - headerHeight;
@@ -61,6 +61,7 @@ export const useDragCopy = () => {
 
   return {
     draggingCircle,
+    draggingNode,
     handleMouseDown,
     handleMouseDownNode,
     handleMouseMove,

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
-import { Link, Node, NodeGraphData } from '../../utils/graphData';
 
 const BFSPage: React.FC = () => {
 
