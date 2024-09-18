@@ -10,6 +10,14 @@ const Circle = styled.circle`
   stroke-width: 2;
 `;
 
+const CircleText = styled.text`
+  fill: black;
+  font-size: 48px;
+  dominant-baseline: middle;
+  text-anchor: middle;
+  pointer-events: none;
+`;
+
 const Line = styled.line`
   stroke: black;
   stroke-width: 2;
@@ -102,9 +110,10 @@ export const useGraphCanvas = () => {
     };
     
     return (
-      <Circle
-        id={node.id} r={NodeRadius} onMouseDown={handleMouseDown}
-      />
+      <>
+        <Circle id={node.id} r={NodeRadius} onMouseDown={handleMouseDown}/>
+        <CircleText x={0} y={0}>{node.id}</CircleText>
+      </>
     );
   };
 
