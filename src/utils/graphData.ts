@@ -7,6 +7,9 @@ export interface BarGraphData {
 
 export const NodeRadius = 50;
 
+export const NodeGraphWidthPadding = 50;
+export const NodeGraphHeightPadding = 120;
+
 export interface NodeGraphData {
     node: Node;
     link: Link;
