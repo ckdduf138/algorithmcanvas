@@ -1,14 +1,13 @@
 import React from 'react';
-
 import styled from 'styled-components';
 import { Graph } from '@visx/network';
-
 import { useWindowSize } from '../../hooks/getWindowSize';
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
-import { NodeGraphHeightPadding, NodeGraphWidthPadding, NodeRadius } from '../../utils/graphData';
+import { NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 
 export const GraphCanvasContainer = styled.div`
   width: 100%;
+  position: relative;
 `;
 
 export const GraphCanvasWapper = styled.svg`
@@ -24,15 +23,9 @@ const Circle = styled.circle`
   stroke-width: 2;
 `;
 
-const GraphCanvasRange = styled.div<{$width: number, $height: number}>`
-  display: flex;
-  position: absolute;
-  left: calc(50% - ${props => props.$width / 2}px);
-  width: ${props => props.$width}px;
-  height: ${props => props.$height}px;
-  box-sizing: border-box;
-  border-bottom: 3px solid #ccc;
-  pointer-events: none;
+const BottomLine = styled.line`
+  stroke: #ccc;
+  stroke-width: 3;
 `;
 
 const GraphCanvas: React.FC = () => {
@@ -40,17 +33,13 @@ const GraphCanvas: React.FC = () => {
   const { nodeGraphDatas, draggingCircle, CustomNode, CustomLink, handleMouseDown, handleMouseMove, handleMouseUp, handleDrop } = useGraphCanvas();
 
   const adjustedHeight = height * 0.8;
-  const headerHeight = height * 0.1;
+  const adjustedWidth = width * 0.98; 
 
   return (
     <GraphCanvasContainer>
-      <GraphCanvasRange $width={width * 0.98} $height={adjustedHeight - NodeGraphHeightPadding} />
-      <GraphCanvasWapper
-        width={width} 
-        height={adjustedHeight}
-        onMouseMove={handleMouseMove}
-        onMouseUp={() => handleMouseUp(handleDrop)}
-      >
+      <GraphCanvasWapper width={width} height={adjustedHeight} onMouseMove={handleMouseMove} onMouseUp={() => handleMouseUp(handleDrop)}>
+
+        {/* 그래프 노드-간선*/}
         <Graph
           graph={nodeGraphDatas}
           nodeComponent={CustomNode}
@@ -62,16 +51,19 @@ const GraphCanvas: React.FC = () => {
           onMouseDown={() => handleMouseDown({ id: nodeGraphDatas.nodes.length.toString(), cx: width / 2, cy: adjustedHeight - NodeRadius - 10, r: NodeRadius })}
         />
 
+        {/* 구분선 */}
+        <BottomLine x1={width * 0.01} y1={adjustedHeight - NodeGraphHeightPadding} x2={adjustedWidth} y2={adjustedHeight - NodeGraphHeightPadding} />
+
         {/* 복사 중인 노드 */}
         {draggingCircle && (
-          <Circle 
-            cx={draggingCircle.cx} 
-            cy={draggingCircle.cy} 
+          <Circle
+            cx={draggingCircle.cx}
+            cy={draggingCircle.cy}
             r={draggingCircle.r}
-            style={{ fill: 'gray', opacity: 0.5 }}
+            style={{ stroke: 'gray', fill: '#ccc', opacity: 0.85 }}
           />
         )}
-
+        
       </GraphCanvasWapper>
     </GraphCanvasContainer>
   );

@@ -32,11 +32,7 @@ export const useGraphCanvas = () => {
     nodeGraphData.forEach((currentNode, index) => {
       const { x, y } = currentNode.node;
 
-      console.log(x + ' / ' + y);
-
-      const isOutOfBounds =
-        x < boundary.left || x > boundary.right ||
-        y < boundary.top || y > boundary.bottom;
+      const isOutOfBounds = x < boundary.left || x > boundary.right || y < boundary.top || y > boundary.bottom;
 
       if (isOutOfBounds) {
         setNodeGraphData(prevData => {
@@ -107,29 +103,27 @@ export const useGraphCanvas = () => {
     
     return (
       <Circle
-        id={node.id}
-        cx={0}
-        cy={0}
-        r={NodeRadius}
-        onMouseDown={handleMouseDown}
+        id={node.id} r={NodeRadius} onMouseDown={handleMouseDown}
       />
     );
   };
 
-  const CustomLink: React.FC<{ link: { source: string; target: string } }> = ({ link }) => {
+  const CustomLink: React.FC<{ link: { source: string; target: string; dashed?: boolean } }> = ({ link }) => {
     const nodes = nodeGraphData.map(data => data.node);
     const sourceNode = nodes.find(node => node.id === link.source);
     const targetNode = nodes.find(node => node.id === link.target);
-  
+
     if (!sourceNode || !targetNode) return null;
   
     return (
-        <Line 
-            x1={sourceNode.x}
-            y1={sourceNode.y} 
-            x2={targetNode.x} 
-            y2={targetNode.y} 
-        />
+      <Line 
+        x1={sourceNode.x}
+        y1={sourceNode.y} 
+        x2={targetNode.x} 
+        y2={targetNode.y}
+        strokeOpacity={0.6}
+        strokeDasharray={link.dashed ? '8,4' : undefined} 
+      />
     );
   };
 
