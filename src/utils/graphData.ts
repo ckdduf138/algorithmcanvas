@@ -1,4 +1,4 @@
-export type NodeFocusStatus = 'clicked' | 'inactive' | 'active' | 'highlight' | 'completed';
+export type NodeFocusStatus = 'inactive' | 'active' | 'highlight' | 'completed';
 
 export interface BarGraphData {
     data: number;

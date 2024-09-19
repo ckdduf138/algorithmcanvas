@@ -24,7 +24,7 @@ export const CircleText = styled.text`
 
 const Line = styled.line`
   stroke: black;
-  stroke-width: 2;
+  stroke-width: 3;
 `;
 
 export const useGraphCanvas = () => {
@@ -110,20 +110,12 @@ export const useGraphCanvas = () => {
     const handleMouseDown = () => {
       if (foundNodeData) {
         handleMouseDownNode(foundNodeData);
-        foundNodeData.focus = 'clicked';
-      }
-    };
-  
-    const handleMouseUp = () => {
-      if (foundNodeData) {
-        foundNodeData.focus = 'inactive';
       }
     };
 
     return (
       <>
         <Circle $focusStatus={foundNodeData?.focus} id={node.id} r={NodeRadius} 
-          onMouseUp={handleMouseUp}
           onMouseDown={handleMouseDown}
         />
         <CircleText x={0} y={0}>{node.id}</CircleText>
