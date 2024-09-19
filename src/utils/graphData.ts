@@ -1,8 +1,8 @@
-type FocusStatus = 'inactive' | 'active' | 'highlight' | 'completed';
+export type NodeFocusStatus = 'clicked' | 'inactive' | 'active' | 'highlight' | 'completed';
 
 export interface BarGraphData {
     data: number;
-    focus: FocusStatus;
+    focus: NodeFocusStatus;
 }
 
 export const NodeRadius = 50;
@@ -13,7 +13,7 @@ export const NodeGraphHeightPadding = 120;
 export interface NodeGraphData {
     node: Node;
     link: Link;
-    focus: FocusStatus;
+    focus: NodeFocusStatus;
 }
 
 export interface Node {

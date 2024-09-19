@@ -1,16 +1,20 @@
-import { useState, useEffect, useRef } from 'react';
-import { Node, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import { useState, useEffect } from 'react';
+import { Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
 import styled from 'styled-components';
 import { useWindowSize } from '../getWindowSize';
 
-const Circle = styled.circle`
+export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus }>`
   fill: white;
-  stroke: black;
-  stroke-width: 2;
+  stroke: #333333;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
+
+  cursor: pointer;
+  transition: stroke 0.3s ease, stroke-width 0.3s ease, fill 0.3s ease;
 `;
 
-const CircleText = styled.text`
+export const CircleText = styled.text`
   fill: black;
   font-size: 48px;
   dominant-baseline: middle;
@@ -29,16 +33,16 @@ export const useGraphCanvas = () => {
   const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode, handleMouseMove, handleMouseUp } = useDragCopy();
   const { width, height } = useWindowSize();
 
-  const boundary = {
-    left: NodeRadius + 2,
-    right: width - NodeRadius - 2,
-    top: NodeRadius + 2,
-    bottom: height * 0.8 - NodeGraphHeightPadding - NodeRadius - 7
-  };
-
   useEffect(() => {
     nodeGraphData.forEach((currentNode, index) => {
       const { x, y } = currentNode.node;
+
+      const boundary = {
+        left: NodeRadius + 2,
+        right: width - NodeRadius - 2,
+        top: NodeRadius + 2,
+        bottom: height * 0.8 - NodeGraphHeightPadding - NodeRadius - 7
+      };
 
       const isOutOfBounds = x < boundary.left || x > boundary.right || y < boundary.top || y > boundary.bottom;
 
@@ -101,17 +105,27 @@ export const useGraphCanvas = () => {
   };
 
   const CustomNode: React.FC<{ node: Node }> = ({ node }) => {
+    const foundNodeData: NodeGraphData | undefined = nodeGraphData.find(graph => graph.node.id === node.id);
+    
     const handleMouseDown = () => {
-      const foundNodeData = nodeGraphData.find(graph => graph.node.id === node.id);
-
       if (foundNodeData) {
         handleMouseDownNode(foundNodeData);
+        foundNodeData.focus = 'clicked';
       }
     };
-    
+  
+    const handleMouseUp = () => {
+      if (foundNodeData) {
+        foundNodeData.focus = 'inactive';
+      }
+    };
+
     return (
       <>
-        <Circle id={node.id} r={NodeRadius} onMouseDown={handleMouseDown}/>
+        <Circle $focusStatus={foundNodeData?.focus} id={node.id} r={NodeRadius} 
+          onMouseUp={handleMouseUp}
+          onMouseDown={handleMouseDown}
+        />
         <CircleText x={0} y={0}>{node.id}</CircleText>
       </>
     );

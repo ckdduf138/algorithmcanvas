@@ -2,25 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { Graph } from '@visx/network';
 import { useWindowSize } from '../../hooks/getWindowSize';
-import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+import { Circle, useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 
-export const GraphCanvasContainer = styled.div`
+const GraphCanvasContainer = styled.div`
   width: 100%;
   position: relative;
 `;
 
-export const GraphCanvasWapper = styled.svg`
+const GraphCanvasWapper = styled.svg`
   width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
-`;
-
-const Circle = styled.circle`
-  fill: white;
-  stroke: black;
-  stroke-width: 2;
 `;
 
 const BottomLine = styled.line`
@@ -56,11 +50,11 @@ const GraphCanvas: React.FC = () => {
 
         {/* 복사 중인 노드 */}
         {draggingCircle && (
-          <Circle
+          <Circle 
             cx={draggingCircle.cx}
             cy={draggingCircle.cy}
             r={draggingCircle.r}
-            style={{ stroke: 'gray', fill: '#ccc', opacity: 0.85 }}
+            style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
           />
         )}
         
