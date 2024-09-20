@@ -27,8 +27,10 @@ type BarCanvasProps = {
 const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) => {
   const { width, height } = useWindowSize();
 
+  const adjustedHeight = height * 0.7;
+
   const xMax = width;
-  const yMax = height - verticalMargin;
+  const yMax = adjustedHeight - verticalMargin;
 
   const transformedData = useMemo(() => { 
       return barGraphData.map(item => getLogScale(item.data));
@@ -55,7 +57,7 @@ const BarCanvas: React.FC<BarCanvasProps> = ({ barGraphData, events = false }) =
 
   return (
     <BarCanvasWapper>
-      <svg width={width} height={height + 50}>
+      <svg width={width} height={adjustedHeight + 50}>
         <Group top={verticalMargin / 2}>
           <BarCanvasMain
             data={barGraphData}

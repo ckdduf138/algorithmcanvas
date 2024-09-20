@@ -4,7 +4,7 @@ import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 const FloydPage: React.FC = () => (
   <Layout subTitle='플로이드(Floyd)'>
-    <GraphCanvas />
+    플로이드(Floyd)
   </Layout>
 );
 

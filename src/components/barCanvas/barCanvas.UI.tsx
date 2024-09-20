@@ -116,6 +116,7 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     return (
         <StyleCanvasUI>
             <InputBox
+                placeholder='추가할 데이터를 입력하세요.'
                 inputValue={inputValue}
                 handleInputChange={handleInputChange}
                 onclickBtnAdd={onclickBtnAdd}
