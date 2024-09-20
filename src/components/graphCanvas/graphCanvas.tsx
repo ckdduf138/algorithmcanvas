@@ -1,80 +1,119 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useWindowSize } from '../../hooks/getWindowSize';
 import { Graph } from '@visx/network';
-import { Node, NodeRadius } from '../../utils/graphData';
+import { useWindowSize } from '../../hooks/getWindowSize';
+import { Circle, useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+import { NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import Tooltip from '../common/tooltip';
 
-const GraphCanvasWapper = styled.div`
+const GraphCanvasContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const GraphCanvasWapper = styled.svg`
   width: 100%;
   display: flex;
   justify-content: center;
+  flex-direction: column;
 `;
 
-const Circle = styled.circle`
-    fill: white;
-    stroke: black;
-    stroke-width: 2;
+const BottomLine = styled.line`
+  stroke: #ccc;
+  stroke-width: 3;
 `;
 
-const Line = styled.line`
-    stroke: black;
-    stroke-width: 2;
+const EdgeToggle = styled.line`
+  stroke: #ccc;
+  stroke-width: 10;
+  cursor: pointer;
+  transition: stroke 0.3s;
+
+  &:hover {
+    stroke: #aaa;
+  }
 `;
 
-const nodes: Node[] = [
-    { id: '1', x: 100, y: 100 },
-    { id: '2', x: 500, y: 500 },
-    { id: '3', x: 650, y: 100 },
-  ];
-
-const CustomNode: React.FC<{ node: Node }> = ({ node }) => (
-  <Circle cx={0} cy={0} r={NodeRadius} />
-);
-
-const CustomLink: React.FC<{ link: { source: string; target: string } }> = ({ link }) => {
-    const sourceNode = nodes.find(node => node.id === link.source);
-    const targetNode = nodes.find(node => node.id === link.target);
-
-    console.log(sourceNode);
-    console.log(targetNode);
-
-    if (!sourceNode || !targetNode) return null;
-
-    return (
-        <Line 
-            x1={sourceNode.x}
-            y1={sourceNode.y} 
-            x2={targetNode.x} 
-            y2={targetNode.y} 
-        />
-    );
-};
-
-type GraphCanvasProps = {
-  events?: boolean;
-};
-
-const GraphCanvas: React.FC<GraphCanvasProps> = ({ events = false }) => {
+const GraphCanvas: React.FC = () => {
   const { width, height } = useWindowSize();
+  const { nodeGraphDatas, draggingCircle, CustomNode, CustomLink, handleMouseDown, handleMouseMove, handleMouseUp, handleDrop } = useGraphCanvas();
+  const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
 
-  const nodeGraphData = {
-    nodes,
-    links: [
-      { source: '1', target: '2' },
-      { source: '1', target: '3' },
-    ],
+  const adjustedHeight = height * 0.8;
+  const adjustedWidth = width * 0.98;
+
+  const handleMouseOverNode = (x: number, y: number) => {
+    setTooltip({
+      visible: true,
+      position: { x: x, y: y},
+      text: '노드(Node)',
+    });
+  };
+
+  const handleMouseOverEdge = (x: number, y: number) => {
+    setTooltip({
+      visible: true,
+      position: { x: x, y: y},
+      text: '간선(Edge)',
+    });
+  };
+
+  const handleMouseOutEdge = () => {
+    setTooltip(null);
   };
 
   return (
-    <GraphCanvasWapper>
-        <svg width={width} height={height + 50}>
-            <Graph
-                graph={nodeGraphData}
-                linkComponent={CustomLink}
-                nodeComponent={CustomNode}
-            />
-        </svg>
-    </GraphCanvasWapper>
+    <GraphCanvasContainer>
+      <GraphCanvasWapper width={width} height={adjustedHeight} onMouseMove={handleMouseMove} onMouseUp={() => handleMouseUp(handleDrop)}>
+
+        {/* 그래프 노드-간선 */}
+        <Graph
+          graph={nodeGraphDatas}
+          nodeComponent={CustomNode}
+          linkComponent={CustomLink}
+        />
+
+        {/* 구분선 */}
+        <BottomLine x1={width * 0.01} y1={adjustedHeight - NodeGraphHeightPadding} x2={adjustedWidth} y2={adjustedHeight - NodeGraphHeightPadding} />
+
+        {/* 복사용 노드 */}
+        <Circle cx={width / 5 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius}
+          onMouseDown={() => handleMouseDown({ id: nodeGraphDatas.nodes.length.toString(), cx: width / 5 * 1, cy: adjustedHeight - NodeRadius - 10, r: NodeRadius })}
+          onMouseOver={() => handleMouseOverNode(width / 5 * 1, adjustedHeight - NodeRadius * 2)}
+          onMouseOut={handleMouseOutEdge}
+        />
+
+        {/* 간선 선택 여부 */}
+        <EdgeToggle 
+          x1={width / 5 * 2 - 40} 
+          y1={adjustedHeight - 100} 
+          x2={width / 5 * 2 + 40} 
+          y2={adjustedHeight - 20}
+          onMouseOver={() => handleMouseOverEdge(width / 5 * 2, adjustedHeight - 100)}
+          onMouseOut={handleMouseOutEdge}
+        />
+
+        {/* 복사 중인 노드 */}
+        {draggingCircle && (
+          <Circle 
+            cx={draggingCircle.cx}
+            cy={draggingCircle.cy}
+            r={draggingCircle.r}
+            style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
+          />
+        )}
+      </GraphCanvasWapper>
+
+      {/* 툴팁 */}
+      {tooltip && (
+        <Tooltip
+          text={tooltip.text}
+          position={tooltip.position}
+          visible={tooltip.visible}
+        />
+      )}
+
+    </GraphCanvasContainer>
   );
 };
 
