@@ -11,7 +11,7 @@ const Flip = styled.div`
     perspective: 1100px;
 `;
 
-const BoxWapper = styled.div<{isTurn: boolean}>`
+const BoxWapper = styled.div<{$isTurn: boolean}>`
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -26,7 +26,7 @@ const BoxWapper = styled.div<{isTurn: boolean}>`
     transform-style: preserve-3d;
     transition: 1s;
 
-    transform: ${({isTurn}) => isTurn === true ? '' : 'rotateY(180deg);'}  
+    transform: ${({$isTurn}) => $isTurn === true ? '' : 'rotateY(180deg);'}  
 `;
 
 const FrontBox = styled.div`
@@ -112,7 +112,7 @@ const Box: React.FC<BoxProps> = ({ title, imgSrc, gifSrc, tags, link, descriptio
 
     return (
         <Flip>
-            <BoxWapper isTurn={isFront} onClick={onclickedBox} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+            <BoxWapper $isTurn={isFront} onClick={onclickedBox} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
             <FrontBox>
                 <BoxTitle>{title}</BoxTitle>
                 <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.png`} 
