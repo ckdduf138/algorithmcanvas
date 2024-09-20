@@ -15,6 +15,22 @@ export interface BoxProps {
 
 export const boxes: BoxProps[] = [
     {
+        title: "큐",
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['정렬', '배열'],
+        link: `queue`,
+        description: '큐에 대한 설명',
+    },
+    {
+        title: "스택",
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['정렬', '배열'],
+        link: `stack`,
+        description: '스택에 대한 설명',
+    },
+    {
         title: "선택정렬",
         imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
         gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,

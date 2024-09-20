@@ -11,8 +11,7 @@ const InputContainer = styled.div`
 
 const Input = styled.input<{$isValidBtnAdd: boolean, theme: string}>`
     width: 100%;
-    padding: 1rem 2rem;
-    min-height: 42px;
+    padding: 1rem 4rem 1rem 2rem;
     border: 1px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? 'green' : 'red'};
     background-color: ${({ theme }) => (theme === 'light' ? '#ffffff' : '#15202b')};
     border-radius: 50px;
@@ -61,12 +60,12 @@ const SvgButton = styled.button<{$isValidBtnAdd: boolean}>`
 `;
 
 interface InputBoxProps {
-    placeholder: string;
-    inputValue: string;
+    placeholder?: string;
+    inputValue?: string;
     isValidBtnAdd: boolean;
-    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    onclickBtnAdd: () => void;
+    handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    onclickBtnAdd?: () => void;
 }
 
 const InputBox: React.FC<InputBoxProps> = ({ placeholder, inputValue, isValidBtnAdd, handleInputChange, handleKeyPress, onclickBtnAdd }) => {
