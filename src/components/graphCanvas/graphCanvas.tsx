@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Graph } from '@visx/network';
 import { useWindowSize } from '../../hooks/getWindowSize';
-import { Circle, useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+import { Circle, Line, useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import Tooltip from '../common/tooltip';
+import EdgeToggle from './edgeToggle';
+import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
 
 const GraphCanvasContainer = styled.div`
   width: 100%;
@@ -23,22 +25,18 @@ const BottomLine = styled.line`
   stroke-width: 3;
 `;
 
-const EdgeToggle = styled.line`
-  stroke: #ccc;
-  stroke-width: 10;
-  cursor: pointer;
-  transition: stroke 0.3s;
-
-  &:hover {
-    stroke: #aaa;
-  }
-`;
-
 const GraphCanvas: React.FC = () => {
   const { width, height } = useWindowSize();
-  const { nodeGraphDatas, draggingCircle, CustomNode, CustomLink, handleMouseDown, handleMouseMove, handleMouseUp, handleDrop } = useGraphCanvas();
-  const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
+  const { nodeGraphDatas, draggingCircle, CustomNode, CustomLink, handleMouseDown } = useGraphCanvas();
 
+  const { svgRef, handleMouseMove, handleMouseUp } = useSVGEvents({
+    initialMouseMove: () => {},
+    initialMouseUp: () => {},
+  });
+
+  const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
+  const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
+  
   const adjustedHeight = height * 0.8;
   const adjustedWidth = width * 0.98;
 
@@ -62,9 +60,18 @@ const GraphCanvas: React.FC = () => {
     setTooltip(null);
   };
 
+  const handleEdgeClick = () => {
+    setSeletedEdge(!selectedEdge);
+  };
+
   return (
     <GraphCanvasContainer>
-      <GraphCanvasWapper width={width} height={adjustedHeight} onMouseMove={handleMouseMove} onMouseUp={() => handleMouseUp(handleDrop)}>
+      <GraphCanvasWapper 
+        ref={svgRef}
+        width={width} 
+        height={adjustedHeight} 
+        onMouseMove={() => handleMouseMove} 
+        onMouseUp={() => handleMouseUp}>
 
         {/* 그래프 노드-간선 */}
         <Graph
@@ -84,18 +91,31 @@ const GraphCanvas: React.FC = () => {
         />
 
         {/* 간선 선택 여부 */}
-        <EdgeToggle 
+        <EdgeToggle
           x1={width / 5 * 2 - 40} 
           y1={adjustedHeight - 100} 
           x2={width / 5 * 2 + 40} 
           y2={adjustedHeight - 20}
+          onClick={handleEdgeClick}
           onMouseOver={() => handleMouseOverEdge(width / 5 * 2, adjustedHeight - 100)}
           onMouseOut={handleMouseOutEdge}
+          strokeWidth={10}
+          $selectedEdge={selectedEdge}
         />
 
         {/* 복사 중인 노드 */}
         {draggingCircle && (
           <Circle 
+            cx={draggingCircle.cx}
+            cy={draggingCircle.cy}
+            r={draggingCircle.r}
+            style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
+          />
+        )}
+
+        {/* 생성 중인 간선 */}
+        {draggingCircle && (
+          <Line 
             cx={draggingCircle.cx}
             cy={draggingCircle.cy}
             r={draggingCircle.r}
