@@ -39,7 +39,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
     nodeGraphData.links = links;
   };
 
-  const edgeMouseDown = (eventNodes: [Node, Node]) => {
+  const edgeMouseDown = (e: React.MouseEvent<SVGElement>, eventNodes: [Node, Node]) => {
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
     removeLinksByNodeIds(eventNodes);
@@ -50,6 +50,18 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
 
     draggingEdgeRef.current = edge;
     isDragging.current = true;
+
+    const newCx = e.clientX;
+    const newCy = e.clientY - headerHeight;
+    
+    if (draggingEdgeRef.current) {
+      setDraggingEdge({
+        ...draggingEdgeRef.current,
+        x2: newCx,
+        y2: newCy
+      });
+    }
+    
   };
 
   const createEdgeMouseDown = (eventNode: Node) => {

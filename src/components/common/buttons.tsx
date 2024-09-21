@@ -12,7 +12,7 @@ const StyledButton = styled.button`
   justify-content: center;
   width: 10%;
   min-width: 120px;
-  min-height: 42px;
+  height: 42px;
   padding: 1%;
   background-color: ${(props) => (props.disabled ? "#ccc" : "#007bff")};
   color: #fff;

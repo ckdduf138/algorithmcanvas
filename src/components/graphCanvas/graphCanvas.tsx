@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Graph } from '@visx/network';
 import { useWindowSize } from '../../hooks/getWindowSize';
@@ -8,6 +8,7 @@ import Tooltip from '../common/tooltip';
 import EdgeToggle from './edgeToggle';
 import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
 import { useTheme } from '../../context/themeContext';
+import SlideUI from './slideUI';
 
 const GraphCanvasContainer = styled.div`
   width: 100%;
@@ -35,6 +36,8 @@ const GraphCanvas: React.FC = () => {
     initialMouseUp: () => {},
   });
 
+  const delayRef = useRef(500);
+
   const {theme} = useTheme();
 
   const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
@@ -60,6 +63,16 @@ const GraphCanvas: React.FC = () => {
 
   const handleMouseOutEdge = () => {
     setTooltip(null);
+  };
+
+  const onclickBtnReset = () => {
+
+  };
+  const onclickBtnRandom = () => {
+
+  };
+  const onclickBtnStart = () => {
+
   };
 
   return (
@@ -94,20 +107,20 @@ const GraphCanvas: React.FC = () => {
         <BottomLine x1={width * 0.01} y1={adjustedHeight - NodeGraphHeightPadding} x2={adjustedWidth} y2={adjustedHeight - NodeGraphHeightPadding} />
 
         {/* 복사용 노드 */}
-        <Circle cx={width / 5 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme}
-          onMouseDown={() => handleMouseDown({ id: nodeGraphDatas.nodes.length.toString(), cx: width / 5 * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius })}
-          onMouseOver={() => handleMouseOverNode(width / 5 * 1, adjustedHeight - NodeRadius * 2)}
+        <Circle cx={width / 3 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme}
+          onMouseDown={() => handleMouseDown({ id: nodeGraphDatas.nodes.length.toString(), cx: width / 3 * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius })}
+          onMouseOver={() => handleMouseOverNode(width / 3 * 1, adjustedHeight - NodeRadius * 2)}
           onMouseOut={handleMouseOutEdge}
         />
 
         {/* 간선 선택 여부 */}
         <EdgeToggle
-          x1={width / 5 * 2 - 40} 
+          x1={width / 3 * 2 - 40} 
           y1={adjustedHeight - 100} 
-          x2={width / 5 * 2 + 40} 
+          x2={width / 3 * 2 + 40} 
           y2={adjustedHeight - 20}
           onClick={handleEdgeClick}
-          onMouseOver={() => handleMouseOverEdge(width / 5 * 2, adjustedHeight - 100)}
+          onMouseOver={() => handleMouseOverEdge(width / 3 * 2, adjustedHeight - 100)}
           onMouseOut={handleMouseOutEdge}
           strokeWidth={10}
           $selectedEdge={selectedEdge}
@@ -135,6 +148,7 @@ const GraphCanvas: React.FC = () => {
         />
       )}
 
+    <SlideUI delayRef={delayRef} onclickBtnRandom={onclickBtnRandom} onclickBtnReset={onclickBtnReset} onclickBtnStart={onclickBtnStart}/>
     </GraphCanvasContainer>
   );
 };

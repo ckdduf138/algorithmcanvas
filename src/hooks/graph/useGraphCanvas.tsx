@@ -121,7 +121,7 @@ export const useGraphCanvas = () => {
     if (!draggingCircle) return;
   
     const newNode: Node = {
-      id: nodeGraphData?.nodes.length.toString() ?? '',
+      id: nodeGraphData?.nodes.length.toString(),
       x: draggingCircle.cx,
       y: draggingCircle.cy,
       radius: draggingCircle.radius,
@@ -193,7 +193,7 @@ export const useGraphCanvas = () => {
       
       const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
       if(closestNode) {
-        edgeMouseDown(closestNode);
+        edgeMouseDown(e, closestNode);
       }
     };
 
