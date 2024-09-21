@@ -7,6 +7,7 @@ import { NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import Tooltip from '../common/tooltip';
 import EdgeToggle from './edgeToggle';
 import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
+import { useTheme } from '../../context/themeContext';
 
 const GraphCanvasContainer = styled.div`
   width: 100%;
@@ -33,6 +34,8 @@ const GraphCanvas: React.FC = () => {
     initialMouseMove: () => {},
     initialMouseUp: () => {},
   });
+
+  const {theme} = useTheme();
 
   const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
   
@@ -75,6 +78,7 @@ const GraphCanvas: React.FC = () => {
             y1={draggingEdge.y1}
             x2={draggingEdge.x2 ?? 0}
             y2={draggingEdge.y2 ?? 0}
+            $theme={theme}
             style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
           />
         )}
@@ -90,7 +94,7 @@ const GraphCanvas: React.FC = () => {
         <BottomLine x1={width * 0.01} y1={adjustedHeight - NodeGraphHeightPadding} x2={adjustedWidth} y2={adjustedHeight - NodeGraphHeightPadding} />
 
         {/* 복사용 노드 */}
-        <Circle cx={width / 5 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius}
+        <Circle cx={width / 5 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme}
           onMouseDown={() => handleMouseDown({ id: nodeGraphDatas.nodes.length.toString(), cx: width / 5 * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius })}
           onMouseOver={() => handleMouseOverNode(width / 5 * 1, adjustedHeight - NodeRadius * 2)}
           onMouseOut={handleMouseOutEdge}
@@ -115,6 +119,7 @@ const GraphCanvas: React.FC = () => {
             cx={draggingCircle.cx}
             cy={draggingCircle.cy}
             r={draggingCircle.radius}
+            $theme={theme}
             style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
           />
         )}

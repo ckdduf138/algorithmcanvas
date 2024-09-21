@@ -7,19 +7,19 @@ import { useDragCopy } from '../../hooks/graph/useDrag';
 import { useWindowSize } from '../getWindowSize';
 import { useEditEdge } from './useEditEdge';
 import { useSVGEvents } from './useSvgEvents';
+import { useTheme } from '../../context/themeContext';
 
-export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus }>`
-  fill: white;
-  stroke: #333333;
+export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
+  fill: #D9D9D9;
+  stroke: ${props => props.$theme === 'light' ? 'black' : 'white'};;
   stroke-width: 3;
   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
 
   cursor: pointer;
-  transition: stroke 0.3s ease, stroke-width 0.3s ease, fill 0.3s ease;
 `;
 
-export const CircleText = styled.text`
-  fill: black;
+export const CircleText = styled.text<{$theme: string}>`
+  fill: ${props => props.$theme === 'light' ? 'black' : 'black'};
   font-size: 48px;
   dominant-baseline: middle;
   text-anchor: middle;
@@ -27,11 +27,10 @@ export const CircleText = styled.text`
   user-select: none;
 `;
 
-export const Line = styled.line`
-  stroke: black;
-  stroke-width: 3;
+export const Line = styled.line<{$theme: string}>`
+  stroke: ${props => props.$theme === 'light' ? 'black' : 'white'};
+  stroke-width: 5;
   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
-
   cursor: pointer;
 `;
 
@@ -46,6 +45,8 @@ export const useGraphCanvas = () => {
   const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData);
 
   const { width, height } = useWindowSize();
+
+  const {theme} = useTheme();
 
   useEffect(() => {
     updateHandlers(dragMouseMove, handleDrop);
@@ -173,10 +174,10 @@ export const useGraphCanvas = () => {
 
     return (
       <>
-        <Circle $focusStatus={foundNodeData?.focus} id={node.id} r={NodeRadius} 
+        <Circle $focusStatus={foundNodeData?.focus} id={node.id} r={NodeRadius} $theme={theme}
           onMouseDown={handleMouseDown}
         />
-        <CircleText x={0} y={0}>{node.id}</CircleText>
+        <CircleText x={0} y={0} $theme={theme}>{node.id}</CircleText>
       </>
     );
   };
@@ -204,6 +205,7 @@ export const useGraphCanvas = () => {
         y2={targetNode.y}
         strokeOpacity={0.6}
         strokeDasharray={link.dashed ? '8,4' : undefined} 
+        $theme={theme}
         onMouseDown={handleMouseDown}
       />
     );

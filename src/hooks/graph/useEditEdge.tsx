@@ -92,7 +92,6 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
       }
     }
     else {
-
       // 삭제 or 복구 논의 필요
       // foucsLink.current?.forEach(link => {
       //   nodeGraphData.links.push(link);
