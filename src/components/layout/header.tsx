@@ -22,6 +22,7 @@ const HeadTitle = styled.div`
     letter-spacing: 30px;
     cursor: pointer;
     font-size: 30px;
+    user-select: none;
 `;
 
 const ToggleContainer = styled.div`
@@ -36,6 +37,7 @@ const Subtitle = styled.div<{ theme: string }>`
     left: 2%;
     font-size: 20px;
     color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
+    user-select: none;
 `;
 
 

@@ -37,12 +37,13 @@ export const Line = styled.line`
 
 export const useGraphCanvas = () => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
+  const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
 
   const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode, dragMouseMove, dragMouseUp } = useDragCopy();
 
   const { updateHandlers } = useSVGEvents({});
 
-  const { draggingEdge, edgeMouseDown, edgeMouseMove, edgeMouseUp  } = useEditEdge(nodeGraphData);
+  const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData);
 
   const { width, height } = useWindowSize();
 
@@ -111,6 +112,10 @@ export const useGraphCanvas = () => {
     });
   }, [draggingNode]);
 
+  const handleEdgeClick = () => {
+    setSeletedEdge(!selectedEdge);
+  };
+
   const handleDrop = () => {
     if (!draggingCircle) return;
   
@@ -150,13 +155,18 @@ export const useGraphCanvas = () => {
     links: nodeGraphData?.links,
   };
 
-  const CustomNode: React.FC<{ node: Node }> = ({ node }) => {
+  const CustomNode: React.FC<{ node: Node }> = ({ node }) => {    
     const foundNodeData: Node | undefined = nodeGraphData.nodes.find(nodes => nodes.id === node.id);
-    
+
     const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
       e.stopPropagation();
 
-      if (foundNodeData) {
+      if(!foundNodeData) return;
+
+      if(selectedEdge) {
+        createEdgeMouseDown(foundNodeData);
+      }
+      else {
         handleMouseDownNode(foundNodeData);
       }
     };
@@ -202,9 +212,11 @@ export const useGraphCanvas = () => {
   return {
     nodeGraphDatas,
     draggingCircle,
+    selectedEdge,
     draggingEdge,
     CustomNode,
     CustomLink,
-    handleMouseDown
+    handleMouseDown,
+    handleEdgeClick
   };
 };

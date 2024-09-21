@@ -6,8 +6,8 @@ import { useSVGEvents } from './useSvgEvents';
 interface EdgePosition {
   x1: number;
   y1: number;
-  x2: number;
-  y2: number;
+  x2: number | null;
+  y2: number | null;
 }
 
 export const useEditEdge = (nodeGraphData: NodeGraphData) => {
@@ -24,7 +24,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
   const { height } = useWindowSize();
   const headerHeight = height * 0.1;
 
-  const removeLinksByNodeIds = (eventNodes: Node[]) => {
+  const removeLinksByNodeIds = (eventNodes: [Node, Node]) => {
     const link1 = nodeGraphData.links.find((data) => data.source === eventNodes[0].id && data.target === eventNodes[1].id);
     const link2 = nodeGraphData.links.find((data) => data.target === eventNodes[0].id && data.source === eventNodes[1].id);
 
@@ -52,6 +52,17 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
     isDragging.current = true;
   };
 
+  const createEdgeMouseDown = (eventNode: Node) => {
+    updateHandlers(edgeMouseMove, edgeMouseUp);
+
+    edgeNodes.current = [eventNode, eventNode];
+
+    const edge: EdgePosition = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null};
+
+    draggingEdgeRef.current = edge;
+    isDragging.current = true;
+  };
+
   const edgeMouseMove = (e: MouseEvent) => {
     if (!isDragging.current) return;
 
@@ -74,7 +85,11 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
 
     if(hasOverlap && edgeNodes.current && edgeNodes.current[0].id !== hasOverlap.id) {
       const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id};
-      nodeGraphData.links.push(newLink);
+
+      if (!nodeGraphData.links.some(link => 
+        (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source))) {
+        nodeGraphData.links.push(newLink);
+      }
     }
     else {
 
@@ -95,7 +110,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
   return {
     draggingEdge,
     edgeMouseDown,
-    edgeMouseMove,
     edgeMouseUp,
+    createEdgeMouseDown
   };
 };

@@ -27,14 +27,13 @@ const BottomLine = styled.line`
 
 const GraphCanvas: React.FC = () => {
   const { width, height } = useWindowSize();
-  const { nodeGraphDatas, draggingCircle, draggingEdge, CustomNode, CustomLink, handleMouseDown } = useGraphCanvas();
+  const { nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, handleMouseDown, handleEdgeClick } = useGraphCanvas();
 
-  const { svgRef, handleMouseMove, handleMouseUp } = useSVGEvents({
+  const { svgRef, handleMouseMove, handleMouseUp, updateHandlers } = useSVGEvents({
     initialMouseMove: () => {},
     initialMouseUp: () => {},
   });
 
-  const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
   const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
   
   const adjustedHeight = height * 0.8;
@@ -60,10 +59,6 @@ const GraphCanvas: React.FC = () => {
     setTooltip(null);
   };
 
-  const handleEdgeClick = () => {
-    setSeletedEdge(!selectedEdge);
-  };
-
   return (
     <GraphCanvasContainer>
       <GraphCanvasWapper 
@@ -78,8 +73,8 @@ const GraphCanvas: React.FC = () => {
           <Line 
             x1={draggingEdge.x1}
             y1={draggingEdge.y1}
-            x2={draggingEdge.x2}
-            y2={draggingEdge.y2}
+            x2={draggingEdge.x2 ?? 0}
+            y2={draggingEdge.y2 ?? 0}
             style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
           />
         )}
