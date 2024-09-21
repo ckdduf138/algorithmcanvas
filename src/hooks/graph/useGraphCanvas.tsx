@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import { getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
 import { useWindowSize } from '../getWindowSize';
 import { useEditEdge } from './useEditEdge';
@@ -24,22 +24,25 @@ export const CircleText = styled.text`
   dominant-baseline: middle;
   text-anchor: middle;
   pointer-events: none;
+  user-select: none;
 `;
 
 export const Line = styled.line`
   stroke: black;
   stroke-width: 3;
   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+
+  cursor: pointer;
 `;
 
 export const useGraphCanvas = () => {
-  const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData[]>([]);
+  const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
 
   const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode, dragMouseMove, dragMouseUp } = useDragCopy();
 
   const { updateHandlers } = useSVGEvents({});
 
-  const { draggingEdge, edgeMouseDown, edgeMouseMove, edgeMouseUp  } = useEditEdge();
+  const { draggingEdge, edgeMouseDown, edgeMouseMove, edgeMouseUp  } = useEditEdge(nodeGraphData);
 
   const { width, height } = useWindowSize();
 
@@ -48,85 +51,110 @@ export const useGraphCanvas = () => {
   },[draggingCircle]);
 
   useEffect(() => {
-    nodeGraphData.forEach((currentNode, index) => {
-      const { x, y } = currentNode.node;
-
+    if (!nodeGraphData) return;
+  
+    const { nodes } = nodeGraphData;
+  
+    const updatedNodes = nodes.map((currentNode) => {
+      const { x, y } = currentNode;
+  
       const boundary = {
         left: NodeRadius + 2,
         right: width - NodeRadius - 2,
         top: NodeRadius + 2,
         bottom: height * 0.8 - NodeGraphHeightPadding - NodeRadius - 7
       };
-
+  
       const isOutOfBounds = x < boundary.left || x > boundary.right || y < boundary.top || y > boundary.bottom;
-
+  
       if (isOutOfBounds) {
-        setNodeGraphData(prevData => {
-          const updatedData = [...prevData];
-
-          updatedData[index] = {
-            ...updatedData[index],
-            node: {
-              ...updatedData[index].node,
-              x: Math.max(boundary.left, Math.min(x, boundary.right)),
-              y: Math.max(boundary.top, Math.min(y, boundary.bottom))
-            }
-          };
-          return updatedData;
-        });
+        return {
+          ...currentNode,
+          x: Math.max(boundary.left, Math.min(x, boundary.right)),
+          y: Math.max(boundary.top, Math.min(y, boundary.bottom))
+        };
       }
+  
+      return currentNode;
     });
-  }, [nodeGraphData]);
+  
+    const nodesChanged = !nodes.every((node, index) => 
+      node.x === updatedNodes[index].x && node.y === updatedNodes[index].y
+    );
+  
+    if (nodesChanged) {
+      setNodeGraphData((prevData) => {
+        if (!prevData) return prevData;
+        
+        return {
+          ...prevData,
+          nodes: updatedNodes,
+        };
+      });
+    }
+  }, [nodeGraphData, width, height]);
 
   useEffect(() => {
     if (!draggingNode) return;
-
-    const newData: NodeGraphData = draggingNode;
-
+  
     setNodeGraphData((prevData) => {
-      const index = prevData.findIndex((nodeData) => nodeData.node.id === newData.node.id);
-      
-      if (index === -1) return prevData;
-
-      const updatedData = [...prevData];
-      updatedData[index] = { ...updatedData[index], ...newData };
-
-      return updatedData;
+      if (!prevData) return prevData;
+  
+      const updatedNodes = prevData.nodes.map((node) =>
+        node.id === draggingNode.id ? { ...node, ...draggingNode } : node
+      );
+  
+      return {
+        ...prevData,
+        nodes: updatedNodes,
+      };
     });
   }, [draggingNode]);
 
   const handleDrop = () => {
-    if(!draggingCircle) return;
-
-    const newNode = {
-      id: nodeGraphData.length.toString(),
+    if (!draggingCircle) return;
+  
+    const newNode: Node = {
+      id: nodeGraphData?.nodes.length.toString() ?? '',
       x: draggingCircle.cx,
       y: draggingCircle.cy,
-      r: draggingCircle.r,
+      radius: draggingCircle.radius,
+      focus: 'inactive'
     };
   
-    const newLink = {
-      source: (nodeGraphData.length - 1).toString(),
-      target: nodeGraphData.length.toString(),
+    const newLink: Link = {
+      source: (parseInt(newNode.id) - 1).toString(),
+      target: newNode.id,
     };
   
-    const newData: NodeGraphData = { node: newNode, link: newLink, focus: 'inactive' };
-    setNodeGraphData((prevData) => [...prevData, newData]);
+    setNodeGraphData((prevData) => {
+      if (!prevData) {
+        return {
+          nodes: [newNode],
+          links: [newLink],
+          focus: 'inactive',
+        };
+      }
 
+      return {
+        nodes: [...prevData.nodes, newNode],
+        links: [...prevData.links, newLink]
+      };
+    });
+  
     dragMouseUp();
   };
 
   const nodeGraphDatas = {
-    nodes: nodeGraphData.map(data => data.node),
-    links: nodeGraphData.map(data => data.link),
+    nodes: nodeGraphData?.nodes,
+    links: nodeGraphData?.links,
   };
 
   const CustomNode: React.FC<{ node: Node }> = ({ node }) => {
-    const foundNodeData: NodeGraphData | undefined = nodeGraphData.find(graph => graph.node.id === node.id);
+    const foundNodeData: Node | undefined = nodeGraphData.nodes.find(nodes => nodes.id === node.id);
     
     const handleMouseDown = () => {
       if (foundNodeData) {
-        updateHandlers(dragMouseMove, dragMouseUp);
         handleMouseDownNode(foundNodeData);
       }
     };
@@ -142,16 +170,16 @@ export const useGraphCanvas = () => {
   };
 
   const CustomLink: React.FC<{ link: { source: string; target: string; dashed?: boolean } }> = ({ link }) => {
-    const nodes = nodeGraphData.map(data => data.node);
-    const sourceNode = nodes.find(node => node.id === link.source);
-    const targetNode = nodes.find(node => node.id === link.target);
+    const sourceNode = nodeGraphData?.nodes.find(node => node.id === link.source);
+    const targetNode = nodeGraphData?.nodes.find(node => node.id === link.target);
 
     if (!sourceNode || !targetNode) return null;
-  
-    const handleMouseDown = () => {
-      edgeMouseDown(sourceNode, targetNode);
-      updateHandlers(dragMouseMove, edgeMouseUp);
-      edgeMouseDown(sourceNode, targetNode);
+
+    const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
+      const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
+      if(closestNode) {
+        edgeMouseDown(closestNode);
+      }
     };
 
     return (
@@ -170,6 +198,7 @@ export const useGraphCanvas = () => {
   return {
     nodeGraphDatas,
     draggingCircle,
+    draggingEdge,
     CustomNode,
     CustomLink,
     handleMouseDown

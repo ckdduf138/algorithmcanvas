@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useWindowSize } from '../getWindowSize';
-import { NodeGraphData } from '../../utils/graphData';
+import { Node, NodeGraphData } from '../../utils/graphData';
 import { useSVGEvents } from './useSvgEvents';
 
 interface CirclePosition {
   id: string;
   cx: number;
   cy: number;
-  r: number;
+  radius: number;
 }
 
 export const useDragCopy = () => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);
-  const [draggingNode, setDraggingNode] = useState<NodeGraphData | null>(null);
+  const [draggingNode, setDraggingNode] = useState<Node | null>(null);
 
   const isDragging = useRef(false);
-  const draggingNodeRef = useRef<NodeGraphData | null>(null);
+  const draggingNodeRef = useRef<Node | null>(null);
   const draggingCircleRef = useRef<CirclePosition | null>(null);
 
   const { updateHandlers } = useSVGEvents({});
@@ -24,14 +24,16 @@ export const useDragCopy = () => {
   const headerHeight = height * 0.1;
 
   const handleMouseDown = (circle: CirclePosition) => {
+    updateHandlers(dragMouseMove);
+    
     setDraggingCircle(circle);
     draggingCircleRef.current = circle;
     isDragging.current = true;
-
-    updateHandlers(dragMouseMove);
   };
 
-  const handleMouseDownNode = (nodeData: NodeGraphData) => {
+  const handleMouseDownNode = (nodeData: Node) => {
+    updateHandlers(dragMouseMove, dragMouseUp);
+
     setDraggingNode(nodeData);
     draggingNodeRef.current = nodeData;
     isDragging.current = true;
@@ -49,11 +51,8 @@ export const useDragCopy = () => {
     } else if (draggingNodeRef.current) {
       setDraggingNode({
         ...draggingNodeRef.current,
-        node: {
-          ...draggingNodeRef.current.node,
-          x: newCx,
-          y: newCy
-        }
+        x: newCx,
+        y: newCy
       });
     }
   };
@@ -61,7 +60,7 @@ export const useDragCopy = () => {
   const dragMouseUp = () => {
     setDraggingCircle(null);
     setDraggingNode(null);
-    
+
     draggingCircleRef.current = null;
     draggingNodeRef.current = null;
     isDragging.current = false;

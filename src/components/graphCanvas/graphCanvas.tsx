@@ -27,7 +27,7 @@ const BottomLine = styled.line`
 
 const GraphCanvas: React.FC = () => {
   const { width, height } = useWindowSize();
-  const { nodeGraphDatas, draggingCircle, CustomNode, CustomLink, handleMouseDown } = useGraphCanvas();
+  const { nodeGraphDatas, draggingCircle, draggingEdge, CustomNode, CustomLink, handleMouseDown } = useGraphCanvas();
 
   const { svgRef, handleMouseMove, handleMouseUp } = useSVGEvents({
     initialMouseMove: () => {},
@@ -73,6 +73,17 @@ const GraphCanvas: React.FC = () => {
         onMouseMove={() => handleMouseMove} 
         onMouseUp={() => handleMouseUp}>
 
+        {/* 생성 중인 간선 */}
+        {draggingEdge && (
+          <Line 
+            x1={draggingEdge.x1}
+            y1={draggingEdge.y1}
+            x2={draggingEdge.x2}
+            y2={draggingEdge.y2}
+            style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
+          />
+        )}
+        
         {/* 그래프 노드-간선 */}
         <Graph
           graph={nodeGraphDatas}
@@ -85,7 +96,7 @@ const GraphCanvas: React.FC = () => {
 
         {/* 복사용 노드 */}
         <Circle cx={width / 5 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius}
-          onMouseDown={() => handleMouseDown({ id: nodeGraphDatas.nodes.length.toString(), cx: width / 5 * 1, cy: adjustedHeight - NodeRadius - 10, r: NodeRadius })}
+          onMouseDown={() => handleMouseDown({ id: nodeGraphDatas.nodes.length.toString(), cx: width / 5 * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius })}
           onMouseOver={() => handleMouseOverNode(width / 5 * 1, adjustedHeight - NodeRadius * 2)}
           onMouseOut={handleMouseOutEdge}
         />
@@ -108,20 +119,11 @@ const GraphCanvas: React.FC = () => {
           <Circle 
             cx={draggingCircle.cx}
             cy={draggingCircle.cy}
-            r={draggingCircle.r}
+            r={draggingCircle.radius}
             style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
           />
         )}
 
-        {/* 생성 중인 간선 */}
-        {draggingCircle && (
-          <Line 
-            cx={draggingCircle.cx}
-            cy={draggingCircle.cy}
-            r={draggingCircle.r}
-            style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
-          />
-        )}
       </GraphCanvasWapper>
 
       {/* 툴팁 */}
