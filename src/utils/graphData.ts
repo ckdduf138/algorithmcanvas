@@ -42,21 +42,20 @@ export const getClosestAndFurthestNode = ( targetPos: { x: number; y: number }, 
 };
   
 
-export const checkNodeOverlap = (newNode: Node, existingNodes: Node[]) => {
+export const findOverlappingNode = (newNode: Node, existingNodes: Node[]): Node | null => {
     for (const node of existingNodes) {
         if (isOverlapping(newNode, node)) {
-        return true;
+            return node; // 겹치는 노드를 반환
         }
     }
 
-    return false;
+    return null; // 겹치는 노드가 없으면 null 반환
 };
 
- const isOverlapping = (node1: Node, node2: Node) => {
+const isOverlapping = (node1: Node, node2: Node) => {
     const distance = Math.sqrt(
         (node1.x - node2.x) ** 2 + (node1.y - node2.y) ** 2
     );
 
     return distance <= node1.radius + node2.radius;
 };
-
