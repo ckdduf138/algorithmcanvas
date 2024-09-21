@@ -153,7 +153,9 @@ export const useGraphCanvas = () => {
   const CustomNode: React.FC<{ node: Node }> = ({ node }) => {
     const foundNodeData: Node | undefined = nodeGraphData.nodes.find(nodes => nodes.id === node.id);
     
-    const handleMouseDown = () => {
+    const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
+      e.stopPropagation();
+
       if (foundNodeData) {
         handleMouseDownNode(foundNodeData);
       }
@@ -176,6 +178,8 @@ export const useGraphCanvas = () => {
     if (!sourceNode || !targetNode) return null;
 
     const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
+      e.stopPropagation();
+      
       const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
       if(closestNode) {
         edgeMouseDown(closestNode);

@@ -41,15 +41,14 @@ export const getClosestAndFurthestNode = ( targetPos: { x: number; y: number }, 
     return distance1 > distance2 ? [node1, node2] : [node2, node1];
 };
   
-
 export const findOverlappingNode = (newNode: Node, existingNodes: Node[]): Node | null => {
     for (const node of existingNodes) {
         if (isOverlapping(newNode, node)) {
-            return node; // 겹치는 노드를 반환
+            return node;
         }
     }
 
-    return null; // 겹치는 노드가 없으면 null 반환
+    return null;
 };
 
 const isOverlapping = (node1: Node, node2: Node) => {

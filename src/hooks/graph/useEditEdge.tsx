@@ -16,7 +16,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
   const isDragging = useRef(false);
   const draggingEdgeRef = useRef<EdgePosition | null>(null);
 
-  const edgeNodes = useRef<[Node, Node]>();
+  const edgeNodes = useRef<[Node, Node] | null>(null);
   const foucsLink = useRef<Set<Link> | null>(null);
 
   const { updateHandlers } = useSVGEvents({});
@@ -40,6 +40,8 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
   };
 
   const edgeMouseDown = (eventNodes: [Node, Node]) => {
+    updateHandlers(edgeMouseMove, edgeMouseUp);
+
     removeLinksByNodeIds(eventNodes);
 
     edgeNodes.current = eventNodes;
@@ -48,8 +50,6 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
 
     draggingEdgeRef.current = edge;
     isDragging.current = true;
-
-    updateHandlers(edgeMouseMove, edgeMouseUp);
   };
 
   const edgeMouseMove = (e: MouseEvent) => {
@@ -72,7 +72,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
 
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 
-    if(hasOverlap && edgeNodes.current) {
+    if(hasOverlap && edgeNodes.current && edgeNodes.current[0].id !== hasOverlap.id) {
       const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id};
       nodeGraphData.links.push(newLink);
     }
@@ -87,6 +87,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
     setDraggingEdge(null);
     
     foucsLink.current = null;
+    edgeNodes.current = null;
     draggingEdgeRef.current = null;
     isDragging.current = false;
   };
