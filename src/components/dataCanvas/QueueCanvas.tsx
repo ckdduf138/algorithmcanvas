@@ -1,13 +1,15 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { useTheme } from '../../context/themeContext';
 
-const QueueContainer = styled.div`
+const QueueContainer = styled.div<{ theme: string }>`
+  width: 70em;
+  height: 40em;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   padding: 20px;
   position: relative;
+  overflow-y: auto;
+  color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색 */
 `;
 
 const fadeIn = keyframes`
@@ -40,14 +42,16 @@ const QueueRow = styled.div`
   margin-top: 10px;
 `;
 
-const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean }>`
-  background-color: white;
+const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean; theme: string }>`
+  width: 80px;
+  height: 80px;
+  background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#444')};  /* 테마에 따른 아이템 배경 */
   border: 1px solid #ccc;
-  padding: 2em;
   margin: 5px;
   text-align: center;
   border-radius: 4px;
   position: relative;
+  color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색상 */
   animation: ${({ isAdding, isRemoving }) => 
     isAdding ? fadeIn : isRemoving ? fadeOut : 'none'} 0.3s ease forwards;
 `;
@@ -57,7 +61,7 @@ const TopLine = styled.div<{ width: string }>`
   height: 1px;
   background-color: #ddd;
   position: absolute;
-  top: -10px;
+  top: 15em;
 `;
 
 const BottomLine = styled.div<{ width: string }>`
@@ -65,15 +69,15 @@ const BottomLine = styled.div<{ width: string }>`
   height: 1px;
   background-color: #ddd;
   position: absolute;
-  bottom: -10px;
+  bottom: 15em;
 `;
 
 const Arrow = styled.div`
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 0 10px 10px 10px; /* 화살표가 아래쪽을 가리키게 설정 */
-  border-color: transparent transparent #000 transparent;
+  border-width: 10px 10px 0 10px;
+  border-color: #000 transparent transparent transparent;
   margin-bottom: 10px;
   position: absolute;
   top: -30px;
@@ -87,23 +91,24 @@ const Label = styled.div`
   top: -50px;
 `;
 
-interface QueueCanvasProps {
-  queue: string[];
-  queueSize: number;
-}
-
 const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: boolean; isRemoving: boolean }> = ({ queue, queueSize, isAdding, isRemoving }) => {
-  const queueWidth = queueSize > 0 ? `${queueSize * 167}px` : '0';
+  const { theme } = useTheme();  // 현재 테마 가져오기
+  const queueWidth = queueSize > 0 ? `${queueSize * 90}px` : '0';
 
   return (
-    <QueueContainer>
+    <QueueContainer theme={theme}>
       <TopLine width={queueWidth} />
       <QueueRow>
         {queue.length === 0 ? (
           <p>큐가 비어 있습니다.</p>
         ) : (
           queue.map((item, index) => (
-            <QueueItem key={index}  isAdding={isAdding && index === 0} isRemoving={isRemoving && index === queue.length - 1}>
+            <QueueItem
+              key={index}
+              isAdding={isAdding && index === 0}
+              isRemoving={isRemoving && index === queue.length - 1}
+              theme={theme}
+            >
               {item}
               {index === 0 && (
                 <>
