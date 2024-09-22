@@ -62,7 +62,7 @@ export const useGraphCanvas = () => {
         });
       }
     });
-  }, [nodeGraphData]);
+  }, [nodeGraphData, width, height]);
 
   useEffect(() => {
     if (!draggingNode) return;
