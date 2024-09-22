@@ -15,15 +15,15 @@ const QueuePage: React.FC = () => {
       alert('추가할 데이터를 입력하세요.');
       return;
     }
-    if (queue.length < queueSize) {
+    if (queue.length < queueSize || queueSize === 0) {
       setQueue(prevQueue => {
         setIsAdding(true);
         return [inputValue, ...prevQueue];
       });
       setInputValue('');
       setTimeout(() => {
-        setIsAdding(false); // 애니메이션 후 false로 변경
-      }, 500); // 애니메이션 시간에 맞게 조정
+        setIsAdding(false);
+      }, 500);
     } else {
       alert('큐가 가득 찼습니다.');
     }

@@ -74,7 +74,7 @@ const QueueCanvasUI: React.FC<QueueCanvasUIProps> = ({
         handleKeyPress={handleKeyPress}
         isValidBtnAdd={true}
       />
-      <Button onClick={handlePush} disabled={!isValidBtnAdd || queueSize === queue.length}>
+      <Button onClick={handlePush} disabled={(!isValidBtnAdd || queueSize === queue.length) && queueSize !== 0}>
         Push
       </Button>
       <Button onClick={handlePop} disabled={queue.length === 0}>
