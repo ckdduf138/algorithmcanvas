@@ -22,6 +22,7 @@ export interface Node {
     x: number;
     y: number;
     radius: number;
+    text: string;
     focus: NodeFocusStatus;
 };
 

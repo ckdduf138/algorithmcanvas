@@ -1,5 +1,5 @@
 import { useWindowSize } from '../getWindowSize';
-import { distance } from '../../utils/common';
+import { distance, generateUUID } from '../../utils/common';
 import { Link, Node, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 
 export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
@@ -26,10 +26,11 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
       } while (isOverlapping);
 
       nodes.push({
-        id: i.toString(),
+        id: generateUUID(),
         x,
         y,
         radius: NodeRadius,
+        text: i.toString(),
         focus: 'inactive',
       });
     }

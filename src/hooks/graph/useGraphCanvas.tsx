@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
@@ -9,6 +9,8 @@ import { useEditEdge } from './useEditEdge';
 import { useSVGEvents } from './useSvgEvents';
 import { useTheme } from '../../context/themeContext';
 import { useGraphCanvasUI } from './useGraphCanvasUI';
+import CustomCircle from '../../components/graphCanvas/customNode';
+import { generateUUID } from '../../utils/common';
 
 export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
   fill: #D9D9D9;
@@ -49,6 +51,8 @@ export const useGraphCanvas = () => {
   const { width, height } = useWindowSize();
 
   const {theme} = useTheme();
+
+  const nodeTextRef = useRef(0);
 
   useEffect(() => {
     updateHandlers(dragMouseMove, handleDrop);
@@ -124,10 +128,11 @@ export const useGraphCanvas = () => {
     if (!draggingCircle) return;
   
     const newNode: Node = {
-      id: nodeGraphData?.nodes.length.toString(),
+      id: generateUUID(),
       x: draggingCircle.cx,
       y: draggingCircle.cy,
       radius: draggingCircle.radius,
+      text: (nodeTextRef.current++).toString(),
       focus: 'inactive'
     };
   
@@ -137,20 +142,13 @@ export const useGraphCanvas = () => {
     };
   
     setNodeGraphData((prevData) => {
-      if (!prevData) {
-        return {
-          nodes: [newNode],
-          links: [newLink],
-          focus: 'inactive',
-        };
-      }
-
       return {
+        ...prevData,
         nodes: [...prevData.nodes, newNode],
         links: [...prevData.links, newLink]
       };
     });
-  
+
     dragMouseUp();
   };
 
@@ -183,13 +181,28 @@ export const useGraphCanvas = () => {
       }
     };
 
+    const handleNodeDelete = (nodeId: string) => {
+      setNodeGraphData(prevData => {
+        const updatedNodes = prevData.nodes.filter(node => node.id !== nodeId);
+        const updatedLinks = prevData.links.filter(link => link.source !== nodeId && link.target !== nodeId);
+
+        return {
+          nodes: updatedNodes,
+          links: updatedLinks,
+        };
+      });
+    };
+
     return (
-      <>
-        <Circle $focusStatus={foundNodeData?.focus} id={node.id} r={NodeRadius} $theme={theme}
-          onMouseDown={handleMouseDown}
-        />
-        <CircleText x={0} y={0} $theme={theme}>{node.id}</CircleText>
-      </>
+      <CustomCircle 
+        id={node.id} 
+        r={NodeRadius} 
+        $focusStatus={node.focus} 
+        $theme={theme} 
+        text={node.text}
+        onMouseDown={handleMouseDown}
+        onDelete={handleNodeDelete}
+      />
     );
   };
 

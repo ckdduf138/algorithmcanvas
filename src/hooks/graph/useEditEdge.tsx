@@ -91,7 +91,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
   };
 
   const edgeMouseUp = (e: MouseEvent) => {
-    const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight, radius: 20, focus: 'inactive' };
+    const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight, radius: 20, text:'', focus: 'inactive' };
 
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 
