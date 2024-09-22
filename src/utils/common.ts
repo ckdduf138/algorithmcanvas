@@ -13,3 +13,7 @@ export const generateRandomNumbers = (min: number, max: number, number: number):
 export const getLogScale = (value: number) => {
     return Math.log10(value + 2);
 };
+
+export const distance = (x1: number, y1: number, x2: number, y2: number) => {
+  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+};

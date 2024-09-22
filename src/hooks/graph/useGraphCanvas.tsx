@@ -8,6 +8,7 @@ import { useWindowSize } from '../getWindowSize';
 import { useEditEdge } from './useEditEdge';
 import { useSVGEvents } from './useSvgEvents';
 import { useTheme } from '../../context/themeContext';
+import { useGraphCanvasUI } from './useGraphCanvasUI';
 
 export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
   fill: #D9D9D9;
@@ -40,6 +41,7 @@ export const useGraphCanvas = () => {
 
   const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode, dragMouseMove, dragMouseUp } = useDragCopy();
 
+  const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
   const { updateHandlers } = useSVGEvents({});
 
   const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData);
@@ -94,6 +96,7 @@ export const useGraphCanvas = () => {
         };
       });
     }
+
   }, [nodeGraphData, width, height]);
 
   useEffect(() => {
@@ -149,6 +152,14 @@ export const useGraphCanvas = () => {
     });
   
     dragMouseUp();
+  };
+
+  const handleRandomizeGraphData = (numNodes: number) => {
+    randomizeGraphData(numNodes);
+  };
+
+  const handleResetGraphData = () => {
+    resetGraphData();
   };
 
   const nodeGraphDatas = {
@@ -219,6 +230,8 @@ export const useGraphCanvas = () => {
     CustomNode,
     CustomLink,
     handleMouseDown,
-    handleEdgeClick
+    handleEdgeClick,
+    handleRandomizeGraphData,
+    handleResetGraphData
   };
 };

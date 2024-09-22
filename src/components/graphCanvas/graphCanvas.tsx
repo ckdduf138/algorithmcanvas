@@ -29,19 +29,22 @@ const BottomLine = styled.line`
 
 const GraphCanvas: React.FC = () => {
   const { width, height } = useWindowSize();
-  const { nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, handleMouseDown, handleEdgeClick } = useGraphCanvas();
+  const { nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, 
+          handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } = useGraphCanvas();
 
-  const { svgRef, handleMouseMove, handleMouseUp, updateHandlers } = useSVGEvents({
+  const { svgRef, handleMouseMove, handleMouseUp } = useSVGEvents({
     initialMouseMove: () => {},
     initialMouseUp: () => {},
   });
-
-  const delayRef = useRef(500);
 
   const {theme} = useTheme();
 
   const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
   
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+
+  const delayRef = useRef(500);
+
   const adjustedHeight = height * 0.8;
   const adjustedWidth = width * 0.98;
 
@@ -66,13 +69,15 @@ const GraphCanvas: React.FC = () => {
   };
 
   const onclickBtnReset = () => {
-
+    handleResetGraphData();
   };
+
   const onclickBtnRandom = () => {
-
+    handleRandomizeGraphData(5); 
   };
-  const onclickBtnStart = () => {
 
+  const onclickBtnStart = () => {
+    setIsRunning(true);
   };
 
   return (
@@ -148,7 +153,13 @@ const GraphCanvas: React.FC = () => {
         />
       )}
 
-    <SlideUI delayRef={delayRef} onclickBtnRandom={onclickBtnRandom} onclickBtnReset={onclickBtnReset} onclickBtnStart={onclickBtnStart}/>
+      {/* UI */}
+    <SlideUI 
+      isRunning={isRunning}
+      delayRef={delayRef} 
+      onclickBtnRandom={onclickBtnRandom}
+      onclickBtnReset={onclickBtnReset}
+      onclickBtnStart={onclickBtnStart}/>
     </GraphCanvasContainer>
   );
 };

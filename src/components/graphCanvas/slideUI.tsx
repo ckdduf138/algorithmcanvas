@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useWindowSize } from "../../hooks/getWindowSize";
 import Button from "../common/buttons";
 import DelaySlider from "../common/delaySlider";
-import { useDelay } from "../../hooks/sort/sort";
 
 const Container = styled.div<{ $isOpen : boolean, $height: number}>`
     display: flex;
@@ -37,18 +36,15 @@ const ToggleButton = styled.button<{$isOpen : boolean, $height: number}>`
 `;
 
 interface SlideUIProps {
+    isRunning: boolean;
+    delayRef: React.MutableRefObject<number>;
     onclickBtnReset: () => void;
     onclickBtnRandom: () => void;
     onclickBtnStart: () => void;
-    delayRef: React.MutableRefObject<number>;
 };
 
-const SlideUI: React.FC<SlideUIProps> = ({ delayRef, onclickBtnReset, onclickBtnRandom, onclickBtnStart }) => {
+const SlideUI: React.FC<SlideUIProps> = ({ isRunning, delayRef, onclickBtnReset, onclickBtnRandom, onclickBtnStart }) => {
     const [isOpen, setIsOpen] = useState(false);
-
-    const [isValidBtnReset, setIsValidBtnReset] = useState<boolean>(false);
-    const [isValidBtnRandom, setIsValidBtnRandom] = useState<boolean>(true);
-    const [isValidBtnStart, setIsValidBtnStart] = useState<boolean>(false);
 
     const { height } = useWindowSize();
 
@@ -63,9 +59,9 @@ const SlideUI: React.FC<SlideUIProps> = ({ delayRef, onclickBtnReset, onclickBtn
     return (
     <>
         <Container $isOpen={isOpen} $height={height * 0.13}>
-            <Button onClick={onclickBtnReset} disabled={!isValidBtnReset}>Reset</Button>
-            <Button onClick={onclickBtnRandom} disabled={!isValidBtnRandom}>Random</Button>
-            <Button onClick={onclickBtnStart} disabled={!isValidBtnStart}>Start</Button>
+            <Button onClick={onclickBtnReset} disabled={isRunning}>Reset</Button>
+            <Button onClick={onclickBtnRandom} disabled={isRunning}>Random</Button>
+            <Button onClick={onclickBtnStart} disabled={!isRunning}>Start</Button>
             <DelaySlider onDelayChange={handleDelayChange}/> 
         </Container>
         <ToggleButton $isOpen={isOpen} $height={height * 0.23} onClick={toggleOpen}>
