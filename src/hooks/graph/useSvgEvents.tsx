@@ -45,6 +45,6 @@ export const useSVGEvents = ({ initialMouseMove, initialMouseUp}: SVGEventHandle
     svgRef,
     handleMouseMove,
     handleMouseUp,
-    updateHandlers,  // 핸들러를 바꾸는 함수 리턴
+    updateHandlers,
   };
 };

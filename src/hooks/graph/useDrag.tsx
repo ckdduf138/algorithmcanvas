@@ -1,14 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useWindowSize } from '../getWindowSize';
-import { Node, NodeGraphData } from '../../utils/graphData';
+import { CirclePosition, Node } from '../../utils/graphData';
 import { useSVGEvents } from './useSvgEvents';
-
-interface CirclePosition {
-  id: string;
-  cx: number;
-  cy: number;
-  radius: number;
-}
 
 export const useDragCopy = () => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);

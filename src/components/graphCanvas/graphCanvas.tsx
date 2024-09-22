@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Graph } from '@visx/network';
 import { useWindowSize } from '../../hooks/getWindowSize';
-import { Circle, Line, useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
-import { NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import { Circle, Line } from '../../hooks/graph/useGraphCanvas';
+import { CirclePosition, EdgePosition, Link, Node, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import Tooltip from '../common/tooltip';
 import EdgeToggle from './edgeToggle';
 import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
@@ -28,10 +28,26 @@ const BottomLine = styled.line`
   stroke-width: 3;
 `;
 
-const GraphCanvas: React.FC = () => {
+interface GraphCanvasProps {
+  nodeGraphDatas: { nodes: Node[], links: Link[] };
+  draggingCircle: CirclePosition | null;
+  selectedEdge: boolean;
+  selectedNode: Node | null;
+  draggingEdge: EdgePosition | null;
+  CustomNode: React.FC<{node: Node}>;
+  CustomLink: React.FC<{ link: { source: string, target: string, dashed?: boolean } }>;
+  delayRef: React.MutableRefObject<number>
+  handleMouseDown: (circle: CirclePosition) => void
+  handleEdgeClick: () => void;
+  handleRandomizeGraphData: (numNodes: number) => void;
+  handleResetGraphData: () => void;
+  handleStart: (startNodeId: string) => Promise<void>;
+};
+
+const GraphCanvas: React.FC<GraphCanvasProps> = ({nodeGraphDatas, draggingCircle, selectedEdge, selectedNode, draggingEdge, CustomNode, CustomLink, delayRef,
+  handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData, handleStart}
+) => {
   const { width, height } = useWindowSize();
-  const { nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, 
-          handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } = useGraphCanvas();
 
   const { svgRef, handleMouseMove, handleMouseUp } = useSVGEvents({
     initialMouseMove: () => {},
@@ -43,8 +59,6 @@ const GraphCanvas: React.FC = () => {
   const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
   
   const [isRunning, setIsRunning] = useState<boolean>(false);
-
-  const delayRef = useRef(500);
 
   const adjustedHeight = height * 0.8;
   const adjustedWidth = width * 0.98;
@@ -77,8 +91,17 @@ const GraphCanvas: React.FC = () => {
     handleRandomizeGraphData(5); 
   };
 
-  const onclickBtnStart = () => {
+  const onclickBtnStart = async () => {
     setIsRunning(true);
+
+    if(selectedNode) {
+      await handleStart(selectedNode.id);
+    }
+    else {
+      alert('시작할 노드를 선택해주세요.');
+    }
+
+    setIsRunning(false);
   };
 
   return (

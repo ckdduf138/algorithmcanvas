@@ -1,14 +1,8 @@
 import { useRef, useState } from 'react';
 import { useWindowSize } from '../getWindowSize';
-import { findOverlappingNode, Link, Node, NodeGraphData } from '../../utils/graphData';
+import { EdgePosition, findOverlappingNode, Link, Node, NodeGraphData } from '../../utils/graphData';
 import { useSVGEvents } from './useSvgEvents';
 
-interface EdgePosition {
-  x1: number;
-  y1: number;
-  x2: number | null;
-  y2: number | null;
-}
 
 export const useEditEdge = (nodeGraphData: NodeGraphData) => {
   const [draggingEdge, setDraggingEdge] = useState<EdgePosition | null>(null);

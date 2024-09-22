@@ -1,6 +1,4 @@
-import { useCallback } from "react";
-
-export type NodeFocusStatus = 'inactive' | 'active' | 'highlight' | 'completed';
+export type NodeFocusStatus = 'selected' | 'inactive' | 'active' | 'highlight' | 'completed';
 
 export const NodeRadius = 50;
 
@@ -30,6 +28,20 @@ export interface Link {
     source: string;
     target: string;
 };
+
+export interface CirclePosition {
+    id: string;
+    cx: number;
+    cy: number;
+    radius: number;
+}
+
+export interface EdgePosition {
+    x1: number;
+    y1: number;
+    x2: number | null;
+    y2: number | null;
+}
 
 export const getClosestAndFurthestNode = ( targetPos: { x: number; y: number }, node1: Node, node2: Node ): [Node, Node] => {
     const distance = (node: Node) => {

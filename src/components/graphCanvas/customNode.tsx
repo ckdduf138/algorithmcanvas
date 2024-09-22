@@ -2,6 +2,25 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NodeFocusStatus, NodeRadius } from '../../utils/graphData';
 
+const getStrokeColor = (focusStatus: NodeFocusStatus, theme: string) => {
+    if (focusStatus === 'inactive') {
+        return theme === 'light' ? 'black' : 'white';
+    }
+    switch (focusStatus) {
+        case 'active':
+            return theme === 'light' ? '#3498db' : '#2980b9';
+        case 'selected':
+            return theme === 'light' ? '#e74c3c' : '#c0392b';
+        case 'highlight':
+            return theme === 'light' ? '#f1c40f' : '#f39c12'; 
+        case 'completed':
+            return theme === 'light' ? '#2ecc71' : '#27ae60';
+        default:
+            return theme === 'light' ? '#d9d9d9' : '#333333';
+    }
+};
+
+
 const DeleteButton = styled.g<{ $show: boolean }>`
     cursor: pointer;
     opacity: ${props => (props.$show ? '1' : '0')};
@@ -11,18 +30,15 @@ const DeleteButton = styled.g<{ $show: boolean }>`
 
 const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
     fill: #D9D9D9;
-    stroke: ${props => props.$theme === 'light' ? 'black' : 'white'};
-    stroke-width: 3;
+    stroke: ${props => getStrokeColor(props.$focusStatus ?? 'inactive', props.$theme)};
+    stroke-width: ${props => props.$focusStatus === 'inactive' ? '3' : '5'};;
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
     cursor: pointer;
-
-    // &:hover ~ ${DeleteButton} {
-    //     opacity: 1;
-    // }
+    transition: stroke 0.3s ease, stroke-width 0.3s ease;
 `;
 
 const CircleText = styled.text<{$theme: string}>`
-    fill: ${props => props.$theme === 'light' ? 'black' : 'black'};
+    fill: black;
     font-size: 48px;
     dominant-baseline: middle;
     text-anchor: middle;
@@ -52,7 +68,7 @@ const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme
 
         timer = setTimeout(() => {
             setShowDelete(false);
-        }, 3000);
+        }, 1000);
     };
 
     const handleMouseLeave = () => {
@@ -60,7 +76,7 @@ const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme
 
         timer = setTimeout(() => {
             setShowDelete(false);
-        }, 3000);
+        }, 1000);
     };
 
     const handleDeleteClick = (e: React.MouseEvent<SVGElement>) => {

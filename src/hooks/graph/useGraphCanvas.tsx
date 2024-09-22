@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import { getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import { getClosestAndFurthestNode, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
 import { useWindowSize } from '../getWindowSize';
 import { useEditEdge } from './useEditEdge';
@@ -40,6 +40,7 @@ export const Line = styled.line<{$theme: string}>`
 export const useGraphCanvas = () => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
+  const [selectedNode, setSeletedNode] = useState<Node | null>(null);
 
   const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode, dragMouseMove, dragMouseUp } = useDragCopy();
 
@@ -147,10 +148,14 @@ export const useGraphCanvas = () => {
   };
 
   const handleRandomizeGraphData = (numNodes: number) => {
+    nodeTextRef.current = 0;
+    setSeletedNode(null);
     randomizeGraphData(numNodes, nodeTextRef);
   };
 
   const handleResetGraphData = () => {
+    nodeTextRef.current = 0;
+    setSeletedNode(null);
     resetGraphData();
   };
 
@@ -165,12 +170,28 @@ export const useGraphCanvas = () => {
     const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
       e.stopPropagation();
 
+      setNodeGraphData(prevData => {
+        if (!prevData) return prevData;
+      
+        const updatedNodes = prevData.nodes.map((node) => ({
+          ...node,
+          focus: 'inactive' as NodeFocusStatus
+        }));
+      
+        return {
+          ...prevData,
+          nodes: updatedNodes
+        };
+      });
+
       if(!foundNodeData) return;
 
       if(selectedEdge) {
         createEdgeMouseDown(foundNodeData);
       }
       else {
+        setSeletedNode(node);
+        node.focus = 'selected';
         handleMouseDownNode(foundNodeData);
       }
     };
@@ -230,9 +251,12 @@ export const useGraphCanvas = () => {
   };
 
   return {
+    nodeGraphData,
+    setNodeGraphData,
     nodeGraphDatas,
     draggingCircle,
     selectedEdge,
+    selectedNode,
     draggingEdge,
     CustomNode,
     CustomLink,
