@@ -155,11 +155,12 @@ const GraphCanvas: React.FC = () => {
 
       {/* UI */}
     <SlideUI 
+      dataSize={nodeGraphDatas.nodes.length}
       isRunning={isRunning}
       delayRef={delayRef} 
       onclickBtnRandom={onclickBtnRandom}
       onclickBtnReset={onclickBtnReset}
-      onclickBtnStart={onclickBtnStart}/>
+      onclickBtnStart={onclickBtnStart} />
     </GraphCanvasContainer>
   );
 };

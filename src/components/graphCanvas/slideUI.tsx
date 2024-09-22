@@ -36,6 +36,7 @@ const ToggleButton = styled.button<{$isOpen : boolean, $height: number}>`
 `;
 
 interface SlideUIProps {
+    dataSize: number;
     isRunning: boolean;
     delayRef: React.MutableRefObject<number>;
     onclickBtnReset: () => void;
@@ -43,7 +44,7 @@ interface SlideUIProps {
     onclickBtnStart: () => void;
 };
 
-const SlideUI: React.FC<SlideUIProps> = ({ isRunning, delayRef, onclickBtnReset, onclickBtnRandom, onclickBtnStart }) => {
+const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, onclickBtnReset, onclickBtnRandom, onclickBtnStart }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { height } = useWindowSize();
@@ -59,9 +60,9 @@ const SlideUI: React.FC<SlideUIProps> = ({ isRunning, delayRef, onclickBtnReset,
     return (
     <>
         <Container $isOpen={isOpen} $height={height * 0.13}>
-            <Button onClick={onclickBtnReset} disabled={isRunning}>Reset</Button>
+            <Button onClick={onclickBtnReset} disabled={dataSize <= 0 && !isRunning}>Reset</Button>
             <Button onClick={onclickBtnRandom} disabled={isRunning}>Random</Button>
-            <Button onClick={onclickBtnStart} disabled={!isRunning}>Start</Button>
+            <Button onClick={onclickBtnStart} disabled={dataSize <= 0 && !isRunning}>Start</Button>
             <DelaySlider onDelayChange={handleDelayChange}/> 
         </Container>
         <ToggleButton $isOpen={isOpen} $height={height * 0.23} onClick={toggleOpen}>
