@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const QueueContainer = styled.div`
   display: flex;
@@ -10,6 +10,28 @@ const QueueContainer = styled.div`
   position: relative;
 `;
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+`;
+
 const QueueRow = styled.div`
   display: flex;
   justify-content: center;
@@ -18,8 +40,7 @@ const QueueRow = styled.div`
   margin-top: 10px;
 `;
 
-const QueueItem = styled.div`
-  width: 80px;
+const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean }>`
   background-color: white;
   border: 1px solid #ccc;
   padding: 2em;
@@ -27,6 +48,8 @@ const QueueItem = styled.div`
   text-align: center;
   border-radius: 4px;
   position: relative;
+  animation: ${({ isAdding, isRemoving }) => 
+    isAdding ? fadeIn : isRemoving ? fadeOut : 'none'} 0.3s ease forwards;
 `;
 
 const TopLine = styled.div<{ width: string }>`
@@ -66,10 +89,10 @@ const Label = styled.div`
 
 interface QueueCanvasProps {
   queue: string[];
-  queueSize: number; // 큐 크기 추가
+  queueSize: number;
 }
 
-const QueueCanvas: React.FC<QueueCanvasProps> = ({ queue, queueSize }) => {
+const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: boolean; isRemoving: boolean }> = ({ queue, queueSize, isAdding, isRemoving }) => {
   const queueWidth = queueSize > 0 ? `${queueSize * 167}px` : '0';
 
   return (
@@ -80,7 +103,7 @@ const QueueCanvas: React.FC<QueueCanvasProps> = ({ queue, queueSize }) => {
           <p>큐가 비어 있습니다.</p>
         ) : (
           queue.map((item, index) => (
-            <QueueItem key={index}>
+            <QueueItem key={index}  isAdding={isAdding && index === 0} isRemoving={isRemoving && index === queue.length - 1}>
               {item}
               {index === 0 && (
                 <>

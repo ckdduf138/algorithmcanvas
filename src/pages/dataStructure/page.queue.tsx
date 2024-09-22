@@ -7,6 +7,8 @@ const QueuePage: React.FC = () => {
   const [queue, setQueue] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [queueSize, setQueueSize] = useState<number>(0);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const handlePush = () => {
     if (!inputValue.trim()) {
@@ -14,8 +16,14 @@ const QueuePage: React.FC = () => {
       return;
     }
     if (queue.length < queueSize) {
-      setQueue(prevQueue => [inputValue, ...prevQueue]);
+      setQueue(prevQueue => {
+        setIsAdding(true);
+        return [inputValue, ...prevQueue];
+      });
       setInputValue('');
+      setTimeout(() => {
+        setIsAdding(false); // 애니메이션 후 false로 변경
+      }, 500); // 애니메이션 시간에 맞게 조정
     } else {
       alert('큐가 가득 찼습니다.');
     }
@@ -23,9 +31,13 @@ const QueuePage: React.FC = () => {
 
   const handlePop = () => {
     if (queue.length > 0) {
+      setIsRemoving(true);
       const newQueue = [...queue];
-      newQueue.pop(); // 오른쪽에서 삭제
-      setQueue(newQueue);
+      setTimeout(() => {
+        newQueue.pop(); // 오른쪽에서 삭제
+        setQueue(newQueue);
+        setIsRemoving(false); // 애니메이션 후 false로 변경
+      }, 500); // 애니메이션 시간에 맞게 조정
     } else {
       alert('큐에 데이터가 없습니다.');
     }
@@ -34,10 +46,7 @@ const QueuePage: React.FC = () => {
   const handleQueueSize = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSize = Number(event.target.value);
     setQueueSize(newSize);
-    if (newSize < queue.length) {
-      // 새 큐 크기가 기존 큐 길이보다 작으면 큐를 초기화
-      setQueue([]);
-    }
+    setQueue([]);
   };
 
   return (
@@ -45,6 +54,8 @@ const QueuePage: React.FC = () => {
       <QueueCanvas 
         queue={queue}        // 큐 상태 전달
         queueSize={queueSize} // 큐 크기 전달
+        isAdding={isAdding}    // 추가 상태 전달
+        isRemoving={isRemoving} // 삭제 상태 전달
       />
       <QueueCanvasUI
         queue={queue}
