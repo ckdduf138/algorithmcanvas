@@ -3,6 +3,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import HomePage from './pages/page.home';
 
+import QueuePage from './pages/dataStructure/page.queue';
+import StackPage from './pages/dataStructure/page.stack';
+
 import SelectionSortPage from './pages/sort/page.selectionSort';
 import InsertionSortPage from './pages/sort/page.insertionSort';
 import BubbleSortPage from './pages/sort/page.bubbleSort';
@@ -28,6 +31,10 @@ const App = () => {
                 <Routes>
                     {/* Root */}
                     <Route path="" element={<HomePage />} />
+
+                    {/* 자료구조 */}
+                    <Route path="queue" element={<QueuePage />} />
+                    <Route path="stack" element={<StackPage />} />
 
                     {/* 정렬 */}
                     <Route path="selection_sort" element={<SelectionSortPage />} />
