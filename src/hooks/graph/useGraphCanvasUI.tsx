@@ -5,7 +5,7 @@ import { Link, Node, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '.
 export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
   const { width, height } = useWindowSize();
 
-  const randomizeGraphData = (numNodes: number) => {
+  const randomizeGraphData = (numNodes: number, nodeTextRef: React.MutableRefObject<number>) => {
     const nodes: Node[] = [];
 
     for (let i = 0; i < numNodes; i++) {
@@ -30,7 +30,7 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
         x,
         y,
         radius: NodeRadius,
-        text: i.toString(),
+        text: (nodeTextRef.current++).toString(),
         focus: 'inactive',
       });
     }

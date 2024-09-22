@@ -136,16 +136,10 @@ export const useGraphCanvas = () => {
       focus: 'inactive'
     };
   
-    const newLink: Link = {
-      source: (parseInt(newNode.id) - 1).toString(),
-      target: newNode.id,
-    };
-  
     setNodeGraphData((prevData) => {
       return {
         ...prevData,
         nodes: [...prevData.nodes, newNode],
-        links: [...prevData.links, newLink]
       };
     });
 
@@ -153,7 +147,7 @@ export const useGraphCanvas = () => {
   };
 
   const handleRandomizeGraphData = (numNodes: number) => {
-    randomizeGraphData(numNodes);
+    randomizeGraphData(numNodes, nodeTextRef);
   };
 
   const handleResetGraphData = () => {
