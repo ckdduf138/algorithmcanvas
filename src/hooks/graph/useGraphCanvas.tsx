@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
@@ -6,11 +6,9 @@ import { EdgeFocusStatus, getClosestAndFurthestNode, Link, Node, NodeFocusStatus
 import { useDragCopy } from '../../hooks/graph/useDrag';
 import { useWindowSize } from '../getWindowSize';
 import { useEditEdge } from './useEditEdge';
-import { useSVGEvents } from './useSvgEvents';
 import { useTheme } from '../../context/themeContext';
 import { useGraphCanvasUI } from './useGraphCanvasUI';
 import CustomCircle from '../../components/graphCanvas/customCircle';
-import { generateUUID } from '../../utils/common';
 import CustomLine from '../../components/graphCanvas/customLine';
 
 export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
@@ -43,10 +41,11 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
   const [selectedNode, setSeletedNode] = useState<Node | null>(null);
 
-  const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode, dragMouseMove, dragMouseUp } = useDragCopy();
+  const nodeTextRef = useRef(0);
+
+  const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode } = useDragCopy(nodeTextRef, setNodeGraphData);
 
   const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
-  const { updateHandlers } = useSVGEvents({});
 
   const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData, setNodeGraphData);
 
@@ -54,32 +53,10 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
   const {theme} = useTheme();
 
-  const nodeTextRef = useRef(0);
-
   const handleEdgeClick = () => {
     if(isRunning.current) return;
     setSeletedEdge(!selectedEdge);
   };
-
-  const handleDrop = useCallback(() => {
-    if (!draggingCircle) return;
-  
-    const newNode: Node = {
-      id: generateUUID(),
-      x: draggingCircle.cx,
-      y: draggingCircle.cy,
-      radius: draggingCircle.radius,
-      text: (nodeTextRef.current++).toString(),
-      focus: 'inactive'
-    };
-  
-    setNodeGraphData((prevData) => ({
-      ...prevData,
-      nodes: [...prevData.nodes, newNode],
-    }));
-  
-    dragMouseUp();
-  }, [draggingCircle, setNodeGraphData, dragMouseUp]);
 
   const handleRandomizeGraphData = (numNodes: number) => {
     nodeTextRef.current = 0;
@@ -219,9 +196,9 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     );
   };
 
-  useEffect(() => {
-    updateHandlers(dragMouseMove, handleDrop);
-  },[draggingCircle, dragMouseMove, handleDrop, updateHandlers]);
+  // useEffect(() => {
+  //   updateHandlers(dragMouseMove, handleDrop);
+  // },[draggingCircle]);
 
   useEffect(() => {
     if (!nodeGraphData) return;
