@@ -31,6 +31,6 @@ export function generateUUID(): string {
           r = (d2 + r) % 16 | 0;
           d2 = Math.floor(d2 / 16);
       }
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      return (c === 'x' ? r : ((r & 0x3) | 0x8)).toString(16);
   });
 }

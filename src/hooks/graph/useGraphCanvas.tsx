@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 import styled from 'styled-components';
 
@@ -56,78 +56,12 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
   const nodeTextRef = useRef(0);
 
-  useEffect(() => {
-    updateHandlers(dragMouseMove, handleDrop);
-  },[draggingCircle]);
-
-  useEffect(() => {
-    if (!nodeGraphData) return;
-
-    const { nodes } = nodeGraphData;
-  
-    const updatedNodes = nodes.map((currentNode) => {
-      const { x, y } = currentNode;
-  
-      const boundary = {
-        left: NodeRadius + 2,
-        right: width - NodeRadius - 2,
-        top: NodeRadius + 2,
-        bottom: height * 0.8 - NodeGraphHeightPadding - NodeRadius - 7
-      };
-  
-      const isOutOfBounds = x < boundary.left || x > boundary.right || y < boundary.top || y > boundary.bottom;
-  
-      if (isOutOfBounds) {
-        return {
-          ...currentNode,
-          x: Math.max(boundary.left, Math.min(x, boundary.right)),
-          y: Math.max(boundary.top, Math.min(y, boundary.bottom))
-        };
-      }
-  
-      return currentNode;
-    });
-  
-    const nodesChanged = !nodes.every((node, index) => 
-      node.x === updatedNodes[index].x && node.y === updatedNodes[index].y
-    );
-  
-    if (nodesChanged) {
-      setNodeGraphData((prevData) => {
-        if (!prevData) return prevData;
-        
-        return {
-          ...prevData,
-          nodes: updatedNodes,
-        };
-      });
-    }
-
-  }, [nodeGraphData, width, height]);
-
-  useEffect(() => {
-    if (!draggingNode) return;
-  
-    setNodeGraphData((prevData) => {
-      if (!prevData) return prevData;
-  
-      const updatedNodes = prevData.nodes.map((node) =>
-        node.id === draggingNode.id ? { ...node, ...draggingNode } : node
-      );
-  
-      return {
-        ...prevData,
-        nodes: updatedNodes,
-      };
-    });
-  }, [draggingNode]);
-
   const handleEdgeClick = () => {
     if(isRunning.current) return;
     setSeletedEdge(!selectedEdge);
   };
 
-  const handleDrop = () => {
+  const handleDrop = useCallback(() => {
     if (!draggingCircle) return;
   
     const newNode: Node = {
@@ -139,15 +73,13 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       focus: 'inactive'
     };
   
-    setNodeGraphData((prevData) => {
-      return {
-        ...prevData,
-        nodes: [...prevData.nodes, newNode],
-      };
-    });
-
+    setNodeGraphData((prevData) => ({
+      ...prevData,
+      nodes: [...prevData.nodes, newNode],
+    }));
+  
     dragMouseUp();
-  };
+  }, [draggingCircle, setNodeGraphData, dragMouseUp]);
 
   const handleRandomizeGraphData = (numNodes: number) => {
     nodeTextRef.current = 0;
@@ -286,6 +218,72 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       />
     );
   };
+
+  useEffect(() => {
+    updateHandlers(dragMouseMove, handleDrop);
+  },[draggingCircle, dragMouseMove, handleDrop, updateHandlers]);
+
+  useEffect(() => {
+    if (!nodeGraphData) return;
+
+    const { nodes } = nodeGraphData;
+  
+    const updatedNodes = nodes.map((currentNode) => {
+      const { x, y } = currentNode;
+  
+      const boundary = {
+        left: NodeRadius + 2,
+        right: width - NodeRadius - 2,
+        top: NodeRadius + 2,
+        bottom: height * 0.8 - NodeGraphHeightPadding - NodeRadius - 7
+      };
+  
+      const isOutOfBounds = x < boundary.left || x > boundary.right || y < boundary.top || y > boundary.bottom;
+  
+      if (isOutOfBounds) {
+        return {
+          ...currentNode,
+          x: Math.max(boundary.left, Math.min(x, boundary.right)),
+          y: Math.max(boundary.top, Math.min(y, boundary.bottom))
+        };
+      }
+  
+      return currentNode;
+    });
+  
+    const nodesChanged = !nodes.every((node, index) => 
+      node.x === updatedNodes[index].x && node.y === updatedNodes[index].y
+    );
+  
+    if (nodesChanged) {
+      setNodeGraphData((prevData) => {
+        if (!prevData) return prevData;
+        
+        return {
+          ...prevData,
+          nodes: updatedNodes,
+        };
+      });
+    }
+
+  }, [nodeGraphData, width, height]);
+
+  useEffect(() => {
+    if (!draggingNode) return;
+  
+    setNodeGraphData((prevData) => {
+      if (!prevData) return prevData;
+  
+      const updatedNodes = prevData.nodes.map((node) =>
+        node.id === draggingNode.id ? { ...node, ...draggingNode } : node
+      );
+  
+      return {
+        ...prevData,
+        nodes: updatedNodes,
+      };
+    });
+  }, [draggingNode]);
 
   return {
     nodeGraphData,
