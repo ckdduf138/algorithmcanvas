@@ -35,7 +35,7 @@ interface GraphCanvasProps {
   selectedNode: Node | null;
   draggingEdge: EdgePosition | null;
   CustomNode: React.FC<{node: Node}>;
-  CustomLink: React.FC<{ link: { source: string, target: string, dashed?: boolean } }>;
+  CustomLink: React.FC<{ link: Link }>;
   delayRef: React.MutableRefObject<number>;
   isRunning: React.MutableRefObject<boolean>;
   handleMouseDown: (circle: CirclePosition) => void
@@ -117,7 +117,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             x2={draggingEdge.x2 ?? 0}
             y2={draggingEdge.y2 ?? 0}
             $theme={theme}
-            style={{ stroke: '#666666', fill: '#ccc', opacity: 0.85 }}
+            style={{ stroke: '#e74c3c' }}
           />
         )}
         

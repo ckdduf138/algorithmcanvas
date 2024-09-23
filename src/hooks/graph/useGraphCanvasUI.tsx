@@ -50,7 +50,7 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
       const reverseLinkKey = `${target}-${source}`;
 
       if (!existingLinks.has(linkKey) && !existingLinks.has(reverseLinkKey)) {
-        links.push({ source, target });
+        links.push({ source, target, focus: 'inactive'});
         existingLinks.add(linkKey);
       }
     }

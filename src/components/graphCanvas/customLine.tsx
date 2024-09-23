@@ -21,10 +21,12 @@ const getStrokeColor = (focusStatus: NodeFocusStatus, theme: string) => {
 };
 
 
-export const Line = styled.line<{$theme: string}>`
-    stroke: ${props => props.$theme === 'light' ? 'black' : 'white'};
+export const Line = styled.line<{$focusStatus?: NodeFocusStatus, $theme: string, $dashed: boolean}>`
+    stroke: ${props => getStrokeColor(props.$focusStatus ?? 'inactive', props.$theme)};
     stroke-width: 5;
     stroke-opacity: 0.6;
+    strokeDasharray= ${props => props.$dashed ? '8,4' : undefined} 
+
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
     cursor: pointer;
 `;
@@ -34,11 +36,12 @@ interface CustomLineProps {
     y1: number;
     x2: number;
     y2: number;
+    dashed?: boolean;
     $theme?: any;
     onMouseDown?: (e: React.MouseEvent<SVGElement>) => void;
 }
 
-const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, onMouseDown }) => {
+const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, dashed, onMouseDown }) => {
 
     return (
         <Line 
@@ -47,6 +50,7 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, onMouse
             x2={x2} 
             y2={y2}
             $theme={$theme}
+            $dashed={dashed ?? false}
             onMouseDown={onMouseDown}
       />
     );

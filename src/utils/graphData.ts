@@ -1,5 +1,7 @@
 export type NodeFocusStatus = 'selected' | 'inactive' | 'active' | 'highlight' | 'completed';
 
+export type EdgeFocusStatus = 'inactive' | 'active'
+
 export const NodeRadius = 50;
 
 export const NodeGraphWidthPadding = 50;
@@ -27,6 +29,8 @@ export interface Node {
 export interface Link {
     source: string;
     target: string;
+    dashed?: boolean;
+    focus: EdgeFocusStatus;
 };
 
 export interface CirclePosition {

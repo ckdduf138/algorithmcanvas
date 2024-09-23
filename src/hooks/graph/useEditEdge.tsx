@@ -90,7 +90,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 
     if(hasOverlap && edgeNodes.current && edgeNodes.current[0].id !== hasOverlap.id) {
-      const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id};
+      const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive'};
 
       if (!nodeGraphData.links.some(link => 
         (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source))) {

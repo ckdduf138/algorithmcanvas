@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import { getClosestAndFurthestNode, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import { getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
 import { useWindowSize } from '../getWindowSize';
 import { useEditEdge } from './useEditEdge';
@@ -228,7 +228,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
     );
   };
 
-  const CustomLink: React.FC<{ link: { source: string; target: string; dashed?: boolean } }> = ({ link }) => {
+  const CustomLink: React.FC<{ link: Link }> = ({ link }) => {
     const sourceNode = nodeGraphData?.nodes.find(node => node.id === link.source);
     const targetNode = nodeGraphData?.nodes.find(node => node.id === link.target);
 
@@ -238,7 +238,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
       e.stopPropagation();
       
       if(isRunning.current) return;
-      
+
       const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
       if(closestNode) {
         edgeMouseDown(e, closestNode);
@@ -252,6 +252,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
         x2={targetNode.x} 
         y2={targetNode.y}
         $theme={theme}
+        dashed={link.dashed}
         onMouseDown={handleMouseDown}
       />
     );
