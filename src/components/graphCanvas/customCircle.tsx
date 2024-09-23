@@ -52,16 +52,19 @@ interface CustomCircleProps {
     $focusStatus: NodeFocusStatus;
     $theme?: any;
     text: string;
+    isRunning: boolean
     onMouseDown?: (e: React.MouseEvent<SVGElement>) => void;
     onDelete?: (id: string) => void;
 }
 
-const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme, text, onMouseDown, onDelete }) => {
+const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme, text, isRunning, onMouseDown, onDelete }) => {
     const [showDelete, setShowDelete] = useState(false);
 
     let timer: NodeJS.Timeout | null = null;
 
     const handleMouseEnter = () => {
+        if(isRunning) return;
+        
         if (timer) clearTimeout(timer);
         
         setShowDelete(true);

@@ -8,7 +8,7 @@ const BFSPage: React.FC = () => {
   const isRunning = useRef(false);
   const delayRef = useRef(500);
 
-  const [renderState, setRenderState] = useState(false);
+  const [, setRenderState] = useState(false);
 
   const { 
     nodeGraphData, setNodeGraphData,  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 

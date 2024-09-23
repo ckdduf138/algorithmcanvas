@@ -62,7 +62,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
   useEffect(() => {
     if (!nodeGraphData) return;
-    
+
     const { nodes } = nodeGraphData;
   
     const updatedNodes = nodes.map((currentNode) => {
@@ -228,6 +228,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         $focusStatus={node.focus} 
         $theme={theme} 
         text={node.text}
+        isRunning={isRunning.current}
         onMouseDown={handleMouseDown}
         onDelete={handleNodeDelete}
       />

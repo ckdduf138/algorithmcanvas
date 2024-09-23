@@ -133,7 +133,9 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
         {/* 복사용 노드 */}
         <Circle cx={width / 3 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme}
-          onMouseDown={() => handleMouseDown({ id: generateUUID(), cx: width / 3 * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius })}
+          onMouseDown={() => {
+            if (!isRunning) {handleMouseDown({ id: generateUUID(), cx: (width / 3) * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius });
+          }}}
           onMouseOver={() => handleMouseOverNode(width / 3 * 1, adjustedHeight - NodeRadius * 2)}
           onMouseOut={handleMouseOutEdge}
         />
