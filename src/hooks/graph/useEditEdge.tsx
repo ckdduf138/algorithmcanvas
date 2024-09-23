@@ -4,7 +4,7 @@ import { EdgePosition, findOverlappingNode, Link, Node, NodeGraphData } from '..
 import { useSVGEvents } from './useSvgEvents';
 
 
-export const useEditEdge = (nodeGraphData: NodeGraphData) => {
+export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
   const [draggingEdge, setDraggingEdge] = useState<EdgePosition | null>(null);
 
   const isDragging = useRef(false);
@@ -19,21 +19,28 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
   const headerHeight = height * 0.1;
 
   const removeLinksByNodeIds = (eventNodes: [Node, Node]) => {
-    const link1 = nodeGraphData.links.find((data) => data.source === eventNodes[0].id && data.target === eventNodes[1].id);
-    const link2 = nodeGraphData.links.find((data) => data.target === eventNodes[0].id && data.source === eventNodes[1].id);
-
-    const linksToRemove = new Set<Link>();
-    if (link1) linksToRemove.add(link1);
-    if (link2) linksToRemove.add(link2);
-
-    const links = nodeGraphData.links.filter((link) => !linksToRemove.has(link));
-
-    foucsLink.current = linksToRemove;
-
-    nodeGraphData.links = links;
+    setNodeGraphData(prevData => {
+      const link1 = prevData.links.find((data) => data.source === eventNodes[0].id && data.target === eventNodes[1].id);
+      const link2 = prevData.links.find((data) => data.target === eventNodes[0].id && data.source === eventNodes[1].id);
+    
+      const linksToRemove = new Set<Link>();
+      if (link1) linksToRemove.add(link1);
+      if (link2) linksToRemove.add(link2);
+    
+      const updatedLinks = prevData.links.filter((link) => !linksToRemove.has(link));
+    
+      foucsLink.current = linksToRemove;
+    
+      return {
+        ...prevData,
+        links: updatedLinks
+      };
+    });
   };
 
   const edgeMouseDown = (e: React.MouseEvent<SVGElement>, eventNodes: [Node, Node]) => {
+
+    console.log('edgeMouseDown');
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
     removeLinksByNodeIds(eventNodes);
@@ -75,6 +82,8 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
     const newCx = e.clientX;
     const newCy = e.clientY - headerHeight;
     
+    console.log('edgeMouseMove');
+
     if (draggingEdgeRef.current) {
       setDraggingEdge({
         ...draggingEdgeRef.current,
@@ -91,10 +100,15 @@ export const useEditEdge = (nodeGraphData: NodeGraphData) => {
 
     if(hasOverlap && edgeNodes.current && edgeNodes.current[0].id !== hasOverlap.id) {
       const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive'};
-
       if (!nodeGraphData.links.some(link => 
         (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source))) {
-        nodeGraphData.links.push(newLink);
+
+        console.log(hasOverlap.text);
+        setNodeGraphData(prevData => ({
+          ...prevData,
+          links: [...prevData.links, newLink]
+        }));
+        console.log(nodeGraphData.links);
       }
     }
     else {

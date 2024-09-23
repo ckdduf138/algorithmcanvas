@@ -48,7 +48,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
   const { updateHandlers } = useSVGEvents({});
 
-  const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData);
+  const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData, setNodeGraphData);
 
   const { width, height } = useWindowSize();
 
@@ -63,6 +63,8 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   useEffect(() => {
     if (!nodeGraphData) return;
   
+    console.log(nodeGraphData);
+
     const { nodes } = nodeGraphData;
   
     const updatedNodes = nodes.map((currentNode) => {
