@@ -1,70 +1,70 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useWindowSize } from '../getWindowSize';
-import { NodeGraphData } from '../../utils/graphData';
-
-interface CirclePosition {
-  id: string;
-  cx: number;
-  cy: number;
-  r: number;
-}
+import { CirclePosition, Node } from '../../utils/graphData';
+import { useSVGEvents } from './useSvgEvents';
 
 export const useDragCopy = () => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);
-  const [draggingNode, setDraggingNode] = useState<NodeGraphData>();
+  const [draggingNode, setDraggingNode] = useState<Node | null>(null);
 
-  const [isDragging, setIsDragging] = useState(false);
+  const isDragging = useRef(false);
+  const draggingNodeRef = useRef<Node | null>(null);
+  const draggingCircleRef = useRef<CirclePosition | null>(null);
+
+  const { updateHandlers } = useSVGEvents({});
 
   const { height } = useWindowSize();
-
   const headerHeight = height * 0.1;
 
   const handleMouseDown = (circle: CirclePosition) => {
+    updateHandlers(dragMouseMove);
+    
     setDraggingCircle(circle);
-    setIsDragging(true);
+    draggingCircleRef.current = circle;
+    isDragging.current = true;
   };
 
-  const handleMouseDownNode = (nodeData: NodeGraphData) => {
+  const handleMouseDownNode = (nodeData: Node) => {
+    updateHandlers(dragMouseMove, dragMouseUp);
+
     setDraggingNode(nodeData);
-    setIsDragging(true);
+    draggingNodeRef.current = nodeData;
+    isDragging.current = true;
   };
 
-  const handleMouseMove = (e: React.MouseEvent<SVGElement>) => {
-    if (isDragging === false) return;
+  const dragMouseMove = (e: MouseEvent) => {
+    if (!isDragging.current) return;
 
     const newCx = e.clientX;
     const newCy = e.clientY - headerHeight;
 
-    if(draggingCircle) {
-      const newCircle = { ...draggingCircle, cx: newCx, cy: newCy};
+    if (draggingCircleRef.current) {
+      const newCircle = { ...draggingCircleRef.current, cx: newCx, cy: newCy };
       setDraggingCircle(newCircle);
-    }
-    else if (draggingNode) {
+    } else if (draggingNodeRef.current) {
       setDraggingNode({
-        ...draggingNode,
-        node: {
-          ...draggingNode.node,
-          x: newCx,
-          y: newCy
-        }
+        ...draggingNodeRef.current,
+        x: newCx,
+        y: newCy
       });
     }
-  }
+  };
 
-  const handleMouseUp = (onDrop: (circle: CirclePosition) => void) => {
-    if (draggingCircle) {
-      onDrop(draggingCircle);
-    }
+  const dragMouseUp = () => {
     setDraggingCircle(null);
-    setIsDragging(false);
+    setDraggingNode(null);
+
+    draggingCircleRef.current = null;
+    draggingNodeRef.current = null;
+    isDragging.current = false;
   };
 
   return {
     draggingCircle,
     draggingNode,
     handleMouseDown,
+    dragMouseMove,
     handleMouseDownNode,
-    handleMouseMove,
-    handleMouseUp,
+    dragMouseUp,
   };
 };

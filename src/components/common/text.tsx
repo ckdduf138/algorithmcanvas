@@ -10,8 +10,8 @@ interface TextProps {
 
 const StyledText = styled.span<{ theme: string, fontSize?: string }>`
     color: ${props => props.theme === 'light' ? '#8A8F95' : '#b8bcbf'};
-
     font-size: ${props => props.fontSize};
+    user-select: none;
 `;
 
 const Text: React.FC<TextProps> = ({ children, fontSize }) => {
