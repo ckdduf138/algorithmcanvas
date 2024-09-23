@@ -62,9 +62,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
   useEffect(() => {
     if (!nodeGraphData) return;
-  
-    console.log(nodeGraphData);
-
+    
     const { nodes } = nodeGraphData;
   
     const updatedNodes = nodes.map((currentNode) => {

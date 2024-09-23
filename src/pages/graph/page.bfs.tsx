@@ -67,9 +67,9 @@ const BFSPage: React.FC = () => {
 
     const handleStart = async (startNodeId: string) => {
       isRunning.current = true;
-
+    
       const { nodes, links } = nodeGraphData;
-
+    
       const visited = new Map<string, boolean>();
       nodes.forEach((node) => visited.set(node.id, false));
     
@@ -78,12 +78,14 @@ const BFSPage: React.FC = () => {
     
       await updateNodeFocus(startNodeId, 'selected');
     
+      let prevNodeId: string | null = null;
+    
       while (queue.length > 0) {
-        const currentNodeId = queue.shift(); // 큐에서 현재 노드를 꺼냄
+        const currentNodeId = queue.shift();
         const currentNode = nodes.find((node) => node.id === currentNodeId);
-
-        if(!currentNode) return;
-
+    
+        if (!currentNode) return;
+    
         await updateNodeFocus(currentNode.id, 'active');
     
         const neighbors = links
@@ -91,26 +93,32 @@ const BFSPage: React.FC = () => {
           .map((link) => (link.source === currentNodeId ? link.target : link.source));
     
         const newlyHighlightedNodes: string[] = [];
+    
         for (const neighborId of neighbors) {
           if (!visited.get(neighborId)) {
             visited.set(neighborId, true);
             queue.push(neighborId);
             newlyHighlightedNodes.push(neighborId);
-
+    
+            await updateNodeFocus(neighborId, 'highlight');
             await updateEdgeFocus(currentNode.id, neighborId, 'active');
             updateEdgeFocus(currentNode.id, neighborId, 'completed');
-            await updateNodeFocus(neighborId, 'highlight');
           }
         }
-
-        if (currentNode) {
-          await updateNodeFocus(currentNode.id, 'completed');
+    
+        if (prevNodeId) {
+          await updateNodeFocus(prevNodeId, 'completed');
         }
+    
+        prevNodeId = currentNode.id;
+      }
+
+      if (prevNodeId) {
+        await updateNodeFocus(prevNodeId, 'completed');
       }
     
       isRunning.current = false;
-      setRenderState((prev) => !prev); 
-      console.log("BFS 완료");
+      setRenderState((prev) => !prev);
     };
     
   

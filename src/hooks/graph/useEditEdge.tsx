@@ -39,8 +39,6 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
   };
 
   const edgeMouseDown = (e: React.MouseEvent<SVGElement>, eventNodes: [Node, Node]) => {
-
-    console.log('edgeMouseDown');
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
     removeLinksByNodeIds(eventNodes);
@@ -81,8 +79,6 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
 
     const newCx = e.clientX;
     const newCy = e.clientY - headerHeight;
-    
-    console.log('edgeMouseMove');
 
     if (draggingEdgeRef.current) {
       setDraggingEdge({
@@ -102,13 +98,10 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
       const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive'};
       if (!nodeGraphData.links.some(link => 
         (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source))) {
-
-        console.log(hasOverlap.text);
         setNodeGraphData(prevData => ({
           ...prevData,
           links: [...prevData.links, newLink]
         }));
-        console.log(nodeGraphData.links);
       }
     }
     else {
