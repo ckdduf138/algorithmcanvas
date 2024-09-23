@@ -37,7 +37,7 @@ export const Line = styled.line<{$theme: string}>`
   cursor: pointer;
 `;
 
-export const useGraphCanvas = () => {
+export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
   const [selectedNode, setSeletedNode] = useState<Node | null>(null);
@@ -122,6 +122,7 @@ export const useGraphCanvas = () => {
   }, [draggingNode]);
 
   const handleEdgeClick = () => {
+    if(isRunning.current) return;
     setSeletedEdge(!selectedEdge);
   };
 
@@ -170,12 +171,14 @@ export const useGraphCanvas = () => {
     const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
       e.stopPropagation();
 
+      if(isRunning.current) return;
+
       setNodeGraphData(prevData => {
         if (!prevData) return prevData;
       
         const updatedNodes = prevData.nodes.map((node) => ({
           ...node,
-          focus: 'inactive' as NodeFocusStatus
+          focus: node === foundNodeData ? 'selected' : 'inactive' as NodeFocusStatus
         }));
       
         return {
@@ -186,17 +189,20 @@ export const useGraphCanvas = () => {
 
       if(!foundNodeData) return;
 
+      node.focus = 'selected';
+      setSeletedNode(node);
+
       if(selectedEdge) {
         createEdgeMouseDown(foundNodeData);
       }
       else {
-        setSeletedNode(node);
-        node.focus = 'selected';
         handleMouseDownNode(foundNodeData);
       }
     };
 
     const handleNodeDelete = (nodeId: string) => {
+      if(isRunning.current) return;
+
       setNodeGraphData(prevData => {
         const updatedNodes = prevData.nodes.filter(node => node.id !== nodeId);
         const updatedLinks = prevData.links.filter(link => link.source !== nodeId && link.target !== nodeId);
@@ -229,6 +235,8 @@ export const useGraphCanvas = () => {
 
     const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
       e.stopPropagation();
+      
+      if(isRunning.current) return;
       
       const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
       if(closestNode) {

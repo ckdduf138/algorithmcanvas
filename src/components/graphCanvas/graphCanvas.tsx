@@ -36,7 +36,8 @@ interface GraphCanvasProps {
   draggingEdge: EdgePosition | null;
   CustomNode: React.FC<{node: Node}>;
   CustomLink: React.FC<{ link: { source: string, target: string, dashed?: boolean } }>;
-  delayRef: React.MutableRefObject<number>
+  delayRef: React.MutableRefObject<number>;
+  isRunning: React.MutableRefObject<boolean>;
   handleMouseDown: (circle: CirclePosition) => void
   handleEdgeClick: () => void;
   handleRandomizeGraphData: (numNodes: number) => void;
@@ -44,7 +45,8 @@ interface GraphCanvasProps {
   handleStart: (startNodeId: string) => Promise<void>;
 };
 
-const GraphCanvas: React.FC<GraphCanvasProps> = ({nodeGraphDatas, draggingCircle, selectedEdge, selectedNode, draggingEdge, CustomNode, CustomLink, delayRef,
+const GraphCanvas: React.FC<GraphCanvasProps> = ({
+  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode, draggingEdge, CustomNode, CustomLink, delayRef, isRunning,
   handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData, handleStart}
 ) => {
   const { width, height } = useWindowSize();
@@ -57,8 +59,6 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({nodeGraphDatas, draggingCircle
   const {theme} = useTheme();
 
   const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
-  
-  const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const adjustedHeight = height * 0.8;
   const adjustedWidth = width * 0.98;
@@ -92,16 +92,12 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({nodeGraphDatas, draggingCircle
   };
 
   const onclickBtnStart = async () => {
-    setIsRunning(true);
-
     if(selectedNode) {
       await handleStart(selectedNode.id);
     }
     else {
       alert('시작할 노드를 선택해주세요.');
     }
-
-    setIsRunning(false);
   };
 
   return (

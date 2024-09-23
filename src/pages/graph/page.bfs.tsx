@@ -2,15 +2,18 @@ import React, { useRef } from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
-import { Node, NodeFocusStatus } from '../../utils/graphData';
+import { NodeFocusStatus } from '../../utils/graphData';
 
 const BFSPage: React.FC = () => {
 
-  const { nodeGraphData, setNodeGraphData,  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
-    handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } = useGraphCanvas();
+  const isRunning = useRef(false);
+  const delayRef = useRef(500);
 
-    const delayRef = useRef(500);
-    
+  const { 
+    nodeGraphData, setNodeGraphData,  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
+    handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } 
+    = useGraphCanvas(isRunning);
+
     const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus) => {
       setNodeGraphData(prevData => {
         if (!prevData) return prevData;
@@ -30,6 +33,8 @@ const BFSPage: React.FC = () => {
     }
 
     const handleStart = async (startNodeId: string) => {
+      isRunning.current = true;
+
       const { nodes, links } = nodeGraphData;
     
       // 1. 각 노드의 방문 여부를 저장할 맵 (id -> boolean)
@@ -74,6 +79,7 @@ const BFSPage: React.FC = () => {
         }
       }
     
+      isRunning.current = false;
       console.log("BFS 완료");
     };
     
@@ -89,6 +95,7 @@ const BFSPage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
+        isRunning={isRunning}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
         handleRandomizeGraphData={handleRandomizeGraphData}
