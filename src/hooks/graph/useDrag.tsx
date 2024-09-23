@@ -1,9 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useWindowSize } from '../getWindowSize';
-import { CirclePosition, Node } from '../../utils/graphData';
+import { CirclePosition, Node, NodeGraphData } from '../../utils/graphData';
 import { useSVGEvents } from './useSvgEvents';
+import { generateUUID } from '../../utils/common';
 
-export const useDragCopy = () => {
+export const useDragCopy = (nodeTextRef: React.MutableRefObject<number>, setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);
   const [draggingNode, setDraggingNode] = useState<Node | null>(null);
 
@@ -17,7 +18,7 @@ export const useDragCopy = () => {
   const headerHeight = height * 0.1;
 
   const handleMouseDown = (circle: CirclePosition) => {
-    updateHandlers(dragMouseMove);
+    updateHandlers(dragMouseMove, handleDrop);
     
     setDraggingCircle(circle);
     draggingCircleRef.current = circle;
@@ -39,6 +40,9 @@ export const useDragCopy = () => {
     const newCy = e.clientY - headerHeight;
 
     if (draggingCircleRef.current) {
+      draggingCircleRef.current.cx = newCx;
+      draggingCircleRef.current.cy = newCy;
+      
       const newCircle = { ...draggingCircleRef.current, cx: newCx, cy: newCy };
       setDraggingCircle(newCircle);
     } else if (draggingNodeRef.current) {
@@ -50,14 +54,34 @@ export const useDragCopy = () => {
     }
   };
 
-  const dragMouseUp = () => {
+  const dragMouseUp = useCallback(() => {
     setDraggingCircle(null);
     setDraggingNode(null);
 
     draggingCircleRef.current = null;
     draggingNodeRef.current = null;
     isDragging.current = false;
-  };
+  },[]);
+
+  const handleDrop = useCallback(() => {
+    if (!draggingCircleRef.current) return;
+
+    const newNode: Node = {
+      id: generateUUID(),
+      x: draggingCircleRef.current.cx,
+      y: draggingCircleRef.current.cy,
+      radius: draggingCircleRef.current.radius,
+      text: (nodeTextRef.current++).toString(),
+      focus: 'inactive'
+    };
+  
+    setNodeGraphData((prevData) => ({
+      ...prevData,
+      nodes: [...prevData.nodes, newNode],
+    }));
+  
+    dragMouseUp();
+  }, [setNodeGraphData, dragMouseUp, nodeTextRef]);
 
   return {
     draggingCircle,

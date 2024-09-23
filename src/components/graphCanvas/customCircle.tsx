@@ -71,7 +71,7 @@ const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme
 
         timer = setTimeout(() => {
             setShowDelete(false);
-        }, 1000);
+        }, 2000);
     };
 
     const handleMouseLeave = () => {
@@ -79,7 +79,7 @@ const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme
 
         timer = setTimeout(() => {
             setShowDelete(false);
-        }, 1000);
+        }, 2000);
     };
 
     const handleDeleteClick = (e: React.MouseEvent<SVGElement>) => {
