@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import { getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import { EdgeFocusStatus, getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
 import { useWindowSize } from '../getWindowSize';
 import { useEditEdge } from './useEditEdge';
@@ -38,7 +38,7 @@ export const Line = styled.line<{$theme: string}>`
   cursor: pointer;
 `;
 
-export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
+export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, delayRef : React.MutableRefObject<number>) => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
   const [selectedNode, setSeletedNode] = useState<Node | null>(null);
@@ -182,9 +182,15 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
           focus: node === foundNodeData ? 'selected' : 'inactive' as NodeFocusStatus
         }));
       
+        const updatedLinks = prevData.links.map((link) => ({
+          ...link,
+          focus: 'inactive' as EdgeFocusStatus
+        }));
+
         return {
           ...prevData,
-          nodes: updatedNodes
+          nodes: updatedNodes,
+          links: updatedLinks
         };
       });
 
@@ -239,6 +245,26 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
       
       if(isRunning.current) return;
 
+      setNodeGraphData(prevData => {
+        if (!prevData) return prevData;
+      
+        const updatedNodes = prevData.nodes.map((node) => ({
+          ...node,
+          focus: 'inactive' as NodeFocusStatus
+        }));
+      
+        const updatedLinks = prevData.links.map((link) => ({
+          ...link,
+          focus: 'inactive' as EdgeFocusStatus
+        }));
+
+        return {
+          ...prevData,
+          nodes: updatedNodes,
+          links: updatedLinks
+        };
+      });
+
       const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
       if(closestNode) {
         edgeMouseDown(e, closestNode);
@@ -253,6 +279,8 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
         y2={targetNode.y}
         $theme={theme}
         dashed={link.dashed}
+        focusStatus={link.focus}
+        delay={delayRef.current}
         onMouseDown={handleMouseDown}
       />
     );

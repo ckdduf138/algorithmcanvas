@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
-import { NodeFocusStatus } from '../../utils/graphData';
+import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
 
 const BFSPage: React.FC = () => {
   const isRunning = useRef(false);
@@ -13,7 +13,7 @@ const BFSPage: React.FC = () => {
   const { 
     nodeGraphData, setNodeGraphData,  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } 
-    = useGraphCanvas(isRunning);
+    = useGraphCanvas(isRunning, delayRef);
 
     const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus) => {
       setNodeGraphData(prevData => {
@@ -33,37 +33,63 @@ const BFSPage: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, delayRef.current));
     }
 
+    const updateEdgeFocus = async (source: string, target: string, updateState: EdgeFocusStatus) => {
+      setNodeGraphData(prevData => {
+        if (!prevData) return prevData;
+        const updatedLinks = prevData.links.map((link) => {
+          if (source === link.target && target === link.source) {
+            return {
+              ...link,
+              source: link.target,
+              target: link.source,
+              focus: updateState
+            };
+          }
+      
+          if (source === link.source && target === link.target) {
+            return {
+              ...link,
+              focus: updateState
+            };
+          }
+  
+          return link;
+        });
+      
+        return {
+          ...prevData,
+          links: updatedLinks,
+        };
+      });
+
+      await new Promise(resolve => setTimeout(resolve, delayRef.current));
+    }
+
     const handleStart = async (startNodeId: string) => {
       isRunning.current = true;
 
       const { nodes, links } = nodeGraphData;
-    
-      // 1. 각 노드의 방문 여부를 저장할 맵 (id -> boolean)
+
       const visited = new Map<string, boolean>();
       nodes.forEach((node) => visited.set(node.id, false));
     
-      // 2. 큐(Queue) 초기화 및 시작 노드 추가
       const queue: string[] = [startNodeId];
       visited.set(startNodeId, true);
     
-      // 3. Initialize node focus states
       await updateNodeFocus(startNodeId, 'selected');
     
       while (queue.length > 0) {
         const currentNodeId = queue.shift(); // 큐에서 현재 노드를 꺼냄
-    
         const currentNode = nodes.find((node) => node.id === currentNodeId);
-        if (currentNode) {
-          console.log(`탐색 중: ${currentNode.text} (ID: ${currentNode.id})`);
-          await updateNodeFocus(currentNode.id, 'active');
-        }
+
+        if(!currentNode) return;
+
+        await updateNodeFocus(currentNode.id, 'active');
     
-        // 현재 노드와 연결된 인접 노드 탐색
         const neighbors = links
           .filter((link) => link.source === currentNodeId || link.target === currentNodeId)
           .map((link) => (link.source === currentNodeId ? link.target : link.source));
     
-        // 인접 노드를 큐에 추가 (방문하지 않은 노드만)
         const newlyHighlightedNodes: string[] = [];
         for (const neighborId of neighbors) {
           if (!visited.get(neighborId)) {
@@ -71,6 +97,8 @@ const BFSPage: React.FC = () => {
             queue.push(neighborId);
             newlyHighlightedNodes.push(neighborId);
 
+            await updateEdgeFocus(currentNode.id, neighborId, 'active');
+            updateEdgeFocus(currentNode.id, neighborId, 'completed');
             await updateNodeFocus(neighborId, 'highlight');
           }
         }
