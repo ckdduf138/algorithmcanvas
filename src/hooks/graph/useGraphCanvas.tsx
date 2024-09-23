@@ -9,8 +9,9 @@ import { useEditEdge } from './useEditEdge';
 import { useSVGEvents } from './useSvgEvents';
 import { useTheme } from '../../context/themeContext';
 import { useGraphCanvasUI } from './useGraphCanvasUI';
-import CustomCircle from '../../components/graphCanvas/customNode';
+import CustomCircle from '../../components/graphCanvas/customCircle';
 import { generateUUID } from '../../utils/common';
+import CustomLine from '../../components/graphCanvas/customLine';
 
 export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
   fill: #D9D9D9;
@@ -245,13 +246,11 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>) => {
     };
 
     return (
-      <Line 
+      <CustomLine
         x1={sourceNode.x}
         y1={sourceNode.y} 
         x2={targetNode.x} 
         y2={targetNode.y}
-        strokeOpacity={0.6}
-        strokeDasharray={link.dashed ? '8,4' : undefined} 
         $theme={theme}
         onMouseDown={handleMouseDown}
       />

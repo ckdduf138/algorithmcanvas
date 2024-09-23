@@ -63,9 +63,9 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, onclic
     return (
     <>
         <Container $isOpen={isOpen} $height={height * 0.13} $theme={theme}>
-            <Button onClick={onclickBtnReset} disabled={dataSize <= 0 && !isRunning.current}>Reset</Button>
+            <Button onClick={onclickBtnReset} disabled={dataSize <= 0 || isRunning.current}>Reset</Button>
             <Button onClick={onclickBtnRandom} disabled={isRunning.current}>Random</Button>
-            <Button onClick={onclickBtnStart} disabled={dataSize <= 0 && !isRunning.current}>Start</Button>
+            <Button onClick={onclickBtnStart} disabled={dataSize <= 0 || isRunning.current}>Start</Button>
             <DelaySlider onDelayChange={handleDelayChange}/> 
         </Container>
         <ToggleButton $isOpen={isOpen} $height={height * 0.23} $theme={theme} onClick={toggleOpen}>

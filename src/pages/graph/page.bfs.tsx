@@ -1,13 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { NodeFocusStatus } from '../../utils/graphData';
 
 const BFSPage: React.FC = () => {
-
   const isRunning = useRef(false);
   const delayRef = useRef(500);
+
+  const [renderState, setRenderState] = useState(false);
 
   const { 
     nodeGraphData, setNodeGraphData,  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
@@ -80,6 +81,7 @@ const BFSPage: React.FC = () => {
       }
     
       isRunning.current = false;
+      setRenderState((prev) => !prev); 
       console.log("BFS 완료");
     };
     
