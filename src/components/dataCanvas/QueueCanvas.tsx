@@ -3,10 +3,11 @@ import styled, { keyframes } from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 
 const QueueContainer = styled.div<{ theme: string }>`
-  width: 70em;
-  height: 40em;
   display: flex;
-  padding: 20px;
+  justify-content: center;
+  width: 100%;
+  height: 40em;
+  padding: 20px 0px;
   position: relative;
   overflow-y: auto;
   color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색 */
@@ -15,7 +16,7 @@ const QueueContainer = styled.div<{ theme: string }>`
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-100px);
   }
   to {
     opacity: 1;
@@ -36,15 +37,21 @@ const fadeOut = keyframes`
 
 const QueueRow = styled.div`
   display: flex;
+  width: 80%;
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 0px 160px;
   margin-top: 10px;
+  overflow-x: auto;
 `;
 
 const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean; theme: string }>`
-  width: 80px;
-  height: 80px;
+  display: flex;
+  min-width: 80px;
+  min-height: 80px;
+  justify-content: center;
+  align-items: center;
   background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#444')};  /* 테마에 따른 아이템 배경 */
   border: 1px solid #ccc;
   margin: 5px;
@@ -56,20 +63,47 @@ const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean; theme: st
     isAdding ? fadeIn : isRemoving ? fadeOut : 'none'} 0.3s ease forwards;
 `;
 
-const TopLine = styled.div<{ width: string }>`
-  width: ${(props) => props.width};
-  height: 1px;
+const TopLine = styled.div`
+  width: calc(80% - 20px);
+  height: 10px;
   background-color: #ddd;
   position: absolute;
   top: 15em;
+
+  &::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 20px solid #ddd;
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 `;
 
-const BottomLine = styled.div<{ width: string }>`
-  width: ${(props) => props.width};
-  height: 1px;
+
+const BottomLine = styled.div`
+  width: calc(80% - 20px);
+  height: 10px;
   background-color: #ddd;
   position: absolute;
   bottom: 15em;
+
+  &::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 20px solid #ddd;
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 `;
 
 const Arrow = styled.div`
@@ -97,7 +131,7 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
 
   return (
     <QueueContainer theme={theme}>
-      <TopLine width={queueWidth} />
+      <TopLine />
       <QueueRow>
         {queue.length === 0 ? (
           <p>큐가 비어 있습니다.</p>
@@ -130,7 +164,7 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
           ))
         )}
       </QueueRow>
-      <BottomLine width={queueWidth} />
+      <BottomLine />
     </QueueContainer>
   );
 };
