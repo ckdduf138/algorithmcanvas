@@ -4,12 +4,13 @@ import { useTheme } from '../../context/themeContext';
 
 const QueueContainer = styled.div<{ theme: string }>`
   display: flex;
-  justify-content: center;
+  flex: auto;
   width: 100%;
-  height: 40em;
+  flex-direction: column;
   padding: 20px 0px;
   position: relative;
-  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
   color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색 */
 `;
 
@@ -38,11 +39,11 @@ const fadeOut = keyframes`
 const QueueRow = styled.div`
   display: flex;
   width: 80%;
+  height: 80px;
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 0px 160px;
-  margin-top: 10px;
+  padding: 60px 160px;
   overflow-x: auto;
 `;
 
@@ -63,47 +64,57 @@ const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean; theme: st
     isAdding ? fadeIn : isRemoving ? fadeOut : 'none'} 0.3s ease forwards;
 `;
 
-const TopLine = styled.div`
-  width: calc(80% - 20px);
-  height: 10px;
-  background-color: #ddd;
-  position: absolute;
-  top: 15em;
-
-  &::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 20px solid #ddd;
-    position: absolute;
-    right: -20px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+const ArrowLineWapper = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 `;
 
+const ArrowLine = styled.div`
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 20px solid #ddd; 
+`;
 
-const BottomLine = styled.div`
-  width: calc(80% - 20px);
+const TopLine = styled.div`
+  width: 80%;
   height: 10px;
   background-color: #ddd;
-  position: absolute;
-  bottom: 15em;
+  position: relative;
+`;
 
-  &::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 20px solid #ddd;
-    position: absolute;
-    right: -20px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+const BottomLine = styled.div`
+  width: 80%;
+  height: 10px;
+  background-color: #ddd;
+  position: relative;
+`;
+
+const BottomTextWapper = styled.div`
+  display: flex;
+  width: 80%;
+  padding: 10px 0px;
+`;
+
+const PUSH = styled.div` 
+  display: flex;
+  width: 100%;
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+  left: 0;
+  justify-content: flex-start;
+`;
+
+const POP = styled.div`
+  display: flex;
+  width: 100%;
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+  right: 0;
+  justify-content: flex-end;
 `;
 
 const Arrow = styled.div`
@@ -131,7 +142,11 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
 
   return (
     <QueueContainer theme={theme}>
-      <TopLine />
+      <ArrowLineWapper>
+        <TopLine />
+        <ArrowLine />
+      </ArrowLineWapper>
+
       <QueueRow>
         {queue.length === 0 ? (
           <p>큐가 비어 있습니다.</p>
@@ -164,7 +179,16 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
           ))
         )}
       </QueueRow>
-      <BottomLine />
+
+      <ArrowLineWapper>
+        <BottomLine />
+        <ArrowLine />
+      </ArrowLineWapper>
+
+      <BottomTextWapper>
+        <PUSH>PUSH</PUSH>
+        <POP>POP</POP>
+      </BottomTextWapper>
     </QueueContainer>
   );
 };
