@@ -137,8 +137,7 @@ const Label = styled.div`
 `;
 
 const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: boolean; isRemoving: boolean }> = ({ queue, queueSize, isAdding, isRemoving }) => {
-  const { theme } = useTheme();  // 현재 테마 가져오기
-  const queueWidth = queueSize > 0 ? `${queueSize * 90}px` : `${queue.length * 90}px`;
+  const { theme } = useTheme();
 
   return (
     <QueueContainer theme={theme}>
