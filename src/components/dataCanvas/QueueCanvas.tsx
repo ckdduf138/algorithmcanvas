@@ -3,19 +3,21 @@ import styled, { keyframes } from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 
 const QueueContainer = styled.div<{ theme: string }>`
-  width: 70em;
-  height: 40em;
   display: flex;
-  padding: 20px;
+  flex: auto;
+  width: 100%;
+  flex-direction: column;
+  padding: 20px 0px;
   position: relative;
-  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
   color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색 */
 `;
 
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-100px);
   }
   to {
     opacity: 1;
@@ -30,46 +32,89 @@ const fadeOut = keyframes`
   }
   to {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(100px);
   }
 `;
 
 const QueueRow = styled.div`
   display: flex;
-  justify-content: center;
+  width: 80%;
+  min-height: 100px;
+  justify-content: space-around;
   align-items: center;
   position: relative;
-  margin-top: 10px;
+  padding: 60px 0;
+  overflow-x: auto;
 `;
 
-const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean; theme: string }>`
-  width: 80px;
-  height: 80px;
-  background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#444')};  /* 테마에 따른 아이템 배경 */
+const QueueItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string }>`
+  display: flex;
+  min-width: 80px;
+  min-height: 80px;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ $theme }) => ($theme === 'light' ? '#fff' : '#444')};  /* 테마에 따른 아이템 배경 */
   border: 1px solid #ccc;
   margin: 5px;
   text-align: center;
   border-radius: 4px;
   position: relative;
-  color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색상 */
-  animation: ${({ isAdding, isRemoving }) => 
-    isAdding ? fadeIn : isRemoving ? fadeOut : 'none'} 0.3s ease forwards;
+  color: ${({ $theme }) => ($theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색상 */
+  animation: ${({ $isAdding, $isRemoving }) => 
+    $isAdding ? fadeIn : $isRemoving ? fadeOut : 'none'} 0.5s ease forwards;
 `;
 
-const TopLine = styled.div<{ width: string }>`
-  width: ${(props) => props.width};
-  height: 1px;
-  background-color: #ddd;
-  position: absolute;
-  top: 15em;
+const ArrowLineWapper = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 `;
 
-const BottomLine = styled.div<{ width: string }>`
-  width: ${(props) => props.width};
-  height: 1px;
+const ArrowLine = styled.div`
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 20px solid #ddd; 
+`;
+
+const TopLine = styled.div`
+  width: 80%;
+  height: 10px;
   background-color: #ddd;
-  position: absolute;
-  bottom: 15em;
+  position: relative;
+`;
+
+const BottomLine = styled.div`
+  width: 80%;
+  height: 10px;
+  background-color: #ddd;
+  position: relative;
+`;
+
+const BottomTextWapper = styled.div`
+  display: flex;
+  width: 80%;
+  padding: 10px 0px;
+`;
+
+const PUSH = styled.div` 
+  display: flex;
+  width: 100%;
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+  left: 0;
+  justify-content: flex-start;
+`;
+
+const POP = styled.div`
+  display: flex;
+  width: 100%;
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+  right: 0;
+  justify-content: flex-end;
 `;
 
 const Arrow = styled.div`
@@ -97,7 +142,11 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
 
   return (
     <QueueContainer theme={theme}>
-      <TopLine width={queueWidth} />
+      <ArrowLineWapper>
+        <TopLine />
+        <ArrowLine />
+      </ArrowLineWapper>
+
       <QueueRow>
         {queue.length === 0 ? (
           <p>큐가 비어 있습니다.</p>
@@ -105,9 +154,9 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
           queue.map((item, index) => (
             <QueueItem
               key={index}
-              isAdding={isAdding && index === 0}
-              isRemoving={isRemoving && index === queue.length - 1}
-              theme={theme}
+              $isAdding={isAdding && index === 0}
+              $isRemoving={isRemoving && index === queue.length - 1}
+              $theme={theme}
             >
               {item}
               {index === 0 && (
@@ -130,7 +179,16 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
           ))
         )}
       </QueueRow>
-      <BottomLine width={queueWidth} />
+
+      <ArrowLineWapper>
+        <BottomLine />
+        <ArrowLine />
+      </ArrowLineWapper>
+
+      <BottomTextWapper>
+        <PUSH>PUSH</PUSH>
+        <POP>POP</POP>
+      </BottomTextWapper>
     </QueueContainer>
   );
 };

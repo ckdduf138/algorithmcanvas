@@ -13,7 +13,6 @@ const StyleCanvasUI = styled.div`
   gap: 1%;
   position: relative;
   row-gap: 20px;
-  padding-bottom: 10px;
   padding-top: 2%;
   padding-bottom: 2%;
 `;
