@@ -32,36 +32,36 @@ const fadeOut = keyframes`
   }
   to {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(100px);
   }
 `;
 
 const QueueRow = styled.div`
   display: flex;
   width: 80%;
-  height: 80px;
-  justify-content: center;
+  min-height: 100px;
+  justify-content: space-around;
   align-items: center;
   position: relative;
-  padding: 60px 160px;
+  padding: 60px 0;
   overflow-x: auto;
 `;
 
-const QueueItem = styled.div<{ isAdding: boolean; isRemoving: boolean; theme: string }>`
+const QueueItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string }>`
   display: flex;
   min-width: 80px;
   min-height: 80px;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#444')};  /* 테마에 따른 아이템 배경 */
+  background-color: ${({ $theme }) => ($theme === 'light' ? '#fff' : '#444')};  /* 테마에 따른 아이템 배경 */
   border: 1px solid #ccc;
   margin: 5px;
   text-align: center;
   border-radius: 4px;
   position: relative;
-  color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색상 */
-  animation: ${({ isAdding, isRemoving }) => 
-    isAdding ? fadeIn : isRemoving ? fadeOut : 'none'} 0.3s ease forwards;
+  color: ${({ $theme }) => ($theme === 'light' ? '#000' : '#fff')};  /* 테마에 따른 텍스트 색상 */
+  animation: ${({ $isAdding, $isRemoving }) => 
+    $isAdding ? fadeIn : $isRemoving ? fadeOut : 'none'} 0.5s ease forwards;
 `;
 
 const ArrowLineWapper = styled.div`
@@ -154,9 +154,9 @@ const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: bool
           queue.map((item, index) => (
             <QueueItem
               key={index}
-              isAdding={isAdding && index === 0}
-              isRemoving={isRemoving && index === queue.length - 1}
-              theme={theme}
+              $isAdding={isAdding && index === 0}
+              $isRemoving={isRemoving && index === queue.length - 1}
+              $theme={theme}
             >
               {item}
               {index === 0 && (
