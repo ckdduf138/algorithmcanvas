@@ -1,8 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../context/themeContext';
+import { ReactSVG } from 'react-svg';
 
-const ToggleLabel = styled.label<{ theme: string }>`
+const ToggleWContainer = styled.div`
+    display: flex;
+    gap: 14px;
+`;
+
+const ToggleImgWapper = styled.div<{ $theme: string }>`
+    svg path {
+        stroke: ${({ $theme }) => ($theme === 'light' ? '#1e1e1e' : '#fff')};
+    }
+`;
+
+const ToggleLabel = styled.label<{ $theme: string }>`
     position: relative;
     display: inline-block;
     width: 60px;
@@ -15,7 +27,7 @@ const ToggleLabel = styled.label<{ theme: string }>`
     }
 
     & input:checked + span {
-        background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#2196F3' : '#bbb')};
+        background-color: ${({ $theme }) => ($theme === 'light' ? '#2196F3' : '#bbb')};
     }
 
     & input:checked + span:before {
@@ -41,7 +53,7 @@ const ToggleSlider = styled.span<{ theme: string }>`
         width: 26px;
         left: 4px;
         bottom: 4px;
-        background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#fff' : '#000')};
+        background-color: #fff;
         transition: .4s;
         border-radius: 50%;
     }
@@ -55,10 +67,22 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ onToggle }) => {
     const { theme } = useTheme();
 
     return (
-        <ToggleLabel theme={theme}>
-            <input type="checkbox" checked={theme === 'dark'} onChange={onToggle} />
-            <ToggleSlider theme={theme} />
-        </ToggleLabel>
+        <ToggleWContainer>
+            <ToggleImgWapper $theme={theme}>
+                <ReactSVG src={`${process.env.PUBLIC_URL}/images/dark-light-toggle-sun.svg`} /> 
+            </ToggleImgWapper>
+
+            <ToggleLabel $theme={theme}>
+                <input type="checkbox" checked={theme === 'dark'} onChange={onToggle} />
+                <ToggleSlider theme={theme} />
+            </ToggleLabel>
+            
+            <ToggleImgWapper $theme={theme}>
+                <ReactSVG src={`${process.env.PUBLIC_URL}/images/dark-light-toggle-moon.svg`} /> 
+            </ToggleImgWapper>
+
+        </ToggleWContainer>
+
     );
 };
 
