@@ -5,10 +5,14 @@ import { ReactSVG } from 'react-svg';
 
 const ToggleWContainer = styled.div`
     display: flex;
-    gap: 14px;
+    gap: 8px;
 `;
 
 const ToggleImgWapper = styled.div<{ $theme: string }>`
+    svg {
+        width: 26px;
+    }
+    
     svg path {
         stroke: ${({ $theme }) => ($theme === 'light' ? '#1e1e1e' : '#fff')};
     }
