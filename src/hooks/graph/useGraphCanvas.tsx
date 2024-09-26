@@ -58,7 +58,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         const updatedNodes = prevData.nodes.map((node) => ({
           ...node,
           focus: node === foundNodeData ? 'selected' : 'inactive' as NodeFocusStatus,
-          text: 'Node',
+          text: 'node',
         }));
       
         const updatedLinks = prevData.links.map((link) => ({
@@ -76,7 +76,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       if(!foundNodeData) return;
 
       node.focus = 'selected';
-      node.text = 'Node';
+      node.text = 'node';
       setSeletedNode(node);
 
       if(selectedEdge) {
@@ -132,7 +132,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         const updatedNodes = prevData.nodes.map((node) => ({
           ...node,
           focus: 'inactive' as NodeFocusStatus,
-          text: 'Node',
+          text: 'node',
         }));
       
         const updatedLinks = prevData.links.map((link) => ({

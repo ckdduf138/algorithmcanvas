@@ -23,8 +23,6 @@ const getStrokeColorOverlay = (focusStatus: NodeFocusStatus, theme: string) => {
     switch (focusStatus) {
         case 'active':
             return theme === 'light' ? '#3498db' : '#2980b9';
-        case 'completed':
-            return theme === 'light' ? '#3498db' : '#2980b9';   
     }
 };
 

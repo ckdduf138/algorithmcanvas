@@ -71,7 +71,7 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
       x: draggingCircleRef.current.cx,
       y: draggingCircleRef.current.cy,
       radius: draggingCircleRef.current.radius,
-      text: 'Node',
+      text: 'node',
       focus: 'inactive'
     };
   

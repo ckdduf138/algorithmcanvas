@@ -4,29 +4,41 @@ import styled from 'styled-components';
 import { BoxProps, tagColors } from '../../utils/box';
 
 const Flip = styled.div`
-    width: 270px;
-    height: 270px;
-    margin: 20px;
-
+display: flex;
+    width: 300px;
+    height: 400px;
+    margin: 30px;
+    border-radius: 12px;
     perspective: 1100px;
+    align-items: center;
+    justify-content: center;
+`;
+
+const GradientBox = styled.div<{$isTurn: boolean}>`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    z-index: 0;
+    padding: 0;
+    background: linear-gradient(#00C2FF, #0019FF);
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
 `;
 
 const BoxWapper = styled.div<{$isTurn: boolean}>`
     display: inline-block;
-    width: 100%;
-    height: 100%;
+    width: 97%;
+    height: 97%;
     position: relative;
     background: #fff;
-    border-radius: 10%;
-
+    border-radius: 8px;
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-    text-align: center;
     cursor: pointer;
-
     transform-style: preserve-3d;
-    transition: 1s;
-
-    transform: ${({$isTurn}) => $isTurn === true ? '' : 'rotateY(180deg);'}  
+    transition: transform 1s;
+    transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
 `;
 
 const FrontBox = styled.div`
@@ -34,7 +46,8 @@ const FrontBox = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 10%;
+    border-radius: 8px;
+    background: #fff;
     backface-visibility: hidden;
     align-content: center;
     flex-direction: column;
@@ -47,7 +60,8 @@ const BackBox = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 10%;
+    border-radius: 8px;
+    background: #fff;
     backface-visibility: hidden;
     align-content: center;
     flex-direction: column;
@@ -116,45 +130,47 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
 
     return (
         <Flip>
+            <GradientBox $isTurn={isFront}/>
             <BoxWapper $isTurn={isFront} onClick={onclickedBox} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
-            <FrontBox>
-                <BoxTitle>{title}</BoxTitle>
-                <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.png`} 
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setIsFront(false);
-                    }}
-                />
-                <BoxImage src={isHover ? gifSrc : imgSrc} alt="boximage" />
-                <TagParent>
-                    {tags.map((tag, index) => (
-                        <Tag
-                        key={index}
-                        color={tagColors[tag]}
-                        onClick={(e) => handleTagClick(tag, e)}
-                    >{tag}</Tag>
-                    ))}
-                </TagParent>
-            </FrontBox>
 
-            <BackBox>
-                <BoxTitle>{title}</BoxTitle>
-                <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.png`} 
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setIsFront(true);
-                    }}
-                />
-                <BoxDescription>{description}</BoxDescription>
-                <TagParent>
-                    {tags.map((tag, index) => (
-                        <Tag
-                        key={index}
-                        color={tagColors[tag]}
-                        onClick={(e) => handleTagClick(tag, e)}
+                <FrontBox>
+                    <BoxTitle>{title}</BoxTitle>
+                    <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.png`} 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsFront(false);
+                        }}
+                    />
+                    <BoxImage src={isHover ? gifSrc : imgSrc} alt="boximage" />
+                    <TagParent>
+                        {tags.map((tag, index) => (
+                            <Tag
+                            key={index}
+                            color={tagColors[tag]}
+                            onClick={(e) => handleTagClick(tag, e)}
                         >{tag}</Tag>
-                    ))}
-                </TagParent>
+                        ))}
+                    </TagParent>
+                </FrontBox>
+
+                <BackBox>
+                    <BoxTitle>{title}</BoxTitle>
+                    <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.png`} 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsFront(true);
+                        }}
+                    />
+                    <BoxDescription>{description}</BoxDescription>
+                    <TagParent>
+                        {tags.map((tag, index) => (
+                            <Tag
+                            key={index}
+                            color={tagColors[tag]}
+                            onClick={(e) => handleTagClick(tag, e)}
+                            >{tag}</Tag>
+                        ))}
+                    </TagParent>
                 </BackBox>
             </BoxWapper>
         </Flip>
