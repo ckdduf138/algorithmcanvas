@@ -1,6 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
-
-import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 
 import { EdgeFocusStatus, getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
@@ -235,6 +233,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   return {
     nodeGraphData,
     setNodeGraphData,
+    setSeletedNode,
     nodeGraphDatas,
     draggingCircle,
     selectedEdge,

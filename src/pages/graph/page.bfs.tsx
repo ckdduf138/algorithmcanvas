@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
@@ -8,10 +8,8 @@ const BFSPage: React.FC = () => {
   const isRunning = useRef(false);
   const delayRef = useRef(500);
 
-  const [, setRenderState] = useState(false);
-
   const { 
-    nodeGraphData, setNodeGraphData,  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
+    nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } 
     = useGraphCanvas(isRunning, delayRef);
 
@@ -126,7 +124,7 @@ const BFSPage: React.FC = () => {
       });
 
       isRunning.current = false;
-      setRenderState((prev) => !prev);
+      setSeletedNode(null);
     };
     
   

@@ -29,28 +29,27 @@ const SearchBar = styled.input`
     line-height: 100%;
 `;
 
-const GradientBorderStoke = 4;
 const GradientBorder = styled.div`
     position: absolute;
-    top: -${GradientBorderStoke}px;
-    left: -${GradientBorderStoke}px;
-    right: -${GradientBorderStoke}px;
-    bottom: -${GradientBorderStoke}px;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
     border-radius: 999px;
     z-index: 0;
     padding: 0;
 `;
 
-const SearchImg = styled.img<{$isPointer: boolean}>`
+const SearchImg = styled.img<{ $isPointer: boolean }>`
     width: 24px;
-    heigth: 24px;
+    height: 24px;
     display: flex;
     position: absolute;
     right: 16px;
     top: calc(50% - 12px);
     z-index: 2;
 
-    cursor: ${({$isPointer}) => $isPointer ? '' : 'pointer' };
+    cursor: ${({ $isPointer }) => ($isPointer ? '' : 'pointer')};
 `;
 
 interface SearchProps {
@@ -63,24 +62,23 @@ const Search: React.FC<SearchProps> = ({ onSearch, query, setQuery }) => {
     const gradientRef = useRef<HTMLDivElement>(null);
     const [isFocused, setIsFocused] = useState(false);
     const [angle, setAngle] = useState(0);
-    const [intervalId, setIntervalId] = useState<number | null>(null);
+    const intervalRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (isFocused) {
-            const id = window.setInterval(() => {
-                setAngle(prevAngle => (prevAngle + 1) % 360); 
+            intervalRef.current = window.setInterval(() => {
+                setAngle(prevAngle => (prevAngle + 1) % 360);
             }, 30);
-            setIntervalId(id);
         } else {
-            if (intervalId) {
-                clearInterval(intervalId);
-                setIntervalId(null);
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
             }
         }
 
         return () => {
-            if (intervalId) {
-                clearInterval(intervalId);
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
             }
         };
     }, [isFocused]);
@@ -103,9 +101,10 @@ const Search: React.FC<SearchProps> = ({ onSearch, query, setQuery }) => {
         }
     };
 
-    const imageSrc = query === '' 
-    ? `${process.env.PUBLIC_URL}/images/search-bar.svg` 
-    : `${process.env.PUBLIC_URL}/images/search-bar-x.svg`;
+    const imageSrc =
+        query === ''
+            ? `${process.env.PUBLIC_URL}/images/search-bar.svg`
+            : `${process.env.PUBLIC_URL}/images/search-bar-x.svg`;
 
     const handleSearchImg = () => {
         setQuery('');
@@ -124,7 +123,11 @@ const Search: React.FC<SearchProps> = ({ onSearch, query, setQuery }) => {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
             />
-        <SearchImg src={imageSrc} onClick={handleSearchImg} $isPointer={query === ''}/>
+            <SearchImg
+                src={imageSrc}
+                onClick={handleSearchImg}
+                $isPointer={query === ''}
+            />
         </SearchContainer>
     );
 };
