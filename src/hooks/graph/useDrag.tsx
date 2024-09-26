@@ -4,7 +4,7 @@ import { CirclePosition, Node, NodeGraphData } from '../../utils/graphData';
 import { useSVGEvents } from './useSvgEvents';
 import { generateUUID } from '../../utils/common';
 
-export const useDragCopy = (nodeTextRef: React.MutableRefObject<number>, setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
+export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);
   const [draggingNode, setDraggingNode] = useState<Node | null>(null);
 
@@ -71,7 +71,7 @@ export const useDragCopy = (nodeTextRef: React.MutableRefObject<number>, setNode
       x: draggingCircleRef.current.cx,
       y: draggingCircleRef.current.cy,
       radius: draggingCircleRef.current.radius,
-      text: (nodeTextRef.current++).toString(),
+      text: 'Node',
       focus: 'inactive'
     };
   
@@ -81,7 +81,7 @@ export const useDragCopy = (nodeTextRef: React.MutableRefObject<number>, setNode
     }));
   
     dragMouseUp();
-  }, [setNodeGraphData, dragMouseUp, nodeTextRef]);
+  }, [setNodeGraphData, dragMouseUp]);
 
   return {
     draggingCircle,

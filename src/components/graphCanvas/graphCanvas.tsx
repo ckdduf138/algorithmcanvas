@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Graph } from '@visx/network';
 import { useWindowSize } from '../../hooks/getWindowSize';
-import { Circle, Line } from '../../hooks/graph/useGraphCanvas';
 import { CirclePosition, EdgePosition, Link, Node, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import Tooltip from '../common/tooltip';
 import EdgeToggle from './edgeToggle';
@@ -10,6 +9,8 @@ import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
 import { useTheme } from '../../context/themeContext';
 import SlideUI from './slideUI';
 import { generateUUID } from '../../utils/common';
+import { Line } from './customLine';
+import { Circle } from './customCircle';
 
 const GraphCanvasContainer = styled.div`
   width: 100%;
@@ -116,7 +117,9 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             y1={draggingEdge.y1}
             x2={draggingEdge.x2 ?? 0}
             y2={draggingEdge.y2 ?? 0}
+            $focusStatus='inactive'
             $theme={theme}
+            $dashed={false}
             style={{ stroke: '#e74c3c' }}
           />
         )}
@@ -132,7 +135,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         <BottomLine x1={width * 0.01} y1={adjustedHeight - NodeGraphHeightPadding} x2={adjustedWidth} y2={adjustedHeight - NodeGraphHeightPadding} />
 
         {/* 복사용 노드 */}
-        <Circle cx={width / 3 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme}
+        <Circle cx={width / 3 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme} $focusStatus='inactive'
           onMouseDown={() => {
             if (!isRunning.current) {handleMouseDown({ id: generateUUID(), cx: (width / 3) * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius });
           }}}

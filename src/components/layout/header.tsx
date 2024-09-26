@@ -25,6 +25,10 @@ const HeadTitle = styled.div`
     user-select: none;
 `;
 
+const ColoredText = styled.span`
+    color: ${(props) => props.color || 'black'};
+`;
+
 const ToggleContainer = styled.div`
     position: absolute;
     right: 2%;
@@ -56,7 +60,24 @@ const Header: React.FC<HeaderProps> = ({ subTitle }) => {
     return (
         <StyledHeader theme={theme}>
             <Subtitle theme={theme}>{subTitle}</Subtitle>
-            <HeadTitle onClick={header_onClicked}>Algo-Canvas</HeadTitle>
+            <HeadTitle onClick={header_onClicked}>
+            <ColoredText color='#FF7E7E'>A</ColoredText>
+            <ColoredText color='#FF7E7E'>L</ColoredText>
+            <ColoredText color='#FF7E7E '>G</ColoredText>
+            <ColoredText color='#FFA07A '>O</ColoredText>
+            <ColoredText color='#FFA07A '>R</ColoredText>
+            <ColoredText color='#FFA07A'>I</ColoredText>
+            <ColoredText color='#FFD569'>T</ColoredText>
+            <ColoredText color='#FFD569'>H</ColoredText>
+            <ColoredText color='#FFD569'>M</ColoredText>
+            <ColoredText color='#1E1E1E'>-</ColoredText>
+            <ColoredText color='#58E79B'>C</ColoredText>
+            <ColoredText color='#58E79B'>A</ColoredText>
+            <ColoredText color='#58E79B'>N</ColoredText>
+            <ColoredText color="#70BAFF">V</ColoredText>
+            <ColoredText color="#70BAFF">A</ColoredText>
+            <ColoredText color="#70BAFF">S</ColoredText>
+        </HeadTitle>
             <ToggleContainer>
                 <ToggleSwitch onToggle={toggleTheme} />
             </ToggleContainer>

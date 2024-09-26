@@ -28,7 +28,7 @@ const DeleteButton = styled.g<{ $show: boolean }>`
     transition: opacity 1s ease;
 `;
 
-const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
+export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
     fill: #D9D9D9;
     stroke: ${props => getStrokeColor(props.$focusStatus ?? 'inactive', props.$theme)};
     stroke-width: ${props => props.$focusStatus === 'inactive' ? '3' : '5'};;
@@ -39,7 +39,7 @@ const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>
 
 const CircleText = styled.text<{$theme: string}>`
     fill: black;
-    font-size: 48px;
+    font-size: 36px;
     dominant-baseline: middle;
     text-anchor: middle;
     pointer-events: none;
