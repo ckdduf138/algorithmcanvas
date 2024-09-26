@@ -35,8 +35,8 @@ const GradientBorder = styled.div<{$isFocused: boolean}>`
 `;
 
 const SearchBar = styled.input`
-    width: 98%;
-    height: 78%;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
     border-radius: 999px;
     border: none;
     padding: 0 22px;
