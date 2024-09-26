@@ -38,7 +38,7 @@ const drawAnimation = (totalLength: number) => keyframes`
     }
 `;
 
-const Line = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string, $dashed: boolean }>`
+export const Line = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string, $dashed: boolean }>`
     stroke: ${({ $focusStatus, $theme }) => getStrokeColor($focusStatus, $theme)};
     stroke-width: 5;
     stroke-opacity: 0.6;
