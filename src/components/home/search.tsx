@@ -1,17 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const SearchContainer = styled.div`
     position: relative;
     width: 600px;
     min-width: 400px;
-    height: 45px;
-    display: inline-block;
+    height: 60px;
+    border-radius: 999px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const GradientBorder = styled.div<{$isFocused: boolean}>`
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 999px;
+    padding: 0;
+    background: linear-gradient(#00C25B, #FFD600, #00FFD1, #80FF00);
+    
+    @keyframes rotate-gradient {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    ${({ $isFocused }) =>
+        $isFocused &&
+        `
+        animation: rotate-gradient 2s ease-in-out infinite;
+    `}
 `;
 
 const SearchBar = styled.input`
-    width: 100%;
-    height: 100%;
+    width: 98%;
+    height: 78%;
     border-radius: 999px;
     border: none;
     padding: 0 22px;
@@ -19,7 +44,6 @@ const SearchBar = styled.input`
     outline: none;
     background: white;
     position: relative;
-    z-index: 1;
     box-sizing: border-box;
 
     font-family: 'Inter';
@@ -27,17 +51,10 @@ const SearchBar = styled.input`
     font-weight: 400;
     font-size: 16px;
     line-height: 100%;
-`;
 
-const GradientBorder = styled.div`
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border-radius: 999px;
-    z-index: 0;
-    padding: 0;
+    &:focus ~ ${GradientBorder} {
+        animation: rotate-gradient 2s linear infinite;
+    }
 `;
 
 const SearchImg = styled.img<{ $isPointer: boolean }>`
@@ -45,9 +62,8 @@ const SearchImg = styled.img<{ $isPointer: boolean }>`
     height: 24px;
     display: flex;
     position: absolute;
-    right: 16px;
+    right: 22px;
     top: calc(50% - 12px);
-    z-index: 2;
 
     cursor: ${({ $isPointer }) => ($isPointer ? '' : 'pointer')};
 `;
@@ -59,35 +75,7 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ onSearch, query, setQuery }) => {
-    const gradientRef = useRef<HTMLDivElement>(null);
     const [isFocused, setIsFocused] = useState(false);
-    const [angle, setAngle] = useState(0);
-    const intervalRef = useRef<number | null>(null);
-
-    useEffect(() => {
-        if (isFocused) {
-            intervalRef.current = window.setInterval(() => {
-                setAngle(prevAngle => (prevAngle + 1) % 360);
-            }, 30);
-        } else {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-                intervalRef.current = null;
-            }
-        }
-
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
-        };
-    }, [isFocused]);
-
-    useEffect(() => {
-        if (gradientRef.current) {
-            gradientRef.current.style.background = `linear-gradient(${angle}deg, #00C25B, #FFD600, #00FFD1, #80FF00)`;
-        }
-    }, [angle]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = event.target.value;
@@ -113,7 +101,7 @@ const Search: React.FC<SearchProps> = ({ onSearch, query, setQuery }) => {
 
     return (
         <SearchContainer>
-            <GradientBorder ref={gradientRef} />
+            <GradientBorder $isFocused={isFocused}/>
             <SearchBar
                 type="text"
                 placeholder="검색어를 입력하세요."
