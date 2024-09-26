@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
@@ -8,20 +8,19 @@ const BFSPage: React.FC = () => {
   const isRunning = useRef(false);
   const delayRef = useRef(500);
 
-  const [, setRenderState] = useState(false);
-
   const { 
-    nodeGraphData, setNodeGraphData,  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
+    nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } 
     = useGraphCanvas(isRunning, delayRef);
 
-    const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus) => {
+    const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus, nodeDepth?: number) => {
       setNodeGraphData(prevData => {
         if (!prevData) return prevData;
     
         const updatedNodes = prevData.nodes.map((node) => ({
           ...node,
           focus: node.id === nodeId ? updateState : node.focus,
+          text: nodeDepth !== undefined ? (node.id === nodeId ? nodeDepth?.toString() : node.text) : node.text,
         }));
     
         return {
@@ -71,14 +70,14 @@ const BFSPage: React.FC = () => {
       const { nodes, links } = nodeGraphData;
     
       const visited = new Map<string, boolean>();
+      let nodeDepth: number = 0;
+
       nodes.forEach((node) => visited.set(node.id, false));
     
       const queue: string[] = [startNodeId];
       visited.set(startNodeId, true);
     
-      await updateNodeFocus(startNodeId, 'selected');
-    
-      let prevNodeId: string | null = null;
+      await updateNodeFocus(startNodeId, 'active', nodeDepth);
     
       while (queue.length > 0) {
         const currentNodeId = queue.shift();
@@ -86,39 +85,46 @@ const BFSPage: React.FC = () => {
     
         if (!currentNode) return;
     
-        await updateNodeFocus(currentNode.id, 'active');
-    
         const neighbors = links
           .filter((link) => link.source === currentNodeId || link.target === currentNodeId)
           .map((link) => (link.source === currentNodeId ? link.target : link.source));
     
         const newlyHighlightedNodes: string[] = [];
     
+        let prevNodeId: string = currentNode.id;
+
+        let flag = true;
         for (const neighborId of neighbors) {
           if (!visited.get(neighborId)) {
             visited.set(neighborId, true);
             queue.push(neighborId);
             newlyHighlightedNodes.push(neighborId);
-    
-            await updateNodeFocus(neighborId, 'highlight');
+
+            if(flag) {
+              flag = false;
+              ++nodeDepth;
+            }
+            
             await updateEdgeFocus(currentNode.id, neighborId, 'active');
             updateEdgeFocus(currentNode.id, neighborId, 'completed');
+
+            updateNodeFocus(neighborId, 'active', nodeDepth);
+
+            updateNodeFocus(prevNodeId, 'completed');
+
+            prevNodeId = neighborId;
           }
         }
-    
-        if (prevNodeId) {
-          await updateNodeFocus(prevNodeId, 'completed');
-        }
-    
-        prevNodeId = currentNode.id;
       }
+    
+      await new Promise(resolve => setTimeout(resolve, delayRef.current));
+      
+      nodes.forEach(node => {
+        updateNodeFocus(node.id, 'completed');
+      });
 
-      if (prevNodeId) {
-        await updateNodeFocus(prevNodeId, 'completed');
-      }
-    
       isRunning.current = false;
-      setRenderState((prev) => !prev);
+      setSeletedNode(null);
     };
     
   

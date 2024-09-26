@@ -1,6 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
-
-import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 
 import { EdgeFocusStatus, getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
@@ -11,39 +9,12 @@ import { useGraphCanvasUI } from './useGraphCanvasUI';
 import CustomCircle from '../../components/graphCanvas/customCircle';
 import CustomLine from '../../components/graphCanvas/customLine';
 
-export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: string }>`
-  fill: #D9D9D9;
-  stroke: ${props => props.$theme === 'light' ? 'black' : 'white'};;
-  stroke-width: 3;
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
-
-  cursor: pointer;
-`;
-
-export const CircleText = styled.text<{$theme: string}>`
-  fill: ${props => props.$theme === 'light' ? 'black' : 'black'};
-  font-size: 48px;
-  dominant-baseline: middle;
-  text-anchor: middle;
-  pointer-events: none;
-  user-select: none;
-`;
-
-export const Line = styled.line<{$theme: string}>`
-  stroke: ${props => props.$theme === 'light' ? 'black' : 'white'};
-  stroke-width: 5;
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
-  cursor: pointer;
-`;
-
 export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, delayRef : React.MutableRefObject<number>) => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
   const [selectedNode, setSeletedNode] = useState<Node | null>(null);
 
-  const nodeTextRef = useRef(0);
-
-  const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode } = useDragCopy(nodeTextRef, setNodeGraphData);
+  const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode } = useDragCopy(setNodeGraphData);
 
   const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -59,13 +30,11 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   };
 
   const handleRandomizeGraphData = (numNodes: number) => {
-    nodeTextRef.current = 0;
     setSeletedNode(null);
-    randomizeGraphData(numNodes, nodeTextRef);
+    randomizeGraphData(numNodes);
   };
 
   const handleResetGraphData = () => {
-    nodeTextRef.current = 0;
     setSeletedNode(null);
     resetGraphData();
   };
@@ -88,7 +57,8 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       
         const updatedNodes = prevData.nodes.map((node) => ({
           ...node,
-          focus: node === foundNodeData ? 'selected' : 'inactive' as NodeFocusStatus
+          focus: node === foundNodeData ? 'selected' : 'inactive' as NodeFocusStatus,
+          text: 'Node',
         }));
       
         const updatedLinks = prevData.links.map((link) => ({
@@ -106,6 +76,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       if(!foundNodeData) return;
 
       node.focus = 'selected';
+      node.text = 'Node';
       setSeletedNode(node);
 
       if(selectedEdge) {
@@ -160,7 +131,8 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       
         const updatedNodes = prevData.nodes.map((node) => ({
           ...node,
-          focus: 'inactive' as NodeFocusStatus
+          focus: 'inactive' as NodeFocusStatus,
+          text: 'Node',
         }));
       
         const updatedLinks = prevData.links.map((link) => ({
@@ -195,10 +167,6 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       />
     );
   };
-
-  // useEffect(() => {
-  //   updateHandlers(dragMouseMove, handleDrop);
-  // },[draggingCircle]);
 
   useEffect(() => {
     if (!nodeGraphData) return;
@@ -265,6 +233,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   return {
     nodeGraphData,
     setNodeGraphData,
+    setSeletedNode,
     nodeGraphDatas,
     draggingCircle,
     selectedEdge,
