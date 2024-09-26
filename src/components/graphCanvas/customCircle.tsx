@@ -39,7 +39,7 @@ export const Circle = styled.circle<{ $focusStatus?: NodeFocusStatus, $theme: st
 
 const CircleText = styled.text<{$theme: string}>`
     fill: black;
-    font-size: 36px;
+    font-size: 32px;
     dominant-baseline: middle;
     text-anchor: middle;
     pointer-events: none;

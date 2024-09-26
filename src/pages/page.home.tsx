@@ -10,6 +10,7 @@ const HomeSearch = styled.div`
     display: flex;
     width: 100%;
     justify-content: center;
+    padding: 20px 0px;
 `;
 
 const HomeContent = styled.div`
