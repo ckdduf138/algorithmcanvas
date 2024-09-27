@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { BoxProps, tagColors } from '../../utils/box';
 
 // box
@@ -15,20 +15,6 @@ const Flip = styled.div`
     justify-content: center;
 `;
 
-const GradientBox = styled.div<{$isTurn: boolean}>`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    z-index: 0;
-    padding: 0;
-    background: linear-gradient(#0019FF, #00C2FF);
-    transform-style: preserve-3d;
-    transition: transform 1s;
-    transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
-`;
-
 const BoxWapper = styled.div<{$isTurn: boolean}>`
     display: inline-block;
     width: calc(100% - 8px);
@@ -40,6 +26,26 @@ const BoxWapper = styled.div<{$isTurn: boolean}>`
     transform-style: preserve-3d;
     transition: transform 1s;
     transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
+
+    // 그라데이션 테두리
+    &: before {
+        content: '';
+        position: absolute;
+        top: -4px;
+        bottom: -4px;
+        left: -4px;
+        right: -4px;
+        border-radius: 12px;
+        z-index: -1;
+        padding: 0;
+        background: linear-gradient(#0019FF, #00C2FF);
+        transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    &:hover {
+        transform: ${({$isTurn}) => $isTurn ? 'scale(1.03)' : 'rotateY(180deg) scale(1.03)'};
+    }
 `;
 
 const FrontBox = styled.div`
@@ -164,13 +170,12 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
 
     return (
         <Flip>
-            <GradientBox $isTurn={isFront}/>
             <BoxWapper $isTurn={isFront} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
 
                 <FrontBox>
                     <BoxTitle>{title}</BoxTitle>
 
-                    <BoxImage src={isHover ? gifSrc : imgSrc} alt="boximage" />
+                    <BoxImage src={isHover ? gifSrc : imgSrc} />
 
                     <TagParent>
                         {tags.map((tag, index) => (
