@@ -45,11 +45,10 @@ export const Line = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string,
 
 const OverlayLine = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string, $totalLength: number, $delay: number }>`
     stroke: ${({ $focusStatus, $theme }) => getStrokeColorOverlay($focusStatus, $theme)};
-    stroke-width: 7;
+    stroke-width: 5;
     stroke-dasharray: ${({ $totalLength }) => $totalLength};
     stroke-dashoffset: ${({ $totalLength }) => $totalLength};
     animation: ${({ $totalLength, $delay }) => drawAnimation($totalLength)} ${({ $delay }) => $delay}ms linear forwards;
-    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
 `;
 
 const WeightTextWapper = styled.circle`

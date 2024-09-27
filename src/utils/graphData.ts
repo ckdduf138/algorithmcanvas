@@ -46,6 +46,7 @@ export interface EdgePosition {
     y1: number;
     x2: number | null;
     y2: number | null;
+    weight?: number;
 }
 
 export const getClosestAndFurthestNode = ( targetPos: { x: number; y: number }, node1: Node, node2: Node ): [Node, Node] => {

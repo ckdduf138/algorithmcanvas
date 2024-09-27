@@ -85,7 +85,7 @@ const BFSPage: React.FC = () => {
     visited.set(startNodeId, true);
     nodeDepthMap.set(startNodeId, 0);
   
-    await updateNodeFocus(startNodeId, 'active', 0);
+    await updateNodeFocus(startNodeId, 'selected', 0);
   
     while (queue.length > 0) {
       const current = queue.shift();
@@ -113,19 +113,11 @@ const BFSPage: React.FC = () => {
           updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
           await updateNodeFocus(neighborId, 'active', currentDepth + 1);
-  
-          await updateNodeFocus(currentNodeId, 'completed');
         }
       }
     }
   
     new Promise((resolve) => setTimeout(resolve, delayRef.current));
-  
-    nodes.forEach((node) => { 
-      if(visited.get(node.id)) {
-        updateNodeFocus(node.id, 'completed');
-      }
-    });
   
     isRunning.current = false;
     setSeletedNode(null);
@@ -149,6 +141,7 @@ const BFSPage: React.FC = () => {
         selectedNode={selectedNode}
         selectedEdge={selectedEdge}
         draggingEdge={draggingEdge}
+        isWeighted={false}
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}

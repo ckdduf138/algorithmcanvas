@@ -93,7 +93,7 @@ const DijkstraPage: React.FC = () => {
       priorityQueue.sort((a, b) => a[1] - b[1]);
     };
   
-    await updateNodeFocus(startNodeId, 'active', 0);
+    await updateNodeFocus(startNodeId, 'selected', 0);
   
     while (priorityQueue.length > 0) {
       sortQueue();
@@ -129,20 +129,11 @@ const DijkstraPage: React.FC = () => {
           }
         }
       }
-  
-      await updateNodeFocus(currentNodeId, 'completed');
     }
-  
-    nodes.forEach((node) => {
-      if (visited.get(node.id)) {
-        updateNodeFocus(node.id, 'completed');
-      }
-    });
   
     isRunning.current = false;
     setSeletedNode(null);
   };
-  
     
   const handleRandomizeGraphData = (numNodes: number) => {
     setSeletedNode(null);
@@ -161,6 +152,7 @@ const DijkstraPage: React.FC = () => {
         draggingCircle={draggingCircle}
         selectedNode={selectedNode}
         selectedEdge={selectedEdge}
+        isWeighted={true}
         draggingEdge={draggingEdge}
         CustomNode={CustomNode}
         CustomLink={CustomLink}

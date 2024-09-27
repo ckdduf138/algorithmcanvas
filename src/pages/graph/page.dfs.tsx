@@ -85,7 +85,9 @@ const DFSPage: React.FC = () => {
       visited.set(currentNodeId, true);
       nodeDepthMap.set(currentNodeId, currentDepth);
   
-      await updateNodeFocus(currentNodeId, 'active', currentDepth);
+      if(currentNodeId !== startNodeId) {
+        await updateNodeFocus(currentNodeId, 'active', currentDepth);
+      }
   
       const currentNode = nodes.find((node) => node.id === currentNodeId);
       if (!currentNode) return;
@@ -100,8 +102,7 @@ const DFSPage: React.FC = () => {
           updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
           await dfs(neighborId, currentDepth + 1);
-  
-          await updateNodeFocus(neighborId, 'completed');
+
         }
       }
     };
@@ -109,13 +110,7 @@ const DFSPage: React.FC = () => {
     await dfs(startNodeId, 0);
   
     new Promise((resolve) => setTimeout(resolve, delayRef.current));
-  
-    nodes.forEach((node) => { 
-      if(visited.get(node.id)) {
-        updateNodeFocus(node.id, 'completed');
-      }
-    });
-  
+
     isRunning.current = false;
     setSeletedNode(null);
   };
@@ -137,6 +132,7 @@ const DFSPage: React.FC = () => {
         draggingCircle={draggingCircle}
         selectedNode={selectedNode}
         selectedEdge={selectedEdge}
+        isWeighted={false}
         draggingEdge={draggingEdge}
         CustomNode={CustomNode}
         CustomLink={CustomLink}

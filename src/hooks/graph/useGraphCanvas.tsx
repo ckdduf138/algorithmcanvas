@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { EdgeFocusStatus, getClosestAndFurthestNode, Link, Node, NodeFocusStatus, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import { useDragCopy } from '../../hooks/graph/useDrag';
@@ -13,6 +13,8 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
   const [selectedNode, setSeletedNode] = useState<Node | null>(null);
 
+  const isWeightedRef = useRef(false);
+
   const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode } = useDragCopy(setNodeGraphData);
 
   const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData, setNodeGraphData);
@@ -21,8 +23,10 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
   const {theme} = useTheme();
 
-  const handleEdgeClick = () => {
+  const handleEdgeClick = (isWeighted: boolean) => {
     if(isRunning.current) return;
+
+    isWeightedRef.current = isWeighted;
     setSeletedEdge(!selectedEdge);
   };
 
@@ -31,7 +35,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     links: nodeGraphData?.links,
   };
 
-  const CustomNode: React.FC<{ node: Node }> = ({ node }) => {    
+  const CustomNode: React.FC<{ node: Node }> = ({ node }) => {  
     const foundNodeData: Node | undefined = nodeGraphData.nodes.find(nodes => nodes.id === node.id);
 
     const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
@@ -67,7 +71,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       setSeletedNode(node);
 
       if(selectedEdge) {
-        createEdgeMouseDown(foundNodeData);
+        createEdgeMouseDown(foundNodeData, isWeightedRef.current);
       }
       else {
         handleMouseDownNode(foundNodeData);
@@ -136,7 +140,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
       const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
       if(closestNode) {
-        edgeMouseDown(e, closestNode);
+        edgeMouseDown(e, closestNode, link);
       }
     };
 

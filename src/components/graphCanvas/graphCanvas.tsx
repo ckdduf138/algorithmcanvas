@@ -9,7 +9,7 @@ import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
 import { useTheme } from '../../context/themeContext';
 import SlideUI from './slideUI';
 import { generateUUID } from '../../utils/common';
-import { Line } from './customLine';
+import CustomLine, { Line } from './customLine';
 import { Circle } from './customCircle';
 
 const GraphCanvasContainer = styled.div`
@@ -32,22 +32,23 @@ const BottomLine = styled.line`
 interface GraphCanvasProps {
   nodeGraphDatas: { nodes: Node[], links: Link[] };
   draggingCircle: CirclePosition | null;
-  selectedEdge: boolean;
   selectedNode: Node | null;
+  selectedEdge: boolean;
+  isWeighted: boolean;
   draggingEdge: EdgePosition | null;
   CustomNode: React.FC<{node: Node}>;
   CustomLink: React.FC<{ link: Link }>;
   delayRef: React.MutableRefObject<number>;
   isRunning: React.MutableRefObject<boolean>;
   handleMouseDown: (circle: CirclePosition) => void
-  handleEdgeClick: () => void;
+  handleEdgeClick: (weight: boolean) => void;
   handleRandomizeGraphData: (numNodes: number) => void;
   handleResetGraphData: () => void;
   handleStart: (startNodeId: string) => Promise<void>;
 };
 
 const GraphCanvas: React.FC<GraphCanvasProps> = ({
-  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode, draggingEdge, CustomNode, CustomLink, delayRef, isRunning,
+  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode, isWeighted, draggingEdge, CustomNode, CustomLink, delayRef, isRunning,
   handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData, handleStart}
 ) => {
   const { width, height } = useWindowSize();
@@ -112,15 +113,15 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
         {/* 생성 중인 간선 */}
         {draggingEdge && (
-          <Line 
+          <CustomLine
             x1={draggingEdge.x1}
-            y1={draggingEdge.y1}
+            y1={draggingEdge.y1} 
             x2={draggingEdge.x2 ?? 0}
             y2={draggingEdge.y2 ?? 0}
-            $focusStatus='inactive'
+            dashed={false}
+            weight={draggingEdge.weight}
             $theme={theme}
-            $dashed={false}
-            style={{ stroke: '#e74c3c' }}
+            focusStatus='inactive'
           />
         )}
         
@@ -153,7 +154,8 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
           onMouseOver={() => handleMouseOverEdge(width / 3 * 2, adjustedHeight - 100)}
           onMouseOut={handleMouseOutEdge}
           strokeWidth={10}
-          $selectedEdge={selectedEdge}
+          selectedEdge={selectedEdge}
+          isWeighted={isWeighted}
         />
 
         {/* 복사 중인 노드 */}
