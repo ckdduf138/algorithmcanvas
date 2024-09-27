@@ -8,7 +8,7 @@ const StyledHeader = styled.header<{ theme: string }>`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${({ theme }) => (theme === 'light' ? '#F5F5F5' : '#15202b')};
+    background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#15202b')};
     text-align: center;
     text-transform: uppercase;
     font-family: 'Raleway', fantasy;
