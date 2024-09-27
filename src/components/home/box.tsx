@@ -40,7 +40,7 @@ const BoxWapper = styled.div<{$isTurn: boolean}>`
         padding: 0;
         background: linear-gradient(#0019FF, #00C2FF);
         transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     &:hover {

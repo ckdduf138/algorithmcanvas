@@ -8,7 +8,7 @@ interface MainProps {
 
 const StyleMain = styled.div<{ theme: string }>`
     width: 100%;
-    background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#F5F5F5' : '#15202b')};
+    background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#fff' : '#15202b')};
 
     display: flex;
     align-items: center;
