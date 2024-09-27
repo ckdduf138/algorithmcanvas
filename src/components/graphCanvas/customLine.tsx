@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { NodeFocusStatus } from '../../utils/graphData';
 
@@ -26,7 +26,6 @@ const getStrokeColorOverlay = (focusStatus: NodeFocusStatus, theme: string) => {
     }
 };
 
-// 애니메이션을 정의하는 keyframes
 const drawAnimation = (totalLength: number) => keyframes`
     from {
         stroke-dashoffset: ${totalLength};
@@ -38,20 +37,43 @@ const drawAnimation = (totalLength: number) => keyframes`
 
 export const Line = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string, $dashed: boolean }>`
     stroke: ${({ $focusStatus, $theme }) => getStrokeColor($focusStatus, $theme)};
-    stroke-width: 5;
+    stroke-width: 3;
     stroke-opacity: 0.6;
     stroke-dasharray: ${({ $dashed }) => ($dashed ? '8,4' : 'none')};
-    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
     cursor: pointer;
 `;
 
 const OverlayLine = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string, $totalLength: number, $delay: number }>`
     stroke: ${({ $focusStatus, $theme }) => getStrokeColorOverlay($focusStatus, $theme)};
-    stroke-width: 7;
+    stroke-width: 5;
     stroke-dasharray: ${({ $totalLength }) => $totalLength};
     stroke-dashoffset: ${({ $totalLength }) => $totalLength};
     animation: ${({ $totalLength, $delay }) => drawAnimation($totalLength)} ${({ $delay }) => $delay}ms linear forwards;
-    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+`;
+
+const WeightTextWapper = styled.rect`
+    fill: #fff;
+`;
+
+const WeightText = styled.text`
+    fill: black;
+    font-size: 28px;
+    dominant-baseline: middle;
+    text-anchor: middle;
+    cursor: pointer; 
+    user-select: none;
+`;
+
+const WeightInput = styled.input`
+    width: 100%;
+    height: 100%;
+    color: black;
+    background: #fff;
+    border: 2px;
+    text-align: center;
+
+    //text 
+    font-size: 28px;
 `;
 
 interface CustomLineProps {
@@ -60,15 +82,20 @@ interface CustomLineProps {
     x2: number;
     y2: number;
     dashed?: boolean;
+    weight?: number;
+    setWeight?: (newWeight: number) => void;
     $theme: string;
     onMouseDown?: (e: React.MouseEvent<SVGElement>) => void;
     focusStatus?: NodeFocusStatus;
     delay?: number;
 }
 
-const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, dashed = false, onMouseDown, focusStatus = 'inactive', delay = 500 }) => {
+const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight, setWeight, dashed = false, onMouseDown, focusStatus = 'inactive', delay = 500 }) => {
     const lineRef = useRef<SVGLineElement>(null);
-    const [totalLength, setTotalLength] = React.useState(0);
+    const [inputValue, setInputValue] = useState("");
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [totalLength, setTotalLength] = useState(0);
 
     useEffect(() => {
         if (lineRef.current) {
@@ -77,6 +104,65 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, dashed 
         }
     }, [x1, y1, x2, y2]);
 
+    const handleTextClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+
+        setInputValue(value);
+    };
+
+    const handleInputFocus = () => {
+
+        if(weight) {
+            setInputValue(weight.toString());
+        }
+    };
+
+    const handleInputBlur = () => {
+        setIsEditing(false);
+
+        if(validatePositiveInteger(inputValue)) {
+            if(setWeight) {    
+                setWeight(parseInt(inputValue));
+            }
+        }
+        else {
+            alert('양의 정수만 입력해주세요.');
+        }
+    };
+
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            setIsEditing(false);
+
+            if(validatePositiveInteger(inputValue)) {
+                if(setWeight) {    
+                    setWeight(parseInt(inputValue));
+                }
+            }
+            else {
+                alert('양의 정수만 입력해주세요.');
+            }
+        }
+
+    };
+
+    // 양의 정수 체크 함수
+    const validatePositiveInteger = (value: string) => {
+        if (value === null || value === '') {
+            return false;
+        }
+
+        const positiveIntegerRegex = /^[1-9]\d*$/;
+        if (!positiveIntegerRegex.test(value)) {
+            return false;
+        }
+        return true;
+    };
+    
     return (
         <>
             <Line 
@@ -103,6 +189,41 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, dashed 
                     $delay={delay} 
                 />
             )}
+
+            {!isEditing && weight !== undefined && 
+                <>
+                    <WeightTextWapper 
+                        x={(x1 + x2) / 2 - (weight.toString().length * 0.6 * 28 / 2)}
+                        y={(y1 + y2) / 2 - 14}
+                        width={(weight.toString().length * 0.6 * 28)}
+                        height={28} 
+                    />
+                    <WeightText x={(x1 + x2) / 2} y={(y1 + y2) / 2} onClick={handleTextClick}>
+                        {weight}
+                    </WeightText>
+                </>
+            }
+
+            {isEditing && weight !== undefined && 
+                <foreignObject 
+                    x={(x1 + x2) / 2 - (weight.toString().length * 0.6 * 28)} 
+                    y={(y1 + y2) / 2 - 14} 
+                    width={(weight.toString().length * 0.6) * 2 * 28} 
+                    height={28}
+                >
+                    <WeightInput
+                        value={inputValue}
+                        onKeyUp={handleKeyPress}
+                        onChange={handleInputChange}
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur} 
+                        autoFocus
+                        style={{
+                            'lineHeight': (Number.toString().length * 0.6) * 2,
+                        }}
+                    />
+                </foreignObject>
+            }
         </>
     );
 };

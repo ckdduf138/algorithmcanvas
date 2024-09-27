@@ -15,7 +15,7 @@ import QuickSortPage from './pages/sort/page.quickSort';
 
 import BFSPage from './pages/graph/page.bfs';
 import DFSPage from './pages/graph/page.dfs';
-// import DijkstraPage from './pages/graph/page.dijkstra';
+import DijkstraPage from './pages/graph/page.dijkstra';
 // import BellmanFordPage from './pages/graph/page.bellman-ford';
 // import FloydPage from './pages/graph/page.floyd';
 // import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
@@ -47,9 +47,9 @@ const App = () => {
                     {/* 그래프 */}
                     <Route path="bfs" element={<BFSPage />} />
                     <Route path="dfs" element={<DFSPage />} />
+                    <Route path="dijkstra" element={<DijkstraPage />} />
 
                     {/* 
-                    <Route path="dijkstra" element={<DijkstraPage />} />
                     <Route path="bellman-ford" element={<BellmanFordPage />} />
                     <Route path="Floyd" element={<FloydPage />} />
                     <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} /> */}

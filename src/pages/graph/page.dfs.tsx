@@ -1,7 +1,11 @@
 import React, { useRef } from 'react';
+
+import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
+
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
-import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
 
 const DFSPage: React.FC = () => {
@@ -10,8 +14,10 @@ const DFSPage: React.FC = () => {
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
-    handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } 
+    handleMouseDown, handleEdgeClick } 
     = useGraphCanvas(isRunning, delayRef);
+
+  const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
   const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus, nodeDepth?: number) => {
     setNodeGraphData(prevData => {
@@ -79,7 +85,9 @@ const DFSPage: React.FC = () => {
       visited.set(currentNodeId, true);
       nodeDepthMap.set(currentNodeId, currentDepth);
   
-      await updateNodeFocus(currentNodeId, 'active', currentDepth);
+      if(currentNodeId !== startNodeId) {
+        await updateNodeFocus(currentNodeId, 'active', currentDepth);
+      }
   
       const currentNode = nodes.find((node) => node.id === currentNodeId);
       if (!currentNode) return;
@@ -94,8 +102,7 @@ const DFSPage: React.FC = () => {
           updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
           await dfs(neighborId, currentDepth + 1);
-  
-          await updateNodeFocus(neighborId, 'completed');
+
         }
       }
     };
@@ -103,17 +110,21 @@ const DFSPage: React.FC = () => {
     await dfs(startNodeId, 0);
   
     new Promise((resolve) => setTimeout(resolve, delayRef.current));
-  
-    nodes.forEach((node) => { 
-      if(visited.get(node.id)) {
-        updateNodeFocus(node.id, 'completed');
-      }
-    });
-  
+
     isRunning.current = false;
     setSeletedNode(null);
   };
     
+  const handleRandomizeGraphData = (numNodes: number) => {
+    setSeletedNode(null);
+    randomizeGraphData(numNodes);
+  };
+
+  const handleResetGraphData = () => {
+    setSeletedNode(null);
+    resetGraphData();
+  };
+
   return(
     <Layout subTitle='깊이 우선 탐색(DFS)'>
       <GraphCanvas 
@@ -121,6 +132,7 @@ const DFSPage: React.FC = () => {
         draggingCircle={draggingCircle}
         selectedNode={selectedNode}
         selectedEdge={selectedEdge}
+        isWeighted={false}
         draggingEdge={draggingEdge}
         CustomNode={CustomNode}
         CustomLink={CustomLink}
