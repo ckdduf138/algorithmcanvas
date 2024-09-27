@@ -9,7 +9,7 @@ import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
 import { useTheme } from '../../context/themeContext';
 import SlideUI from './slideUI';
 import { generateUUID } from '../../utils/common';
-import CustomLine, { Line } from './customLine';
+import CustomLine from './customLine';
 import { Circle } from './customCircle';
 
 const GraphCanvasContainer = styled.div`
