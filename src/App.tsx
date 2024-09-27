@@ -14,7 +14,7 @@ import HeapSortPage from './pages/sort/page.heapSort';
 import QuickSortPage from './pages/sort/page.quickSort';
 
 import BFSPage from './pages/graph/page.bfs';
-// import DFSPage from './pages/graph/page.dfs';
+import DFSPage from './pages/graph/page.dfs';
 // import DijkstraPage from './pages/graph/page.dijkstra';
 // import BellmanFordPage from './pages/graph/page.bellman-ford';
 // import FloydPage from './pages/graph/page.floyd';
@@ -46,9 +46,9 @@ const App = () => {
 
                     {/* 그래프 */}
                     <Route path="bfs" element={<BFSPage />} />
+                    <Route path="dfs" element={<DFSPage />} />
 
-
-                    {/* <Route path="dfs" element={<DFSPage />} />
+                    {/* 
                     <Route path="dijkstra" element={<DijkstraPage />} />
                     <Route path="bellman-ford" element={<BellmanFordPage />} />
                     <Route path="Floyd" element={<FloydPage />} />
