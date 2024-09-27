@@ -51,7 +51,7 @@ const OverlayLine = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string,
     animation: ${({ $totalLength, $delay }) => drawAnimation($totalLength)} ${({ $delay }) => $delay}ms linear forwards;
 `;
 
-const WeightTextWapper = styled.circle`
+const WeightTextWapper = styled.rect`
     fill: #fff;
 `;
 
@@ -68,8 +68,8 @@ const WeightInput = styled.input`
     width: 100%;
     height: 100%;
     color: black;
-    background: transparent;
-    border: none;
+    background: #fff;
+    border: 2px;
     text-align: center;
 
     //text 
@@ -111,8 +111,13 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight,
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
 
-        if (validatePositiveInteger(value)) {
-            setInputValue(value);
+        setInputValue(value);
+    };
+
+    const handleInputFocus = () => {
+
+        if(weight) {
+            setInputValue(weight.toString());
         }
     };
 
@@ -124,14 +129,22 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight,
                 setWeight(parseInt(inputValue));
             }
         }
+        else {
+            alert('양의 정수만 입력해주세요.');
+        }
     };
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             setIsEditing(false);
 
-            if(setWeight) {    
-                setWeight(parseInt(inputValue));
+            if(validatePositiveInteger(inputValue)) {
+                if(setWeight) {    
+                    setWeight(parseInt(inputValue));
+                }
+            }
+            else {
+                alert('양의 정수만 입력해주세요.');
             }
         }
 
@@ -177,21 +190,32 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight,
                 />
             )}
 
-            {weight !== undefined && (
+            {!isEditing && weight !== undefined && 
                 <>
-                    <WeightTextWapper cx={(x1 + x2) / 2} cy={(y1 + y2) / 2} r={(Number.toString().length * 0.6)} />
+                    <WeightTextWapper 
+                        x={(x1 + x2) / 2 - (weight.toString().length * 0.6 * 28 / 2)}
+                        y={(y1 + y2) / 2 - 14}
+                        width={(weight.toString().length * 0.6 * 28)}
+                        height={28} 
+                    />
                     <WeightText x={(x1 + x2) / 2} y={(y1 + y2) / 2} onClick={handleTextClick}>
                         {weight}
                     </WeightText>
                 </>
-            )}
+            }
 
-            {isEditing &&
-                <foreignObject x={(x1 + x2) / 2 - (Number.toString().length * 0.6)} y={(y1 + y2) / 2 - 15} width={(Number.toString().length * 0.6) * 2} height={(Number.toString().length * 0.6) * 2}>
-                      <WeightInput
+            {isEditing && weight !== undefined && 
+                <foreignObject 
+                    x={(x1 + x2) / 2 - (weight.toString().length * 0.6 * 28)} 
+                    y={(y1 + y2) / 2 - 14} 
+                    width={(weight.toString().length * 0.6) * 2 * 28} 
+                    height={28}
+                >
+                    <WeightInput
                         value={inputValue}
                         onKeyUp={handleKeyPress}
                         onChange={handleInputChange}
+                        onFocus={handleInputFocus}
                         onBlur={handleInputBlur} 
                         autoFocus
                         style={{
