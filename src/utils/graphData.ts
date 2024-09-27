@@ -29,6 +29,7 @@ export interface Node {
 export interface Link {
     source: string;
     target: string;
+    weight?: number;
     dashed?: boolean;
     focus: EdgeFocusStatus;
 };

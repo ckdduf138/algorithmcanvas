@@ -1,7 +1,11 @@
 import React, { useRef } from 'react';
+
+import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
+
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
-import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
 
 const DFSPage: React.FC = () => {
@@ -10,8 +14,10 @@ const DFSPage: React.FC = () => {
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
-    handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } 
+    handleMouseDown, handleEdgeClick } 
     = useGraphCanvas(isRunning, delayRef);
+
+  const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
   const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus, nodeDepth?: number) => {
     setNodeGraphData(prevData => {
@@ -114,6 +120,16 @@ const DFSPage: React.FC = () => {
     setSeletedNode(null);
   };
     
+  const handleRandomizeGraphData = (numNodes: number) => {
+    setSeletedNode(null);
+    randomizeGraphData(numNodes);
+  };
+
+  const handleResetGraphData = () => {
+    setSeletedNode(null);
+    resetGraphData();
+  };
+
   return(
     <Layout subTitle='깊이 우선 탐색(DFS)'>
       <GraphCanvas 
