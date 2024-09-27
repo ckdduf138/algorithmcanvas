@@ -115,7 +115,7 @@ const DFSPage: React.FC = () => {
   };
     
   return(
-    <Layout subTitle='너비 우선 탐색(BFS)'>
+    <Layout subTitle='깊이 우선 탐색(DFS)'>
       <GraphCanvas 
         nodeGraphDatas={nodeGraphDatas}
         draggingCircle={draggingCircle}
