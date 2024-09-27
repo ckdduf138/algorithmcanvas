@@ -38,14 +38,14 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     });
   };
 
-  const edgeMouseDown = (e: React.MouseEvent<SVGElement>, eventNodes: [Node, Node]) => {
+  const edgeMouseDown = (e: React.MouseEvent<SVGElement>, eventNodes: [Node, Node], link: Link) => {
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
     removeLinksByNodeIds(eventNodes);
 
     edgeNodes.current = eventNodes;
 
-    const edge: EdgePosition = {x1: eventNodes[0].x, y1: eventNodes[0].y, x2: eventNodes[1].x, y2: eventNodes[1].y};
+    const edge: EdgePosition = {x1: eventNodes[0].x, y1: eventNodes[0].y, x2: eventNodes[1].x, y2: eventNodes[1].y, weight: link.weight};
 
     draggingEdgeRef.current = edge;
     isDragging.current = true;
@@ -57,18 +57,25 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
       setDraggingEdge({
         ...draggingEdgeRef.current,
         x2: newCx,
-        y2: newCy
+        y2: newCy,
+        weight: link.weight
       });
     }
-    
   };
 
-  const createEdgeMouseDown = (eventNode: Node) => {
+  const createEdgeMouseDown = (eventNode: Node, isWeighted: boolean) => {
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
     edgeNodes.current = [eventNode, eventNode];
 
-    const edge: EdgePosition = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null};
+    let edge: EdgePosition;
+
+    if(isWeighted) {
+      edge = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null, weight: 1};
+    }
+    else {
+      edge = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null};
+    }
 
     draggingEdgeRef.current = edge;
     isDragging.current = true;
@@ -84,18 +91,18 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
       setDraggingEdge({
         ...draggingEdgeRef.current,
         x2: newCx,
-        y2: newCy
+        y2: newCy,
       });
     }
   };
 
   const edgeMouseUp = (e: MouseEvent) => {
-    const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight, radius: 20, text:'', focus: 'inactive' };
+    const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight, radius: 50, text:'', focus: 'inactive' };
 
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 
     if(hasOverlap && edgeNodes.current && edgeNodes.current[0].id !== hasOverlap.id) {
-      const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive'};
+      const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive', weight: draggingEdgeRef.current?.weight};
 
       if (!nodeGraphData.links.some(link => 
         (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source))) {
@@ -104,12 +111,6 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
           links: [...prevData.links, newLink]
         }));
       }
-    }
-    else {
-      // 삭제 or 복구 논의 필요
-      // foucsLink.current?.forEach(link => {
-      //   nodeGraphData.links.push(link);
-      // });
     }
 
     setDraggingEdge(null);

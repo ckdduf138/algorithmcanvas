@@ -1,7 +1,11 @@
 import React, { useRef } from 'react';
+
+import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
+
 import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
-import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
+
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
 
 const BFSPage: React.FC = () => {
@@ -10,8 +14,10 @@ const BFSPage: React.FC = () => {
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
-    handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData } 
+    handleMouseDown, handleEdgeClick } 
     = useGraphCanvas(isRunning, delayRef);
+
+  const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
   const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus, nodeDepth?: number) => {
     setNodeGraphData(prevData => {
@@ -79,7 +85,7 @@ const BFSPage: React.FC = () => {
     visited.set(startNodeId, true);
     nodeDepthMap.set(startNodeId, 0);
   
-    await updateNodeFocus(startNodeId, 'active', 0);
+    await updateNodeFocus(startNodeId, 'selected', 0);
   
     while (queue.length > 0) {
       const current = queue.shift();
@@ -107,24 +113,26 @@ const BFSPage: React.FC = () => {
           updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
           await updateNodeFocus(neighborId, 'active', currentDepth + 1);
-  
-          await updateNodeFocus(currentNodeId, 'completed');
         }
       }
     }
   
     new Promise((resolve) => setTimeout(resolve, delayRef.current));
   
-    nodes.forEach((node) => { 
-      if(visited.get(node.id)) {
-        updateNodeFocus(node.id, 'completed');
-      }
-    });
-  
     isRunning.current = false;
     setSeletedNode(null);
   };
-    
+  
+  const handleRandomizeGraphData = (numNodes: number) => {
+    setSeletedNode(null);
+    randomizeGraphData(numNodes);
+  };
+
+  const handleResetGraphData = () => {
+    setSeletedNode(null);
+    resetGraphData();
+  };
+
   return(
     <Layout subTitle='너비 우선 탐색(BFS)'>
       <GraphCanvas 
@@ -133,6 +141,7 @@ const BFSPage: React.FC = () => {
         selectedNode={selectedNode}
         selectedEdge={selectedEdge}
         draggingEdge={draggingEdge}
+        isWeighted={false}
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}

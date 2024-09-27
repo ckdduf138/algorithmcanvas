@@ -24,14 +24,15 @@ interface EdgeToggleProps {
   y1: number;
   x2: number;
   y2: number;
-  $selectedEdge: boolean;
+  selectedEdge: boolean;
+  isWeighted: boolean;
   strokeWidth: number;
-  onClick: () => void;
+  onClick: (isWeighted: boolean) => void;
   onMouseOver: () => void;
   onMouseOut: () => void;
 }
 
-const EdgeToggle: React.FC<EdgeToggleProps> = ({ x1, y1, x2, y2, $selectedEdge, strokeWidth, onClick, onMouseOver, onMouseOut }) => {
+const EdgeToggle: React.FC<EdgeToggleProps> = ({ x1, y1, x2, y2, selectedEdge, isWeighted, strokeWidth, onClick, onMouseOver, onMouseOut }) => {
   const edgePath = `M ${x1} ${y1} L ${x2} ${y2}`;
 
   const offset = strokeWidth / 2;
@@ -50,14 +51,14 @@ const EdgeToggle: React.FC<EdgeToggleProps> = ({ x1, y1, x2, y2, $selectedEdge, 
 
   return (
     <EdgeToggleWrapper
-      onClick={onClick}
+      onClick={() => onClick(isWeighted)}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
       {/* 외곽선 */}
       <OuterEdge
         d={outerEdgePath}
-        $selectedEdge={$selectedEdge}
+        $selectedEdge={selectedEdge}
         $strokeWidth={strokeWidth}
       />
       {/* 내부 선 */}
