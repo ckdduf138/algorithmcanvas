@@ -8,7 +8,7 @@ const StyledHeader = styled.header<{ theme: string }>`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${({ theme }) => (theme === 'light' ? '#ffffff' : '#15202b')};
+    background-color: ${({ theme }) => (theme === 'light' ? '#F5F5F5' : '#15202b')};
     text-align: center;
     text-transform: uppercase;
     font-family: 'Raleway', fantasy;
@@ -19,31 +19,43 @@ const StyledHeader = styled.header<{ theme: string }>`
 `;
 
 const HeadTitle = styled.div`
-    letter-spacing: 30px;
+    display: flex;
     cursor: pointer;
     font-size: 30px;
     user-select: none;
 `;
 
-const ColoredText = styled.span`
+const ColoredText = styled.div`
+    display: flex;
+    width: 40px;
+    justify-content: center;
     color: ${(props) => props.color || 'black'};
 `;
 
 const ToggleContainer = styled.div`
     position: absolute;
-    right: 2%;
+    right: 3%;
     display: flex;
     align-items: center;
 `;
 
-const Subtitle = styled.div<{ theme: string }>`
+const SubtitleWapper = styled.div`
+    display: flex;
+    padding: 4px 52px;
+    border-radius: 7px;
     position: absolute;
-    left: 2%;
-    font-size: 20px;
-    color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
-    user-select: none;
+    min-width: 50px;
+    left: 3%;
+    align-items: center;
+    justify-content: center;
+    background: #5200FF;
 `;
 
+const Subtitle = styled.div<{ theme: string }>`
+    font-size: 20px;
+    color: #DEE0DE;
+    user-select: none;
+`;
 
 interface HeaderProps {
     subTitle: string;
@@ -59,25 +71,30 @@ const Header: React.FC<HeaderProps> = ({ subTitle }) => {
 
     return (
         <StyledHeader theme={theme}>
-            <Subtitle theme={theme}>{subTitle}</Subtitle>
+            {subTitle && 
+                <SubtitleWapper>
+                    <Subtitle theme={theme}>{subTitle}</Subtitle>
+                </SubtitleWapper>}
+
             <HeadTitle onClick={header_onClicked}>
-            <ColoredText color='#FF7E7E'>A</ColoredText>
-            <ColoredText color='#FF7E7E'>L</ColoredText>
-            <ColoredText color='#FF7E7E '>G</ColoredText>
-            <ColoredText color='#FFA07A '>O</ColoredText>
-            <ColoredText color='#FFA07A '>R</ColoredText>
-            <ColoredText color='#FFA07A'>I</ColoredText>
-            <ColoredText color='#FFD569'>T</ColoredText>
-            <ColoredText color='#FFD569'>H</ColoredText>
-            <ColoredText color='#FFD569'>M</ColoredText>
-            <ColoredText color='#1E1E1E'>-</ColoredText>
-            <ColoredText color='#58E79B'>C</ColoredText>
-            <ColoredText color='#58E79B'>A</ColoredText>
-            <ColoredText color='#58E79B'>N</ColoredText>
-            <ColoredText color="#70BAFF">V</ColoredText>
-            <ColoredText color="#70BAFF">A</ColoredText>
-            <ColoredText color="#70BAFF">S</ColoredText>
-        </HeadTitle>
+                <ColoredText color='#FF7E7E'>A</ColoredText>
+                <ColoredText color='#FF7E7E'>L</ColoredText>
+                <ColoredText color='#FF7E7E'>G</ColoredText>
+                <ColoredText color='#FFA07A'>O</ColoredText>
+                <ColoredText color='#FFA07A'>R</ColoredText>
+                <ColoredText color='#FFA07A'>I</ColoredText>
+                <ColoredText color='#FFD569'>T</ColoredText>
+                <ColoredText color='#FFD569'>H</ColoredText>
+                <ColoredText color='#FFD569'>M</ColoredText>
+                <ColoredText color='#1E1E1E'>-</ColoredText>
+                <ColoredText color='#58E79B'>C</ColoredText>
+                <ColoredText color='#58E79B'>A</ColoredText>
+                <ColoredText color='#58E79B'>N</ColoredText>
+                <ColoredText color="#70BAFF">V</ColoredText>
+                <ColoredText color="#70BAFF">A</ColoredText>
+                <ColoredText color="#70BAFF">S</ColoredText>
+            </HeadTitle>
+
             <ToggleContainer>
                 <ToggleSwitch onToggle={toggleTheme} />
             </ToggleContainer>

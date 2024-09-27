@@ -1,7 +1,7 @@
 export const tagColors: { [key: string]: string } = {
-    '정렬': '#E6E6FA',
-    '배열': '#FFEFD5',
-    '그래프': '#7FFFD4',
+    '정렬': '#FFF1A5',
+    '배열': '#AEFFB1',
+    '그래프': '#FFD0D0',
 };
 
 export interface BoxProps {
@@ -20,7 +20,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['정렬', '배열'],
         link: `queue`,
-        description: '큐에 대한 설명',
+        description: '큐(Queue)는 선입선출(FIFO: First In, First Out) 구조를 가지는 자료구조입니다.<br><br> 큐에서는 먼저 들어온 데이터가 먼저 나가며, 줄을 서는 방식과 유사합니다.<br>' +
+        '일반적인 큐의 동작은 두 가지 주요 연산으로 이루어집니다.',
     },
     {
         title: "스택",

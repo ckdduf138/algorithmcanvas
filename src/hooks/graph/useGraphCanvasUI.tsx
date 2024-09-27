@@ -30,7 +30,7 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
         x,
         y,
         radius: NodeRadius,
-        text: 'Node',
+        text: 'node',
         focus: 'inactive',
       });
     }
