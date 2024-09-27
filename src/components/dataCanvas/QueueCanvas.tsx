@@ -136,7 +136,7 @@ const Label = styled.div`
   top: -50px;
 `;
 
-const QueueCanvas: React.FC<{ queue: string[]; queueSize: number; isAdding: boolean; isRemoving: boolean }> = ({ queue, queueSize, isAdding, isRemoving }) => {
+const QueueCanvas: React.FC<{ queue: string[];  isAdding: boolean; isRemoving: boolean }> = ({ queue, isAdding, isRemoving }) => {
   const { theme } = useTheme();
 
   return (

@@ -36,21 +36,38 @@ const fadeOut = keyframes`
   }
 `;
 
-const StackRow = styled.div`
+const StackWrapper = styled.div`
   display: flex;
-  width: 80%;
-  min-height: 100px;
+  flex-direction: row;
+  width: 100%;
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 20px 0;
+`;
+
+const Column = styled.div`
+  width: 10px;
+  background-color: black;
+  height: 100%;
+  position: relative;
+`;
+
+const StackRow = styled.div`
+  display: flex;
   flex-direction: column;
+  width: 200px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #000;
 `;
 
 const StackItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string }>`
   display: flex;
-  min-width: 80px;
-  min-height: 80px;
+  width: 180px;
+  height: 80px;
   justify-content: center;
   align-items: center;
   background-color: ${({ $theme }) => ($theme === 'light' ? '#fff' : '#444')};
@@ -59,31 +76,41 @@ const StackItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme:
   text-align: center;
   border-radius: 4px;
   color: ${({ $theme }) => ($theme === 'light' ? '#000' : '#fff')};
-  animation: ${({ $isAdding, $isRemoving }) => 
+  animation: ${({ $isAdding, $isRemoving }) =>
     $isAdding ? fadeIn : $isRemoving ? fadeOut : 'none'} 0.5s ease forwards;
 `;
 
-const StackCanvas: React.FC<{ stack: string[]; stackSize: number; isAdding: boolean; isRemoving: boolean }> = ({ stack, stackSize, isAdding, isRemoving }) => {
+const StackCanvas: React.FC<{ stack: string[]; isAdding: boolean; isRemoving: boolean }> = ({
+  stack,
+  isAdding,
+  isRemoving,
+}) => {
   const { theme } = useTheme();
 
   return (
     <StackContainer theme={theme}>
-      <StackRow>
-        {stack.length === 0 ? (
-          <p>스택이 비어 있습니다.</p>
-        ) : (
-          [...stack].reverse().map((item, index) => (
-            <StackItem
-              key={index}
-              $isAdding={isAdding && index === 0}
-              $isRemoving={isRemoving && index === 0}
-              $theme={theme}
-            >
-              {item}
-            </StackItem>
-          ))
-        )}
-      </StackRow>
+      <StackWrapper>
+        <Column />
+      </StackWrapper>
+        <StackRow>
+          {stack.length === 0 ? (
+            <p>스택이 비어 있습니다.</p>
+          ) : (
+            [...stack].reverse().map((item, index) => (
+              <StackItem
+                key={index}
+                $isAdding={isAdding && index === 0}
+                $isRemoving={isRemoving && index === 0}
+                $theme={theme}
+              >
+                {item}
+              </StackItem>
+            ))
+          )}
+        </StackRow>
+      <StackWrapper>
+        <Column />
+      </StackWrapper>
     </StackContainer>
   );
 };
