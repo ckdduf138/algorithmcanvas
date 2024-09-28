@@ -120,8 +120,11 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             y2={draggingEdge.y2 ?? 0}
             dashed={false}
             weight={draggingEdge.weight}
+            isNegativeWeightAllowed={false}
+            direction={draggingEdge.direction}
             $theme={theme}
             focusStatus='inactive'
+            arrowId='arrowhead_dragging'
           />
         )}
         
