@@ -9,7 +9,7 @@ const StackContainer = styled.div<{ theme: string }>`
   flex-direction: column;
   padding: 20px 0px;
   position: relative;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   color: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
 `;
@@ -36,32 +36,29 @@ const fadeOut = keyframes`
   }
 `;
 
-const StackWrapper = styled.div`
+const StackBox = styled.div<{ boxSize: number; theme: string}>`
+  background-color: transparent;
+  border: 1px solid ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
+  border-top-color : transparent;
+  position: relative;
+  width: 231px;
+  height: ${({ boxSize }) => boxSize}px;
+  max-height: 700px;
+  overflow-y: auto;
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-`;
-
-const Column = styled.div`
-  width: 10px;
-  background-color: black;
-  height: 100%;
-  position: relative;
+  justify-content: flex-end;
+  align-items: flex-end;
 `;
 
 const StackRow = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   width: 200px;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   padding: 10px;
   position: relative;
-  background-color: #fff;
-  border: 1px solid #000;
+  margin-top: 50px;
 `;
 
 const StackItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string }>`
@@ -80,37 +77,59 @@ const StackItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme:
     $isAdding ? fadeIn : $isRemoving ? fadeOut : 'none'} 0.5s ease forwards;
 `;
 
-const StackCanvas: React.FC<{ stack: string[]; isAdding: boolean; isRemoving: boolean }> = ({
+const Arrow = styled.div`
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: #000 transparent transparent transparent;
+  margin-bottom: 10px;
+  position: absolute;
+  top: -30px;
+`;
+
+const Label = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  top: -50px;
+`;
+
+const StackCanvas: React.FC<{ stack: string[]; stackSize: number;  isAdding: boolean; isRemoving: boolean }> = ({
   stack,
+  stackSize,
   isAdding,
   isRemoving,
 }) => {
   const { theme } = useTheme();
-
+  const boxSize = Math.max(Math.min(stackSize > 0 ? stackSize * 92.5 + 30 + 50 : stack.length * 92.5 + 30 + 50, 700), 150);
   return (
     <StackContainer theme={theme}>
-      <StackWrapper>
-        <Column />
-      </StackWrapper>
+      <StackBox boxSize={boxSize} theme={theme}>
         <StackRow>
           {stack.length === 0 ? (
             <p>스택이 비어 있습니다.</p>
           ) : (
-            [...stack].reverse().map((item, index) => (
+            stack.map((item, index) => (
               <StackItem
                 key={index}
-                $isAdding={isAdding && index === 0}
-                $isRemoving={isRemoving && index === 0}
+                $isAdding={isAdding && index === stack.length - 1}
+                $isRemoving={isRemoving && index === stack.length - 1}
                 $theme={theme}
               >
                 {item}
+                {index === stack.length - 1 && (
+                <>
+                  <Arrow />
+                  <Label>Top</Label>
+                </>
+              )}
               </StackItem>
             ))
           )}
         </StackRow>
-      <StackWrapper>
-        <Column />
-      </StackWrapper>
+      </StackBox>
     </StackContainer>
   );
 };

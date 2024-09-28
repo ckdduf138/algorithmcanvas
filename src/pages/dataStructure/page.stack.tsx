@@ -53,6 +53,7 @@ const StackPage: React.FC = () => {
     <Layout subTitle="스택(STACK)">
       <StackCanvas 
         stack={stack}
+        stackSize={stackSize}
         isAdding={isAdding}
         isRemoving={isRemoving}
       />

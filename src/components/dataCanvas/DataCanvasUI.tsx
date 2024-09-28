@@ -76,7 +76,7 @@ const DataCanvasUI: React.FC<DataCanvasUIProps> = ({
         handleKeyPress={handleKeyPress}
         isValidBtnAdd={true}
       />
-      <Button onClick={handlePush} disabled={!isValidBtnAdd && (maxSize === data.length || maxSize !== 0)}>
+      <Button onClick={handlePush} disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0)}>
         Push
       </Button>
       <Button onClick={handlePop} disabled={data.length === 0}>
