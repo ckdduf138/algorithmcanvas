@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { NodeFocusStatus } from '../../utils/graphData';
+import { EdgeFocusStatus, NodeRadius, validateInteger, validatePositiveInteger } from '../../utils/graphData';
 
-const getStrokeColor = (focusStatus: NodeFocusStatus, theme: string) => {
+const getStrokeColor = (focusStatus: EdgeFocusStatus, theme: string) => {
     if (focusStatus === 'inactive') {
         return theme === 'light' ? 'black' : 'white';
     }
@@ -15,7 +15,7 @@ const getStrokeColor = (focusStatus: NodeFocusStatus, theme: string) => {
     }
 };
 
-const getStrokeColorOverlay = (focusStatus: NodeFocusStatus, theme: string) => {
+const getStrokeColorOverlay = (focusStatus: EdgeFocusStatus, theme: string) => {
     if (focusStatus === 'inactive') {
         return theme === 'light' ? 'black' : 'white';
     }
@@ -35,7 +35,7 @@ const drawAnimation = (totalLength: number) => keyframes`
     }
 `;
 
-export const Line = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string, $dashed: boolean }>`
+export const Line = styled.line<{ $focusStatus: EdgeFocusStatus, $theme: string, $dashed: boolean }>`
     stroke: ${({ $focusStatus, $theme }) => getStrokeColor($focusStatus, $theme)};
     stroke-width: 3;
     stroke-opacity: 0.6;
@@ -43,12 +43,27 @@ export const Line = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string,
     cursor: pointer;
 `;
 
-const OverlayLine = styled.line<{ $focusStatus: NodeFocusStatus, $theme: string, $totalLength: number, $delay: number }>`
+const Arrow = styled.line<{ $focusStatus: EdgeFocusStatus, $theme: string }>`
+    stroke: ${({ $focusStatus, $theme }) => getStrokeColor($focusStatus, $theme)};
+    stroke-opacity: 0.6;
+    stroke-width: 3;
+`;
+
+const OverlayLine = styled.line<{ $focusStatus: EdgeFocusStatus, $theme: string, $totalLength: number, $delay: number }>`
     stroke: ${({ $focusStatus, $theme }) => getStrokeColorOverlay($focusStatus, $theme)};
     stroke-width: 5;
     stroke-dasharray: ${({ $totalLength }) => $totalLength};
     stroke-dashoffset: ${({ $totalLength }) => $totalLength};
-    animation: ${({ $totalLength, $delay }) => drawAnimation($totalLength)} ${({ $delay }) => $delay}ms linear forwards;
+    animation: ${({ $totalLength }) => drawAnimation($totalLength)} ${({ $delay }) => $delay}ms linear forwards;
+`;
+
+const OverlayArrow = styled.line<{ $focusStatus: EdgeFocusStatus, $theme: string, $delay: number }>`
+    stroke: ${({ $focusStatus, $theme }) => getStrokeColorOverlay($focusStatus, $theme)};
+    stroke-width: 5;
+    stroke-dasharray: 15;
+    stroke-dashoffset: 15;
+    animation: ${drawAnimation(15)} ${({ $delay }) => $delay * 0.25}ms linear forwards;
+    animation-delay: ${({ $delay }) => $delay}ms;
 `;
 
 const WeightTextWapper = styled.rect`
@@ -81,16 +96,21 @@ interface CustomLineProps {
     y1: number;
     x2: number;
     y2: number;
+    direction?: boolean
     dashed?: boolean;
     weight?: number;
+    isNegativeWeightAllowed: boolean;
     setWeight?: (newWeight: number) => void;
     $theme: string;
     onMouseDown?: (e: React.MouseEvent<SVGElement>) => void;
-    focusStatus?: NodeFocusStatus;
+    focusStatus?: EdgeFocusStatus;
     delay?: number;
+    arrowId: string;
 }
 
-const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight, setWeight, dashed = false, onMouseDown, focusStatus = 'inactive', delay = 500 }) => {
+const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, direction = false, $theme, weight, isNegativeWeightAllowed, arrowId,
+    setWeight, dashed = false, onMouseDown, focusStatus = 'inactive', delay = 500 }
+) => {
     const lineRef = useRef<SVGLineElement>(null);
     const [inputValue, setInputValue] = useState("");
 
@@ -115,13 +135,32 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight,
     };
 
     const handleInputFocus = () => {
-
         if(weight) {
             setInputValue(weight.toString());
         }
     };
 
     const handleInputBlur = () => {
+        if(isNegativeWeightAllowed) {
+            ReturnInteger();
+        }
+        else {
+            ReturnPostiveInteger();
+        }
+    };
+
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            if(isNegativeWeightAllowed) {
+                ReturnInteger();
+            }
+            else {
+                ReturnPostiveInteger();
+            }
+        }
+    };
+    
+    const ReturnPostiveInteger = () => {
         setIsEditing(false);
 
         if(validatePositiveInteger(inputValue)) {
@@ -130,39 +169,36 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight,
             }
         }
         else {
-            alert('양의 정수만 입력해주세요.');
+            alert('1000이하의 양의 정수만 입력해주세요.');
         }
     };
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            setIsEditing(false);
+    const ReturnInteger = () => {
+        setIsEditing(false);
 
-            if(validatePositiveInteger(inputValue)) {
-                if(setWeight) {    
-                    setWeight(parseInt(inputValue));
-                }
-            }
-            else {
-                alert('양의 정수만 입력해주세요.');
+        if(validateInteger(inputValue)) {
+            if(setWeight) {    
+                setWeight(parseInt(inputValue));
             }
         }
-
+        else {
+            alert('-1000 ~ 1000 사이 정수만 입력해주세요.');
+        }
     };
 
-    // 양의 정수 체크 함수
-    const validatePositiveInteger = (value: string) => {
-        if (value === null || value === '') {
-            return false;
-        }
+    const arrowPos = arrowId === 'arrowhead_dragging' ? 0 : NodeRadius;
 
-        const positiveIntegerRegex = /^[1-9]\d*$/;
-        if (!positiveIntegerRegex.test(value)) {
-            return false;
-        }
-        return true;
-    };
-    
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const headLength = 15;
+
+    const adjustedX2 = x2 - arrowPos * Math.cos(angle);
+    const adjustedY2 = y2 - arrowPos * Math.sin(angle);
+
+    const arrowX1 = adjustedX2 - headLength * Math.cos(angle - Math.PI / 6);
+    const arrowY1 = adjustedY2 - headLength * Math.sin(angle - Math.PI / 6);
+    const arrowX2 = adjustedX2 - headLength * Math.cos(angle + Math.PI / 6);
+    const arrowY2 = adjustedY2 - headLength * Math.sin(angle + Math.PI / 6);
+
     return (
         <>
             <Line 
@@ -177,17 +213,35 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, $theme, weight,
                 onMouseDown={onMouseDown}
             />
 
+            {/* 화살표 */}
+            {direction && 
+                <>
+                    <Arrow x1={arrowX1} y1={arrowY1} x2={adjustedX2} y2={adjustedY2} $focusStatus={focusStatus} $theme={$theme} />
+                    <Arrow x1={arrowX2} y1={arrowY2} x2={adjustedX2} y2={adjustedY2}  $focusStatus={focusStatus} $theme={$theme} />
+                </>
+            }
+
+
             {focusStatus === 'active' && (
-                <OverlayLine 
-                    x1={x1} 
-                    y1={y1} 
-                    x2={x2} 
-                    y2={y2} 
-                    $focusStatus={focusStatus} 
-                    $theme={$theme} 
-                    $totalLength={totalLength} 
-                    $delay={delay} 
-                />
+                <>
+                    <OverlayLine 
+                        x1={x1} 
+                        y1={y1} 
+                        x2={x2} 
+                        y2={y2} 
+                        $focusStatus={focusStatus} 
+                        $theme={$theme} 
+                        $totalLength={totalLength} 
+                        $delay={delay} 
+                    />
+                {/* 화살표 */}
+                {direction && 
+                <>
+                    <OverlayArrow x1={arrowX1} y1={arrowY1} x2={adjustedX2} y2={adjustedY2} $focusStatus={focusStatus} $theme={$theme} $delay={delay}  />
+                    <OverlayArrow x1={arrowX2} y1={arrowY2} x2={adjustedX2} y2={adjustedY2} $focusStatus={focusStatus} $theme={$theme} $delay={delay} />
+                </>
+            }
+                </>
             )}
 
             {!isEditing && weight !== undefined && 

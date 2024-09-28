@@ -30,6 +30,7 @@ export interface Link {
     source: string;
     target: string;
     weight?: number;
+    direction?: boolean;
     dashed?: boolean;
     focus: EdgeFocusStatus;
 };
@@ -47,6 +48,7 @@ export interface EdgePosition {
     x2: number | null;
     y2: number | null;
     weight?: number;
+    direction?: boolean;
 }
 
 export const getClosestAndFurthestNode = ( targetPos: { x: number; y: number }, node1: Node, node2: Node ): [Node, Node] => {
@@ -76,4 +78,40 @@ const isOverlapping = (node1: Node, node2: Node) => {
     );
 
     return distance <= node1.radius + node2.radius;
+};
+
+// 양의 정수 체크 함수
+export const validatePositiveInteger = (value: string) => {
+    if (value === null || value === '') {
+        return false;
+    }
+
+    if (parseInt(value) > 1000) {
+        return false;
+    }
+
+    const positiveIntegerRegex = /^[1-9]\d*$/;
+    if (!positiveIntegerRegex.test(value)) {
+        return false;
+    }
+    return true;
+};
+
+// 정수 체크 함수
+export const validateInteger = (value: string) => {
+    if (value === null || value === '') {
+        return false;
+    }
+
+    const numberValue = parseInt(value, 10);
+    if (numberValue > 1000 || numberValue < -1000) {
+        return false;
+    }
+
+    const integerRegex = /^-?\d+$/;
+    if (!integerRegex.test(value)) {
+        return false;
+    }
+
+    return true;
 };

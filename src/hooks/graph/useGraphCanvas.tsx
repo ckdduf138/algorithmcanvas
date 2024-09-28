@@ -8,7 +8,9 @@ import { useTheme } from '../../context/themeContext';
 import CustomCircle from '../../components/graphCanvas/customCircle';
 import CustomLine from '../../components/graphCanvas/customLine';
 
-export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, delayRef : React.MutableRefObject<number>) => {
+export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, delayRef : React.MutableRefObject<number>, 
+  isNegativeWeightAllowed: boolean = false, direction: boolean = false
+) => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
   const [selectedNode, setSeletedNode] = useState<Node | null>(null);
@@ -17,7 +19,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
   const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode } = useDragCopy(setNodeGraphData);
 
-  const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData, setNodeGraphData);
+  const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData, setNodeGraphData, direction);
 
   const { width, height } = useWindowSize();
 
@@ -178,13 +180,16 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         y1={sourceNode.y} 
         x2={targetNode.x} 
         y2={targetNode.y}
+        direction={link.direction}
         dashed={link.dashed}
         weight={link.weight}
+        isNegativeWeightAllowed={isNegativeWeightAllowed}
         $theme={theme}
         focusStatus={link.focus}
         delay={delayRef.current}
         onMouseDown={handleMouseDown}
         setWeight={setWeight}
+        arrowId='arrowhead'
       />
     );
   };
