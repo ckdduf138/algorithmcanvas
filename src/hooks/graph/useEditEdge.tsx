@@ -4,7 +4,9 @@ import { EdgePosition, findOverlappingNode, Link, Node, NodeGraphData } from '..
 import { useSVGEvents } from './useSvgEvents';
 
 
-export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
+export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>, 
+  direction: boolean = false
+) => {
   const [draggingEdge, setDraggingEdge] = useState<EdgePosition | null>(null);
 
   const isDragging = useRef(false);
@@ -45,7 +47,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
 
     edgeNodes.current = eventNodes;
 
-    const edge: EdgePosition = {x1: eventNodes[0].x, y1: eventNodes[0].y, x2: eventNodes[1].x, y2: eventNodes[1].y, weight: link.weight};
+    const edge: EdgePosition = {x1: eventNodes[0].x, y1: eventNodes[0].y, x2: eventNodes[1].x, y2: eventNodes[1].y, weight: link.weight, direction: direction};
 
     draggingEdgeRef.current = edge;
     isDragging.current = true;
@@ -58,7 +60,8 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
         ...draggingEdgeRef.current,
         x2: newCx,
         y2: newCy,
-        weight: link.weight
+        weight: link.weight,
+        direction: direction
       });
     }
   };
@@ -71,10 +74,10 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     let edge: EdgePosition;
 
     if(isWeighted) {
-      edge = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null, weight: 1};
+      edge = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null, weight: 1, direction: direction};
     }
     else {
-      edge = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null};
+      edge = {x1: eventNode.x, y1: eventNode.y, x2: null, y2: null, direction: direction};
     }
 
     draggingEdgeRef.current = edge;
@@ -102,7 +105,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 
     if(hasOverlap && edgeNodes.current && edgeNodes.current[0].id !== hasOverlap.id) {
-      const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive', weight: draggingEdgeRef.current?.weight};
+      const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive', weight: draggingEdgeRef.current?.weight, direction: direction};
 
       if (!nodeGraphData.links.some(link => 
         (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source))) {
