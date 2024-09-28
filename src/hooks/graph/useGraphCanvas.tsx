@@ -140,7 +140,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         };
       });
 
-      const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY }, sourceNode, targetNode);
+      const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY * 0.8 }, sourceNode, targetNode);
       if(closestNode) {
         edgeMouseDown(e, closestNode, link);
       }

@@ -15,6 +15,8 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
   const edgeNodes = useRef<[Node, Node] | null>(null);
   const foucsLink = useRef<Set<Link> | null>(null);
 
+  const edgeEdit = useRef<Boolean>(false);
+
   const { updateHandlers } = useSVGEvents({});
 
   const { height } = useWindowSize();
@@ -43,6 +45,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
   const edgeMouseDown = (e: React.MouseEvent<SVGElement>, eventNodes: [Node, Node], link: Link) => {
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
+    edgeEdit.current = true;
     removeLinksByNodeIds(eventNodes);
 
     edgeNodes.current = eventNodes;
@@ -68,6 +71,8 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
 
   const createEdgeMouseDown = (eventNode: Node, isWeighted: boolean) => {
     updateHandlers(edgeMouseMove, edgeMouseUp);
+
+    edgeEdit.current = false;
 
     edgeNodes.current = [eventNode, eventNode];
 
@@ -105,10 +110,16 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 
     if(hasOverlap && edgeNodes.current && edgeNodes.current[0].id !== hasOverlap.id) {
-      const newLink: Link = {source: edgeNodes.current[0].id, target: hasOverlap.id, focus: 'inactive', weight: draggingEdgeRef.current?.weight, direction: direction};
+      const newLink: Link = {
+        source: edgeNodes.current[0].id, 
+        target: hasOverlap.id, 
+        focus: 'inactive', 
+        weight: draggingEdgeRef.current?.weight, 
+        direction: direction
+      };
 
       if (!nodeGraphData.links.some(link => 
-        (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source))) {
+        (link.source === newLink.source && link.target === newLink.target) || (link.source === newLink.target && link.target === newLink.source)) || edgeEdit.current) {
         setNodeGraphData(prevData => ({
           ...prevData,
           links: [...prevData.links, newLink]
