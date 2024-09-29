@@ -22,7 +22,8 @@ const StyledButton = styled.button`
   cursor: ${(props) => (props.disabled ? "normal" : "pointer")};
   transition: background-color 0.3s;
   align-items: center;
-
+  user-select: none;
+  
   &:hover {
     background-color: ${(props) => (props.disabled ? "#ccc" : "#0056b3")};
   }

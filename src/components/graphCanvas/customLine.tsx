@@ -11,7 +11,9 @@ const getStrokeColor = (focusStatus: EdgeFocusStatus, theme: string) => {
         case 'active':
             return theme === 'light' ? 'black' : 'white';
         case 'completed':
-            return theme === 'light' ? '#3498db' : '#2980b9';   
+            return theme === 'light' ? '#3498db' : '#2980b9';  
+        case 'success':
+            return theme === 'light' ? '#2ecc71' : '#27ae60'; 
         case 'error':
             return theme === 'light' ? '#ff6f61 ' : 'b22222';   
     }

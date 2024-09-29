@@ -18,7 +18,7 @@ import DFSPage from './pages/graph/page.dfs';
 import DijkstraPage from './pages/graph/page.dijkstra';
 import BellmanFordPage from './pages/graph/page.bellman-ford';
 // import FloydPage from './pages/graph/page.floyd';
-// import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
+import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
 
 import NotFoundPage from './pages/page.notFound';
 
@@ -49,10 +49,11 @@ const App = () => {
                     <Route path="dfs" element={<DFSPage />} />
                     <Route path="dijkstra" element={<DijkstraPage />} />
                     <Route path="bellman-ford" element={<BellmanFordPage />} />
-
+                    <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} />
+                    
                     {/* 
                     <Route path="Floyd" element={<FloydPage />} />
-                    <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} /> */}
+                     */}
 
                     {/* 404 */}
                     <Route path="404" element={<NotFoundPage />} />
