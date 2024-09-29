@@ -15,6 +15,8 @@ const getStrokeColor = (focusStatus: NodeFocusStatus, theme: string) => {
             return theme === 'light' ? '#f1c40f' : '#f39c12'; 
         case 'completed':
             return theme === 'light' ? '#2ecc71' : '#27ae60';
+        case 'error':
+            return theme === 'light' ? '#ff6f61 ' : 'b22222';   
         default:
             return theme === 'light' ? '#d9d9d9' : '#333333';
     }
