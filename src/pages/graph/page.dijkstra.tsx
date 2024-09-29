@@ -7,6 +7,7 @@ import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
+import SlideUI from '../../components/graphCanvas/slideUI';
 
 const DijkstraPage: React.FC = () => {
   const isRunning = useRef(false);
@@ -145,6 +146,15 @@ const DijkstraPage: React.FC = () => {
     resetGraphData();
   };
 
+  const onclickBtnStart = async () => {
+    if(selectedNode) {
+      await handleStart(selectedNode.id);
+    }
+    else {
+      alert('시작할 노드를 선택해주세요.');
+    }
+  };
+
   return(
     <Layout subTitle='다익스트라(Dijkstra)'>
       <GraphCanvas 
@@ -160,9 +170,16 @@ const DijkstraPage: React.FC = () => {
         isRunning={isRunning}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
-        handleRandomizeGraphData={handleRandomizeGraphData}
-        handleResetGraphData={handleResetGraphData}
-        handleStart={handleStart}
+      />
+
+      {/* UI */}
+      <SlideUI 
+        dataSize={nodeGraphDatas.nodes.length}
+        isRunning={isRunning}
+        delayRef={delayRef} 
+        onclickBtnRandom={() => handleRandomizeGraphData(5)}
+        onclickBtnReset={handleResetGraphData}
+        onclickBtnStart={onclickBtnStart} 
       />
     </Layout>
   )
