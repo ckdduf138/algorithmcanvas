@@ -12,6 +12,8 @@ const getStrokeColor = (focusStatus: EdgeFocusStatus, theme: string) => {
             return theme === 'light' ? 'black' : 'white';
         case 'completed':
             return theme === 'light' ? '#3498db' : '#2980b9';   
+        case 'error':
+            return theme === 'light' ? '#ff6f61 ' : 'b22222';   
     }
 };
 
@@ -23,6 +25,8 @@ const getStrokeColorOverlay = (focusStatus: EdgeFocusStatus, theme: string) => {
     switch (focusStatus) {
         case 'active':
             return theme === 'light' ? '#3498db' : '#2980b9';
+        case 'error':
+            return theme === 'light' ? '#ff6f61 ' : 'b22222';   
     }
 };
 
