@@ -17,25 +17,29 @@ const StyleCanvasUI = styled.div`
   padding-bottom: 2%;
 `;
 
-interface QueueCanvasUIProps {
-  queue: string[];
+interface DataCanvasUIProps {
+  data: string[];
   inputValue: string;
-  queueSize: number;
+  maxSize: number;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
-  setQueueSize: React.Dispatch<React.SetStateAction<number>>;
+  setMaxSize: React.Dispatch<React.SetStateAction<number>>;
   handlePush: () => void;
   handlePop: () => void;
-  handleQueueSize: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleMaxSizeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  addItemPlaceholder: string;
+  sizePlaceholder: string;
 }
 
-const QueueCanvasUI: React.FC<QueueCanvasUIProps> = ({
-  queue,
+const DataCanvasUI: React.FC<DataCanvasUIProps> = ({
+  data,
   inputValue,
-  queueSize,
+  maxSize,
   setInputValue,
   handlePush,
   handlePop,
-  handleQueueSize,
+  handleMaxSizeChange,
+  addItemPlaceholder,
+  sizePlaceholder,
 }) => {
   const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
 
@@ -52,14 +56,13 @@ const QueueCanvasUI: React.FC<QueueCanvasUIProps> = ({
   };
 
   useEffect(() => {
-    // Push 버튼 클릭 후 입력 값 검증
     setIsValidBtnAdd(inputValue.trim() !== '');
-  }, [inputValue]); // inputValue가 변경될 때마다 검사
+  }, [inputValue]);
 
   return (
     <StyleCanvasUI>
       <InputBox
-        placeholder='추가할 데이터를 입력하세요.'
+        placeholder={addItemPlaceholder}
         inputValue={inputValue}
         handleInputChange={handleInputChange}
         handleKeyPress={handleKeyPress}
@@ -67,20 +70,20 @@ const QueueCanvasUI: React.FC<QueueCanvasUIProps> = ({
         onclickBtnAdd={handlePush}
       />
       <InputBox
-        placeholder='큐 크기를 설정하세요.'
-        inputValue={queueSize.toString()}
-        handleInputChange={handleQueueSize}
+        placeholder={sizePlaceholder}
+        inputValue={maxSize.toString()}
+        handleInputChange={handleMaxSizeChange}
         handleKeyPress={handleKeyPress}
         isValidBtnAdd={true}
       />
-      <Button onClick={handlePush} disabled={(!isValidBtnAdd || queueSize === queue.length) && queueSize !== 0}>
+      <Button onClick={handlePush} disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0)}>
         Push
       </Button>
-      <Button onClick={handlePop} disabled={queue.length === 0}>
+      <Button onClick={handlePop} disabled={data.length === 0}>
         Pop
       </Button>
     </StyleCanvasUI>
   );
 };
 
-export default QueueCanvasUI;
+export default DataCanvasUI;
