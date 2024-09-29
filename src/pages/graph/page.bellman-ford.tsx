@@ -65,61 +65,66 @@ const DijkstraPage: React.FC = () => {
     isRunning.current = true;
 
     const { nodes, links } = nodeGraphData;
-
-    const visited = new Map<string, boolean>();
+  
     const distances = new Map<string, number>();
     const previous = new Map<string, string | null>();
-
+  
     nodes.forEach((node) => {
-      visited.set(node.id, false);
       distances.set(node.id, Infinity);
       previous.set(node.id, null);
     });
-
+  
     distances.set(startNodeId, 0);
-    
-    const priorityQueue: Array<[string, number]> = [[startNodeId, 0]];
-
-    const sortQueue = () => {
-      priorityQueue.sort((a, b) => a[1] - b[1]);
-    };
-
-    await updateNodeFocus(startNodeId, 'selected', 0);
-
-    while (priorityQueue.length > 0) {
-      sortQueue();
-      const [currentNodeId, currentDistance] = priorityQueue.shift()!;
-
-      if (visited.get(currentNodeId)) continue;
-      visited.set(currentNodeId, true);
-
-      const currentNode = nodes.find((node) => node.id === currentNodeId);
-      if (!currentNode) return;
-
-      const neighbors = links
-        .filter(link => link.source === currentNodeId) 
-        .map(link => ({
-          neighborId: link.target,
-          weight: link.weight,
-        }));
-
-      for (const { neighborId, weight } of neighbors) {
-        if (!visited.get(neighborId)) {
-          const distanceThroughCurrent = currentDistance + (weight ?? 0);
-
-          if (distanceThroughCurrent < (distances.get(neighborId) || Infinity)) {
-            distances.set(neighborId, distanceThroughCurrent);
-            previous.set(neighborId, currentNodeId);
-
-            priorityQueue.push([neighborId, distanceThroughCurrent]);
-
-            await updateEdgeFocus(currentNodeId, neighborId, 'active');
-            updateEdgeFocus(currentNodeId, neighborId, 'completed');
-
-            await updateNodeFocus(neighborId, 'active', distanceThroughCurrent);
-          }
+  
+    for (let i = 0; i < nodes.length - 1; i++) {
+      for (const { source, target, weight } of links) {
+        const sourceDistance = distances.get(source) ?? Infinity;
+        const targetDistance = distances.get(target) ?? Infinity;
+        const newDistance = sourceDistance + (weight ?? 0);
+  
+        if (newDistance < targetDistance) {
+          distances.set(target, newDistance);
+          previous.set(target, source);
+  
+          await updateEdgeFocus(source, target, 'active');
+          updateEdgeFocus(source, target, 'completed');
+          await updateNodeFocus(target, 'active', newDistance);
         }
       }
+    }
+  
+    // 음수 사이클 체크
+    const negativeCycleNodes: string[] = [];
+    for (const { source, target, weight } of links) {
+        const sourceDistance = distances.get(source) ?? Infinity;
+        const newDistance = sourceDistance + (weight ?? 0);
+
+        if (newDistance < (distances.get(target) ?? Infinity)) {
+            alert("음수 사이클이 존재합니다.");
+            let currentNode = target;
+
+
+            while (!negativeCycleNodes.includes(currentNode)) {
+                negativeCycleNodes.push(currentNode);
+                currentNode = previous.get(currentNode)!;
+            }
+
+            for (const nodeId of negativeCycleNodes) {
+                updateNodeFocus(nodeId, 'error', 0);
+            }
+
+            for (let i = 0; i < negativeCycleNodes.length; i++) {
+                const nodeId = negativeCycleNodes[i];
+                const prevNodeId = previous.get(nodeId);
+                if (prevNodeId) {
+                    updateEdgeFocus(prevNodeId, nodeId, 'error');
+                }
+            }
+
+            isRunning.current = false;
+            setSeletedNode(null);
+            return;
+        }
     }
 
     isRunning.current = false;

@@ -1,6 +1,6 @@
-export type NodeFocusStatus = 'selected' | 'inactive' | 'active' | 'highlight' | 'completed';
+export type NodeFocusStatus = 'selected' | 'inactive' | 'active' | 'highlight' | 'completed' | 'error';
 
-export type EdgeFocusStatus = 'inactive' | 'active' | 'completed'
+export type EdgeFocusStatus = 'inactive' | 'active' | 'completed' | 'error';
 
 export const NodeRadius = 50;
 
