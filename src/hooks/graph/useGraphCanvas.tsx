@@ -32,6 +32,29 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     setSeletedEdge(!selectedEdge);
   };
 
+  const ResetData = () => {
+    setNodeGraphData(prevData => {
+      if (!prevData) return prevData;
+    
+      const updatedNodes = prevData.nodes.map((node) => ({
+        ...node,
+        focus: 'inactive' as NodeFocusStatus,
+        text: 'node',
+      }));
+    
+      const updatedLinks = prevData.links.map((link) => ({
+        ...link,
+        focus: 'inactive' as EdgeFocusStatus
+      }));
+
+      return {
+        ...prevData,
+        nodes: updatedNodes,
+        links: updatedLinks
+      };
+    });
+  };
+
   const nodeGraphDatas = {
     nodes: nodeGraphData?.nodes,
     links: nodeGraphData?.links,
@@ -45,26 +68,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
       if(isRunning.current) return;
 
-      setNodeGraphData(prevData => {
-        if (!prevData) return prevData;
-      
-        const updatedNodes = prevData.nodes.map((node) => ({
-          ...node,
-          focus: node === foundNodeData ? 'selected' : 'inactive' as NodeFocusStatus,
-          text: 'node',
-        }));
-      
-        const updatedLinks = prevData.links.map((link) => ({
-          ...link,
-          focus: 'inactive' as EdgeFocusStatus
-        }));
-
-        return {
-          ...prevData,
-          nodes: updatedNodes,
-          links: updatedLinks
-        };
-      });
+      ResetData();
 
       if(!foundNodeData) return;
 
@@ -119,26 +123,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
       
       if(isRunning.current) return;
 
-      setNodeGraphData(prevData => {
-        if (!prevData) return prevData;
-      
-        const updatedNodes = prevData.nodes.map((node) => ({
-          ...node,
-          focus: 'inactive' as NodeFocusStatus,
-          text: 'node',
-        }));
-      
-        const updatedLinks = prevData.links.map((link) => ({
-          ...link,
-          focus: 'inactive' as EdgeFocusStatus
-        }));
-
-        return {
-          ...prevData,
-          nodes: updatedNodes,
-          links: updatedLinks
-        };
-      });
+      ResetData();
 
       const closestNode: [Node, Node] = getClosestAndFurthestNode({ x: e.clientX, y: e.clientY * 0.8 }, sourceNode, targetNode);
       if(closestNode) {
@@ -267,6 +252,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     draggingEdge,
     CustomNode,
     CustomLink,
+    ResetData,
     handleMouseDown,
     handleEdgeClick,
   };

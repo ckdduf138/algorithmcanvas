@@ -4,6 +4,7 @@ import { useWindowSize } from "../../hooks/getWindowSize";
 import Button from "../common/buttons";
 import DelaySlider from "../common/delaySlider";
 import { useTheme } from "../../context/themeContext";
+import SegmentedControl, { SegmentOption } from "../common/segmentedControl";
 
 const Container = styled.div<{ $isOpen : boolean, $height: number, $theme: string}>`
     display: flex;
@@ -34,18 +35,23 @@ const ToggleButton = styled.button<{$isOpen : boolean, $height: number, $theme: 
     cursor: pointer;
     transition: bottom 0.3s ease-in-out;
     font-size: 20px;
+    user-select: none;
 `;
 
 interface SlideUIProps {
     dataSize: number;
     isRunning: React.MutableRefObject<boolean>;
     delayRef: React.MutableRefObject<number>;
+    segmentedControl?: boolean;
+    options?: SegmentOption[];
+    selected?: string;
+    setOption?: (option: string) => void;
     onclickBtnReset: () => void;
     onclickBtnRandom: () => void;
     onclickBtnStart: () => void;
 };
 
-const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, onclickBtnReset, onclickBtnRandom, onclickBtnStart }) => {
+const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, segmentedControl, options, selected, setOption, onclickBtnReset, onclickBtnRandom, onclickBtnStart }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { height } = useWindowSize();
@@ -60,12 +66,25 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, onclic
         delayRef.current = 1000 / value;
     };
 
+    const handleChange = (value: string) => {
+        if(setOption) {
+            setOption(value);
+        }
+    };
+
     return (
     <>
         <Container $isOpen={isOpen} $height={height * 0.13} $theme={theme}>
             <Button onClick={onclickBtnReset} disabled={dataSize <= 0 || isRunning.current}>Reset</Button>
+            
             <Button onClick={onclickBtnRandom} disabled={isRunning.current}>Random</Button>
+            
             <Button onClick={onclickBtnStart} disabled={dataSize <= 0 || isRunning.current}>Start</Button>
+            
+            {segmentedControl && options && selected &&
+                <SegmentedControl options={options} selectedValue={selected} onChange={handleChange} />
+            }
+
             <DelaySlider onDelayChange={handleDelayChange}/> 
         </Container>
         <ToggleButton $isOpen={isOpen} $height={height * 0.23} $theme={theme} onClick={toggleOpen}>
