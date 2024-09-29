@@ -7,6 +7,7 @@ import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
+import SlideUI from '../../components/graphCanvas/slideUI';
 
 const DFSPage: React.FC = () => {
   const isRunning = useRef(false);
@@ -125,6 +126,15 @@ const DFSPage: React.FC = () => {
     resetGraphData();
   };
 
+  const onclickBtnStart = async () => {
+    if(selectedNode) {
+      await handleStart(selectedNode.id);
+    }
+    else {
+      alert('시작할 노드를 선택해주세요.');
+    }
+  };
+  
   return(
     <Layout subTitle='깊이 우선 탐색(DFS)'>
       <GraphCanvas 
@@ -140,9 +150,16 @@ const DFSPage: React.FC = () => {
         isRunning={isRunning}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
-        handleRandomizeGraphData={handleRandomizeGraphData}
-        handleResetGraphData={handleResetGraphData}
-        handleStart={handleStart}
+      />
+
+      {/* UI */}
+      <SlideUI 
+        dataSize={nodeGraphDatas.nodes.length}
+        isRunning={isRunning}
+        delayRef={delayRef} 
+        onclickBtnRandom={() => handleRandomizeGraphData(5)}
+        onclickBtnReset={handleResetGraphData}
+        onclickBtnStart={onclickBtnStart} 
       />
     </Layout>
   )
