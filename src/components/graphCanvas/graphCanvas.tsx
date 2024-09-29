@@ -7,7 +7,6 @@ import Tooltip from '../common/tooltip';
 import EdgeToggle from './edgeToggle';
 import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
 import { useTheme } from '../../context/themeContext';
-import SlideUI from './slideUI';
 import { generateUUID } from '../../utils/common';
 import CustomLine from './customLine';
 import { Circle } from './customCircle';
@@ -42,14 +41,11 @@ interface GraphCanvasProps {
   isRunning: React.MutableRefObject<boolean>;
   handleMouseDown: (circle: CirclePosition) => void
   handleEdgeClick: (weight: boolean) => void;
-  handleRandomizeGraphData: (numNodes: number) => void;
-  handleResetGraphData: () => void;
-  handleStart: (startNodeId: string) => Promise<void>;
 };
 
 const GraphCanvas: React.FC<GraphCanvasProps> = ({
-  nodeGraphDatas, draggingCircle, selectedEdge, selectedNode, isWeighted, draggingEdge, CustomNode, CustomLink, delayRef, isRunning,
-  handleMouseDown, handleEdgeClick, handleRandomizeGraphData, handleResetGraphData, handleStart}
+  nodeGraphDatas, draggingCircle, selectedEdge, isWeighted, draggingEdge, CustomNode, CustomLink, isRunning,
+  handleMouseDown, handleEdgeClick}
 ) => {
   const { width, height } = useWindowSize();
 
@@ -83,23 +79,6 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
   const handleMouseOutEdge = () => {
     setTooltip(null);
-  };
-
-  const onclickBtnReset = () => {
-    handleResetGraphData();
-  };
-
-  const onclickBtnRandom = () => {
-    handleRandomizeGraphData(5); 
-  };
-
-  const onclickBtnStart = async () => {
-    if(selectedNode) {
-      await handleStart(selectedNode.id);
-    }
-    else {
-      alert('시작할 노드를 선택해주세요.');
-    }
   };
 
   return (
@@ -182,15 +161,6 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
           visible={tooltip.visible}
         />
       )}
-
-      {/* UI */}
-    <SlideUI 
-      dataSize={nodeGraphDatas.nodes.length}
-      isRunning={isRunning}
-      delayRef={delayRef} 
-      onclickBtnRandom={onclickBtnRandom}
-      onclickBtnReset={onclickBtnReset}
-      onclickBtnStart={onclickBtnStart} />
     </GraphCanvasContainer>
   );
 };
