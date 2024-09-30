@@ -10,8 +10,6 @@ const StyledHeader = styled.header<{ theme: string }>`
     align-items: center;
     background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#15202b')};
     text-align: center;
-    text-transform: uppercase;
-    font-family: 'Raleway', fantasy;
     position: relative;
     width: 100%;
     height: 10%;
@@ -41,14 +39,14 @@ const ToggleContainer = styled.div`
 
 const SubtitleWapper = styled.div`
     display: flex;
-    padding: 4px 52px;
+    padding: 4px 28px;
     border-radius: 7px;
     position: absolute;
     min-width: 50px;
     left: 3%;
     align-items: center;
     justify-content: center;
-    background: #5200FF;
+    background: #8D57FF;
 `;
 
 const Subtitle = styled.div<{ theme: string }>`
