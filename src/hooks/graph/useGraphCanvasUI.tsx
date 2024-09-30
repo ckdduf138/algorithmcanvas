@@ -111,7 +111,6 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
     setNodeGraphData({nodes, links});
   };
 
-
   const randomizeGraphDataInWeightAndDirection = (numNodes: number) => {
     const nodes: Node[] = [];
 

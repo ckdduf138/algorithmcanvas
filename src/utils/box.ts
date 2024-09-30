@@ -122,11 +122,11 @@ export const boxes: BoxProps[] = [
         '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
     },
     {
-        title: "플로이드",
+        title: "플로이드-워셜",
         imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
         gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
         tags: ['그래프'],
-        link: `Floyd`,
+        link: `floyd-warshall`,
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
         '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
     },
