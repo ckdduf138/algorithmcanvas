@@ -17,12 +17,13 @@ import BFSPage from './pages/graph/page.bfs';
 import DFSPage from './pages/graph/page.dfs';
 import DijkstraPage from './pages/graph/page.dijkstra';
 import BellmanFordPage from './pages/graph/page.bellman-ford';
-// import FloydPage from './pages/graph/page.floyd';
+import FloydWarshallPage from './pages/graph/page.floyd-warshall';
 import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
 
 import NotFoundPage from './pages/page.notFound';
 
 import { ThemeProvider } from './context/themeContext';
+
 
 const App = () => {
     return (
@@ -49,11 +50,8 @@ const App = () => {
                     <Route path="dfs" element={<DFSPage />} />
                     <Route path="dijkstra" element={<DijkstraPage />} />
                     <Route path="bellman-ford" element={<BellmanFordPage />} />
+                    <Route path="floyd-warshall" element={<FloydWarshallPage />} />
                     <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} />
-                    
-                    {/* 
-                    <Route path="Floyd" element={<FloydPage />} />
-                     */}
 
                     {/* 404 */}
                     <Route path="404" element={<NotFoundPage />} />
