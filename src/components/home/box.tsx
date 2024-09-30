@@ -6,7 +6,7 @@ import { BoxProps, tagColors } from '../../utils/box';
 // box
 const Flip = styled.div`
     display: flex;
-    width: 300px;
+    min-width: 300px;
     height: 400px;
     margin: 30px;
     border-radius: 12px;
