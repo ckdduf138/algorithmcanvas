@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://algorithmcanvas.com//sitemap.xml
+Sitemap: https://algorithmcanvas.com/sitemap.xml
