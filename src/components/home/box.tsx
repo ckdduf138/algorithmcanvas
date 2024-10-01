@@ -175,7 +175,7 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                 <FrontBox>
                     <BoxTitle>{title}</BoxTitle>
 
-                    <BoxImage src={isHover ? gifSrc : imgSrc} />
+                    <BoxImage src={isHover ? gifSrc : imgSrc} alt='알고리즘 예시'/>
 
                     <TagParent>
                         {tags.map((tag, index) => (
