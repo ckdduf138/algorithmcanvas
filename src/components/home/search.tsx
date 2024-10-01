@@ -115,6 +115,7 @@ const Search: React.FC<SearchProps> = ({ onSearch, query, setQuery }) => {
                 src={imageSrc}
                 onClick={handleSearchImg}
                 $isPointer={query === ''}
+                alt='검색도구'
             />
         </SearchContainer>
     );
