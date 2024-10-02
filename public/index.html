@@ -21,19 +21,23 @@
         <link rel="sitemap" type="application/xml" title="Sitemap" href="https://algorithmcanvas.com/sitemap.xml" />
 
         <script type="text/javascript">
-            (function() {
-                var redirected = window.location.search.match(/^\?p=([^&]*)&q=(.*)$/);
-                if (redirected) {
-                    var target = redirected[1];
-                    var query = redirected[2].replace(/~and~/g, '&');
-                    window.history.replaceState(
-                        null, 
-                        null,
-                        window.location.pathname.slice(0, -5) + target + (query ? '?' + query : '') + window.location.hash
-                    );
+            (function (l) {
+              if (l.search) {
+                var q = {};
+                l.search.slice(1).split('&').forEach(function (v) {
+                  var a = v.split('=');
+                  q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+                });
+                if (q.p !== undefined) {
+                  window.history.replaceState(null, null,
+                    l.pathname.slice(0, -1) + (q.p || '') +
+                    (q.q ? ('?' + q.q) : '') +
+                    l.hash
+                  );
                 }
-            })();
-        </script>
+              }
+            }(window.location))
+          </script>
     </head>
     <div id="root"></div>
 
