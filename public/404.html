@@ -9,7 +9,7 @@
 <body>
     <script type="text/javascript">
         var l = window.location;
-        var basename = '/algorithmcanvas';
+        var basename = '';
         var newUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + basename + '/index' + l.search + l.hash;
         window.history.replaceState(null, null, newUrl);
         window.location.replace(newUrl);
