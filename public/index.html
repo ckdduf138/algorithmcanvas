@@ -21,30 +21,18 @@
         <link rel="sitemap" type="application/xml" title="Sitemap" href="https://algorithmcanvas.com/sitemap.xml" />
 
         <script type="text/javascript">
-            (function (l) {
-                // SPA 라우팅 처리
-                var pathSegmentsToKeep = 0;
-    
-                // 무한 리다이렉션 방지
-                var isRedirecting = false;
-    
-                if (l.pathname !== '/') {
-                    // 이전에 리다이렉션된 적이 없다면 리다이렉션
-                    if (!isRedirecting) {
-                        isRedirecting = true; // 리다이렉션 상태 변경
-                        window.location.replace('/');
-                    }
-                } else {
-                    // SPA URL 변환 처리
-                    l.replace(
-                        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-                        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-                        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-                        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-                        l.hash
+            (function() {
+                var redirected = window.location.search.match(/^\?p=([^&]*)&q=(.*)$/);
+                if (redirected) {
+                    var target = redirected[1];
+                    var query = redirected[2].replace(/~and~/g, '&');
+                    window.history.replaceState(
+                        null, 
+                        null,
+                        window.location.pathname.slice(0, -5) + target + (query ? '?' + query : '') + window.location.hash
                     );
                 }
-            }(window.location));
+            })();
         </script>
     </head>
     <div id="root"></div>
