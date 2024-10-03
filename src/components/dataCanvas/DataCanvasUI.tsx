@@ -10,11 +10,16 @@ const StyleCanvasUI = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1%;
+  gap: 30px;
   position: relative;
   row-gap: 20px;
   padding-top: 2%;
   padding-bottom: 2%;
+`;
+
+const ButtonWapper = styled.div`
+  display: flex;
+  gap: 20px;
 `;
 
 interface DataCanvasUIProps {
@@ -76,12 +81,21 @@ const DataCanvasUI: React.FC<DataCanvasUIProps> = ({
         handleKeyPress={handleKeyPress}
         isValidBtnAdd={true}
       />
-      <Button onClick={handlePush} disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0)}>
-        Push
-      </Button>
-      <Button onClick={handlePop} disabled={data.length === 0}>
-        Pop
-      </Button>
+      <ButtonWapper>
+        <Button 
+          onClick={handlePush} 
+          disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0)} 
+          rightImg={`${process.env.PUBLIC_URL}/images/add-circle.svg`}>
+          Push
+        </Button>
+        <Button 
+          onClick={handlePop} 
+          disabled={data.length === 0}
+          rightImg={`${process.env.PUBLIC_URL}/images/minus-circle.svg`}>
+          Pop
+        </Button>
+      </ButtonWapper>
+
     </StyleCanvasUI>
   );
 };

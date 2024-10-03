@@ -43,9 +43,8 @@ const StackBox = styled.div`
   border: 10px solid #ddd;
   border-top-color: transparent;
   position: relative;
-  width: 231px;
-  height: 700px;
-  overflow-x: visible;
+  height: 500px;
+  padding: 0 20px;
   overflow-y: auto;
   align-items: center;
 `;

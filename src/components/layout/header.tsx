@@ -51,7 +51,7 @@ const SubtitleWapper = styled.div`
 
 const Subtitle = styled.div<{ theme: string }>`
     font-size: 20px;
-    color: #DEE0DE;
+    color: #FFFFFF;
     user-select: none;
 `;
 
