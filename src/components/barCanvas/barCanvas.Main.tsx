@@ -24,10 +24,10 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, transformedData, xSc
         const barHeight = yMax - (yScale(d) ?? 0);
         const barX = (xScale(index.toString()) ?? 0) + (xScale.bandwidth() - barWidth) / 2;
         const barY = yMax - barHeight;
-        const fill = data[index].focus === 'active' ? '#F5005A'
-              : data[index].focus === 'completed' ? '#00FF00'   
-              : data[index].focus === 'highlight' ? '#0000FF' 
-              : theme === 'light' ? '#15202b' : '#ffffff';
+        const fill = data[index].focus === 'active' ? '#FF90B9'
+              : data[index].focus === 'completed' ? '#90FF90'   
+              : data[index].focus === 'highlight' ? '#A2A2FF' 
+              : theme === 'light' ? '#CDCDCD' : '#ffffff';
 
         return (
           <React.Fragment key={index}>
@@ -46,7 +46,7 @@ const BarCanvasMain: React.FC<BarComponentProps> = ({ data, transformedData, xSc
               y={barY + barHeight - 10}
               fontSize="24px"
               textAnchor="middle"
-              fill={theme === 'light' ? '#ffffff' : '#15202b'}
+              fill={theme === 'light' ? '#15202b' : '#15202b'}
             >
               {data[index].data}
             </text>

@@ -13,7 +13,7 @@ const StyleCanvasUI = styled.div`
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 1%;
+    gap: 30px;
     position: relative;
     row-gap: 20px;
     padding-bottom: 10px;
@@ -123,9 +123,10 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
                 handleKeyPress={handleKeyPress}
                 isValidBtnAdd={isValidBtnAdd}
             />
-            <Button onClick={onclickBtnReset} disabled={!isValidBtnReset}>Reset</Button>
-            <Button onClick={onclickBtnRandom} disabled={!isValidBtnRandom}>Random</Button>
-            <Button onClick={onclickBtnStart} disabled={!isValidBtnStart}>Start</Button>
+            <Button onClick={onclickBtnStart} disabled={!isValidBtnStart} rightImg={`${process.env.PUBLIC_URL}/images/play-button.svg`}>Start</Button>
+            <Button onClick={onclickBtnRandom} disabled={!isValidBtnRandom} rightImg={`${process.env.PUBLIC_URL}/images/shuffle-button.svg`}>Random</Button>
+            <Button onClick={onclickBtnReset} disabled={!isValidBtnReset} rightImg={`${process.env.PUBLIC_URL}/images/reset-button.svg`}>Reset</Button>
+
             <RadioContainer>
                 <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" />
                 <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" />

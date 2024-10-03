@@ -12,19 +12,19 @@ const InputContainer = styled.div`
 const Input = styled.input<{$isValidBtnAdd: boolean, theme: string}>`
     width: 100%;
     padding: 1rem 4rem 1rem 2rem;
-    border: 1px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? 'green' : 'red'};
+    border: 1px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? '#54FF54' : '#FF5454'};
     background-color: ${({ theme }) => (theme === 'light' ? '#ffffff' : '#15202b')};
     border-radius: 50px;
     color: ${({ theme }) => (theme === 'light' ? 'black' : 'white')};
     font-size: 16px;
-    outline: 2px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? 'green' : 'red'};
+    outline: 2px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? '#54FF54' : '#FF5454'};
 
     &::placeholder {
         color: ${({ theme }) => (theme === 'light' ? 'black' : 'white')};
     }
 
     &:focus {
-        outline: 4px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? 'green' : 'red'};;
+        outline: 4px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? '#54FF54' : '#FF5454'};;
     }
 `;
 
