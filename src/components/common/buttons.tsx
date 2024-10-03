@@ -1,25 +1,20 @@
 import React from "react";
+import { ReactSVG } from "react-svg";
 import styled from "styled-components";
 
-interface ButtonProps {
-    onClick: () => void;
-    disabled?: boolean;
-    children: React.ReactNode;
-}
-
-const StyledButton = styled.button`
+const ButtonWapper = styled.button`
   display: flex;
-  justify-content: center;
-  width: 10%;
+  justify-content: space-evenly;
+  width: 180px;
   min-width: 120px;
   min-height: 42px;
-  padding: 1%;
+  padding: 15px 10px;
   background-color: ${(props) => (props.disabled ? "#ccc" : "#007bff")};
   color: #fff;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: ${(props) => (props.disabled ? "normal" : "pointer")};
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: ${(props) => (props.disabled ? "" : "pointer")};
   transition: background-color 0.3s;
   align-items: center;
   user-select: none;
@@ -29,11 +24,34 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button: React.FC<ButtonProps> = ({ onClick, disabled = false, children }) => {
+const RightImgWapper = styled.div`
+  right: 10%;
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  svg path {
+      stroke: #fff;
+  }
+`;
+
+interface ButtonProps {
+  onClick: () => void;
+  disabled?: boolean;
+  rightImg : string;
+  children: React.ReactNode;
+}
+
+const Button: React.FC<ButtonProps> = ({ onClick, disabled = false, children, rightImg }) => {
   return (
-    <StyledButton onClick={onClick} disabled={disabled}>
+    <ButtonWapper onClick={onClick} disabled={disabled}>
       {children}
-    </StyledButton>
+      <RightImgWapper>
+        <ReactSVG src={rightImg} /> 
+      </RightImgWapper>
+    </ButtonWapper>
   );
 };
 
