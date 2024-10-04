@@ -42,7 +42,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     });
   };
 
-  const edgeMouseDown = (e: React.PointerEvent, eventNodes: [Node, Node], link: Link) => {
+  const edgeMouseDown = (e: React.PointerEvent | TouchEvent, eventNodes: [Node, Node], link: Link) => {
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
     edgeEdit.current = true;
@@ -55,8 +55,19 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     draggingEdgeRef.current = edge;
     isDragging.current = true;
 
-    const newCx = e.clientX;
-    const newCy = e.clientY - headerHeight;
+    let new_x: number = 0;
+    let new_y: number = 0;
+    
+    if (e instanceof PointerEvent) {
+      new_x = e.clientX;
+      new_y = e.clientY;
+    } else if (e instanceof TouchEvent && e.touches.length > 0) {
+      new_x = e.touches[0].clientX;
+      new_y = e.touches[0].clientY;
+    }
+
+    const newCx = new_x;
+    const newCy = new_y - headerHeight;
     
     if (draggingEdgeRef.current) {
       setDraggingEdge({
@@ -89,13 +100,24 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     isDragging.current = true;
   };
 
-  const edgeMouseMove = (e: PointerEvent) => {
+  const edgeMouseMove = (e: PointerEvent | TouchEvent) => {
     console.log('bye');
 
     if (!isDragging.current) return;
 
-    const newCx = e.clientX;
-    const newCy = e.clientY - headerHeight;
+    let new_x: number = 0;
+    let new_y: number = 0;
+    
+    if (e instanceof PointerEvent) {
+      new_x = e.clientX;
+      new_y = e.clientY;
+    } else if (e instanceof TouchEvent && e.touches.length > 0) {
+      new_x = e.touches[0].clientX;
+      new_y = e.touches[0].clientY;
+    }
+
+    const newCx = new_x;
+    const newCy = new_y - headerHeight;
 
     if (draggingEdgeRef.current) {
       setDraggingEdge({
@@ -106,8 +128,20 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     }
   };
 
-  const edgeMouseUp = (e: PointerEvent) => {
-    const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight, radius: 50, text:'', focus: 'inactive' };
+  const edgeMouseUp = (e: PointerEvent | TouchEvent) => {
+
+    let new_x: number = 0;
+    let new_y: number = 0;
+    
+    if (e instanceof PointerEvent) {
+      new_x = e.clientX;
+      new_y = e.clientY;
+    } else if (e instanceof TouchEvent && e.touches.length > 0) {
+      new_x = e.touches[0].clientX;
+      new_y = e.touches[0].clientY;
+    }
+
+    const newNode: Node = { id: '-1', x: new_x, y: new_y - headerHeight, radius: 50, text:'', focus: 'inactive' };
 
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 

@@ -55,11 +55,11 @@ interface CustomCircleProps {
     $theme?: any;
     text: string;
     isRunning: boolean
-    onMouseDown: () => void;
+    onPointerDown: (e: React.PointerEvent) => void;
     onDelete?: (id: string) => void;
 }
 
-const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme, text, isRunning, onMouseDown, onDelete }) => {
+const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme, text, isRunning, onPointerDown: onMouseDown, onDelete }) => {
     const [showDelete, setShowDelete] = useState(false);
 
     let timer: NodeJS.Timeout | null = null;

@@ -1,39 +1,57 @@
 import { useEffect, useState, useCallback } from 'react';
+import useDeviceCheck from '../useDeviceCheck';
 
 interface SVGEventHandlers {
-  initialMouseMove?: (e: PointerEvent) => void;
-  initialMouseUp?: (e: PointerEvent) => void;
+  initialMouseMove?: (e: PointerEvent | TouchEvent) => void;
+  initialMouseUp?: (e: PointerEvent | TouchEvent) => void;
 }
 
 export const useSVGEvents = ({ initialMouseMove, initialMouseUp }: SVGEventHandlers) => {
-  const [mouseMoveHandler, setMouseMoveHandler] = useState<(e: PointerEvent) => void>(initialMouseMove || (() => {}));
-  const [mouseUpHandler, setMouseUpHandler] = useState<(e: PointerEvent) => void>(initialMouseUp || (() => {}));
+  const [mouseMoveHandler, setMouseMoveHandler] = useState<(e: PointerEvent | TouchEvent) => void>(initialMouseMove || (() => {}));
+  const [mouseUpHandler, setMouseUpHandler] = useState<(e: PointerEvent | TouchEvent) => void>(initialMouseUp || (() => {}));
 
-  const handleMouseMove = useCallback((e: PointerEvent) => {
+  const deviceType = useDeviceCheck();
+
+  const handleMouseMove = useCallback((e: PointerEvent | TouchEvent) => {
     if (mouseMoveHandler) {
       mouseMoveHandler(e);
     }
   }, [mouseMoveHandler]);
 
-  const handleMouseUp = useCallback((e: PointerEvent) => {
+  const handleMouseUp = useCallback((e: PointerEvent | TouchEvent) => {
     if (mouseUpHandler) {
       mouseUpHandler(e);
     }
   }, [mouseUpHandler]);
 
   useEffect(() => {
-    window.addEventListener('pointermove', handleMouseMove);
-    window.addEventListener('pointerup', handleMouseUp);
-    window.addEventListener('pointercancel', handleMouseUp);
+
+    if (deviceType === 'desktop') {
+      window.addEventListener('pointermove', handleMouseMove);
+      window.addEventListener('pointerup', handleMouseUp);
+      window.addEventListener('pointercancel', handleMouseUp);
+    }
+    else {
+      window.addEventListener('touchmove', handleMouseMove);
+      window.addEventListener('touchend', handleMouseUp);
+      window.addEventListener('touchcancel', handleMouseUp);
+    }
 
     return () => {
-      window.removeEventListener('pointermove', handleMouseMove);
-      window.removeEventListener('pointerup', handleMouseUp);
-      window.removeEventListener('pointercancel', handleMouseUp);
+      if (deviceType === 'desktop') {
+        window.removeEventListener('pointermove', handleMouseMove);
+        window.removeEventListener('pointerup', handleMouseUp);
+        window.removeEventListener('pointercancel', handleMouseUp);
+      }
+      else {
+        window.removeEventListener('touchmove', handleMouseMove);
+        window.removeEventListener('touchend', handleMouseUp);
+        window.removeEventListener('touchcancel', handleMouseUp);
+      }
     };
-  }, [handleMouseMove, handleMouseUp]);
+  }, [handleMouseMove, handleMouseUp, deviceType]);
 
-  const updateHandlers = (newMouseMoveHandler?: (e: PointerEvent) => void, newMouseUpHandler?: (e: PointerEvent) => void) => {
+  const updateHandlers = (newMouseMoveHandler?: (e: PointerEvent | TouchEvent) => void, newMouseUpHandler?: (e: PointerEvent | TouchEvent) => void) => {
     setMouseMoveHandler(() => newMouseMoveHandler);
     setMouseUpHandler(() => newMouseUpHandler);
   };
