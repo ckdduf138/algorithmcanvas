@@ -43,26 +43,34 @@ const HomePage = () => {
     const { theme } = useTheme();
 
     const home_onSearch = (query: string) => {
-        const lowerCaseQuery = query.toLowerCase();
+        const lowerCaseQuery = query.toLowerCase().trim().replace(/\s+/g, '').replace(/-/g, '');
+        
+        console.log(lowerCaseQuery);
         const exactMatchBoxes = boxes.filter(box => box.title.toLowerCase() === lowerCaseQuery);
-    
+        
         if (exactMatchBoxes.length > 0) {
             setFilteredBoxes(exactMatchBoxes);
-        } else {
-            const filtered = boxes.filter(box =>{
-                const titleLikeMatch = RegExp(query.split("").join(".*?"), "i").test(box.title);
-                const tagLikeMatch = box.tags.some(tag => {
-                    return RegExp(query.split("").join(".*?"), "i").test(tag) || RegExp(tag.split("").join(".*?"), "i").test(query);
-                })
-                return titleLikeMatch || tagLikeMatch
-            });
-            setFilteredBoxes(filtered);
         }
+
+        const filtered = boxes.filter(box => {
+            const processedTags = box.tags.map(tag => 
+                tag.toLowerCase().replace(/\s+/g, '').replace(/-/g, '')
+            );
+    
+            const titleMatch = box.title.toLowerCase().includes(lowerCaseQuery);
+            const tagMatch = processedTags.some(tag => tag.includes(lowerCaseQuery));
+    
+            return titleMatch || tagMatch;
+        });
+    
+        setFilteredBoxes(filtered);
     };
+
     const handleTagClick = (tag: string) => {
         setQuery(tag);
         home_onSearch(tag);
     };
+    
     return (
         <Layout subTitle=''>
             <HomeSearch>
