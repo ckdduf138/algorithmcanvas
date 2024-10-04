@@ -33,7 +33,9 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
     isDragging.current = true;
   };
 
-  const dragMouseMove = (e: MouseEvent) => {
+  const dragMouseMove = (e: PointerEvent) => {
+    console.log('hi');
+
     if (!isDragging.current) return;
 
     const newCx = e.clientX;
@@ -55,13 +57,17 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
   };
 
   const dragMouseUp = useCallback(() => {
+    console.log('hiii');
+
     setDraggingCircle(null);
     setDraggingNode(null);
 
     draggingCircleRef.current = null;
     draggingNodeRef.current = null;
     isDragging.current = false;
-  },[]);
+
+    updateHandlers(() => {}, () => {});
+  },[updateHandlers]);
 
   const handleDrop = useCallback(() => {
     if (!draggingCircleRef.current) return;

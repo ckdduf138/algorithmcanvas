@@ -5,7 +5,6 @@ import { useWindowSize } from '../../hooks/getWindowSize';
 import { CirclePosition, EdgePosition, Link, Node, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
 import Tooltip from '../common/tooltip';
 import EdgeToggle from './edgeToggle';
-import { useSVGEvents } from '../../hooks/graph/useSvgEvents';
 import { useTheme } from '../../context/themeContext';
 import { generateUUID } from '../../utils/common';
 import CustomLine from './customLine';
@@ -49,11 +48,6 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 ) => {
   const { width, height } = useWindowSize();
 
-  const { svgRef, handleMouseMove, handleMouseUp } = useSVGEvents({
-    initialMouseMove: () => {},
-    initialMouseUp: () => {},
-  });
-
   const {theme} = useTheme();
 
   const [tooltip, setTooltip] = useState<{ visible: boolean; position: { x: number; y: number }; text: string; } | null>(null);
@@ -80,15 +74,12 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const handleMouseOutEdge = () => {
     setTooltip(null);
   };
-
+  
   return (
     <GraphCanvasContainer>
       <GraphCanvasWapper 
-        ref={svgRef}
         width={width} 
-        height={adjustedHeight} 
-        onMouseMove={() => handleMouseMove} 
-        onMouseUp={() => handleMouseUp}>
+        height={adjustedHeight} >
 
         {/* 생성 중인 간선 */}
         {draggingEdge && (
@@ -119,7 +110,8 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
         {/* 복사용 노드 */}
         <Circle cx={width / 3 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme} $focusStatus='inactive'
-          onMouseDown={() => {
+          onPointerDown ={() => {
+            console.log(23);
             if (!isRunning.current) {handleMouseDown({ id: generateUUID(), cx: (width / 3) * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius });
           }}}
           onMouseOver={() => handleMouseOverNode(width / 3 * 1, adjustedHeight - NodeRadius * 2)}

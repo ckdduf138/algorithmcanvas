@@ -42,7 +42,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     });
   };
 
-  const edgeMouseDown = (e: React.MouseEvent<SVGElement>, eventNodes: [Node, Node], link: Link) => {
+  const edgeMouseDown = (e: React.PointerEvent, eventNodes: [Node, Node], link: Link) => {
     updateHandlers(edgeMouseMove, edgeMouseUp);
 
     edgeEdit.current = true;
@@ -89,7 +89,9 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     isDragging.current = true;
   };
 
-  const edgeMouseMove = (e: MouseEvent) => {
+  const edgeMouseMove = (e: PointerEvent) => {
+    console.log('bye');
+
     if (!isDragging.current) return;
 
     const newCx = e.clientX;
@@ -104,7 +106,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     }
   };
 
-  const edgeMouseUp = (e: MouseEvent) => {
+  const edgeMouseUp = (e: PointerEvent) => {
     const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight, radius: 50, text:'', focus: 'inactive' };
 
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
@@ -133,6 +135,8 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     edgeNodes.current = null;
     draggingEdgeRef.current = null;
     isDragging.current = false;
+
+    updateHandlers(() => {}, () => {});
   };
 
   return {

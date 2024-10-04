@@ -63,8 +63,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   const CustomNode: React.FC<{ node: Node }> = ({ node }) => {  
     const foundNodeData: Node | undefined = nodeGraphData.nodes.find(nodes => nodes.id === node.id);
 
-    const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
-      e.stopPropagation();
+    const handleMouseDown = () => {
 
       if(isRunning.current) return;
 
@@ -118,7 +117,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
     if (!sourceNode || !targetNode) return null;
 
-    const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
+    const handleMouseDown = (e: React.PointerEvent) => {
       e.stopPropagation();
       
       if(isRunning.current) return;
@@ -172,7 +171,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         $theme={theme}
         focusStatus={link.focus}
         delay={delayRef.current}
-        onMouseDown={handleMouseDown}
+        onPointerDown={handleMouseDown}
         setWeight={setWeight}
         arrowId='arrowhead'
       />

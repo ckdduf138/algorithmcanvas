@@ -108,14 +108,14 @@ interface CustomLineProps {
     isNegativeWeightAllowed: boolean;
     setWeight?: (newWeight: number) => void;
     $theme: string;
-    onMouseDown?: (e: React.MouseEvent<SVGElement>) => void;
+    onPointerDown?: (e: React.PointerEvent) => void;
     focusStatus?: EdgeFocusStatus;
     delay?: number;
     arrowId: string;
 }
 
 const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, direction = false, $theme, weight, isNegativeWeightAllowed, arrowId,
-    setWeight, dashed = false, onMouseDown, focusStatus = 'inactive', delay = 500 }
+    setWeight, dashed = false, onPointerDown, focusStatus = 'inactive', delay = 500 }
 ) => {
     const lineRef = useRef<SVGLineElement>(null);
     const [inputValue, setInputValue] = useState("");
@@ -216,7 +216,7 @@ const CustomLine: React.FC<CustomLineProps> = ({ x1, y1, x2, y2, direction = fal
                 $focusStatus={focusStatus} 
                 $theme={$theme}
                 $dashed={dashed}
-                onMouseDown={onMouseDown}
+                onPointerDown={onPointerDown}
             />
 
             {/* 화살표 */}

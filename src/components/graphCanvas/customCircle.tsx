@@ -44,8 +44,8 @@ const CircleText = styled.text<{$theme: string}>`
     font-size: 32px;
     dominant-baseline: middle;
     text-anchor: middle;
-    pointer-events: none;
     user-select: none;
+    pointer-events: none;
 `;
 
 interface CustomCircleProps {
@@ -55,7 +55,7 @@ interface CustomCircleProps {
     $theme?: any;
     text: string;
     isRunning: boolean
-    onMouseDown?: (e: React.MouseEvent<SVGElement>) => void;
+    onMouseDown: () => void;
     onDelete?: (id: string) => void;
 }
 
@@ -99,9 +99,9 @@ const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme
                 id={id} 
                 r={r} 
                 $theme={$theme}
-                onMouseDown={onMouseDown}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+                onPointerDown={onMouseDown}
+                onPointerEnter={handleMouseEnter}
+                onPointerLeave={handleMouseLeave}
             />
             <CircleText x={0} y={0} $theme={$theme}>{text}</CircleText>
             <DeleteButton $show={showDelete} onClick={handleDeleteClick}>
