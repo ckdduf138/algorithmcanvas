@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Button from "../common/buttons";
-import RadioButton from "../common/radioButton";
 import DelaySlider from "../common/delaySlider";
 import InputBox from "../common/InputBox";
+import SegmentedControl from "../common/segmentedControl";
 
 const StyleCanvasUI = styled.div`
     width: 100%;
@@ -21,10 +21,6 @@ const StyleCanvasUI = styled.div`
     padding-bottom: 2%;
 `;
 
-const RadioContainer = styled.div`
-    display: flex;
-`;
-
 interface CanvasUIProps {
     handleAdd: (inputValue: string) => void;
     handleReset: () => void;
@@ -37,7 +33,7 @@ interface CanvasUIProps {
 const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleRandom, handleDelay }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [dataLength, setDataLength] = useState<number>(0);
-    const [isAscending, setIsAscending] = useState<boolean>(false);
+    const [isAscending, setIsAscending] = useState<string>('asc');
 
     const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
     const [isValidBtnReset, setIsValidBtnReset] = useState<boolean>(false);
@@ -97,10 +93,9 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
         setIsValidBtnStart(true);
     };
     
-    const handleSetSort = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const sortOrder = event.target.value as "asc" | "desc";
-        setSortOrder(sortOrder);
-        setIsAscending(sortOrder === "asc");
+    const handleSetSort = (value: string) => {
+        setSortOrder(value as "asc" | "desc");
+        setIsAscending(value);
     };
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -112,6 +107,11 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     const handleDelayChange = (value: number) => {
         handleDelay(value);
     };
+
+    const options = [
+        { value: 'asc', label: '오름차순' },
+        { value: 'desc', label: '내림차순' },
+      ];
 
     return (
         <StyleCanvasUI>
@@ -127,10 +127,8 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
             <Button onClick={onclickBtnRandom} disabled={!isValidBtnRandom} rightImg={`${process.env.PUBLIC_URL}/images/shuffle-button.svg`}>Random</Button>
             <Button onClick={onclickBtnReset} disabled={!isValidBtnReset} rightImg={`${process.env.PUBLIC_URL}/images/reset-button.svg`}>Reset</Button>
 
-            <RadioContainer>
-                <RadioButton value="asc" checked={isAscending} onChange={handleSetSort} label="오름차순" />
-                <RadioButton value="desc" checked={!isAscending} onChange={handleSetSort} label="내림차순" />
-            </RadioContainer>
+            <SegmentedControl options={options} selectedValue={isAscending} onChange={handleSetSort} />
+
             <DelaySlider onDelayChange={handleDelayChange}/>            
         </ StyleCanvasUI>
     );

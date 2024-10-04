@@ -8,7 +8,7 @@ import BarCanvasUI from '../../components/barCanvas/barCanvas.UI';
 
 const QuickSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const delayRef = useRef(500);
 
     const handleAdd = useAdd(setBarGraphData);
