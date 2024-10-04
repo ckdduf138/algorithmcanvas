@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { BoxProps, tagColors } from '../../utils/box';
+import { algorithmTypes, BoxProps, tagColors } from '../../utils/box';
 
 // box
 const Flip = styled.div`
@@ -15,7 +15,7 @@ const Flip = styled.div`
     justify-content: center;
 `;
 
-const BoxWapper = styled.div<{$isTurn: boolean}>`
+const BoxWapper = styled.div<{$isTurn: boolean, $algorithmType: string}>`
     display: inline-block;
     width: calc(100% - 8px);
     height: calc(100% - 8px);
@@ -38,7 +38,7 @@ const BoxWapper = styled.div<{$isTurn: boolean}>`
         border-radius: 12px;
         z-index: -1;
         padding: 0;
-        background: linear-gradient(#0019FF, #00C2FF);
+        background: ${({ $algorithmType }) => `linear-gradient(${algorithmTypes[$algorithmType][0]}, ${algorithmTypes[$algorithmType][1]})`};
         transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
     }
@@ -80,18 +80,20 @@ const BackBox = styled.div`
 const BoxTitle = styled.div`
     display: flex;
     width: 100%;
-    font-size: 26px;
     padding: 8px 0;
     justify-content: center;
+
+    // text
+    font-size: 26px;
+    font-weight: 600;
 `;
 
 const BoxSubTitle = styled.div`
     display: flex;
     width: 90%;
 
-    //text
-    font-style: normal;
-    font-weight: 700;
+    // text
+    font-weight: 600;
     font-size: 18px;
     color: #1E1E1E;
 `;
@@ -114,11 +116,14 @@ const TagParent = styled.div`
 `;
 
 const Tag = styled.span<{ color: string }>`
-    font-size: 18px;
     background-color: ${({ color }) => color || '#F0F1F2'};
-    color: #0062CD;
     border-radius: 8px;
     padding: 4px 8px;
+
+    // text
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
 `;
 
 const BoxUI = styled.div`
@@ -154,7 +159,7 @@ const BoxDescription = styled.div`
     border-radius: 10%;
 `;
 
-const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title, imgSrc, gifSrc, tags, link, description, onTagClick }) => {
+const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title, algorithmType, imgSrc, gifSrc, tags, link, description, onTagClick }) => {
     const [isFront, setIsFront] = useState(true);
     const [isHover, setIsHover] = useState(false);
 
@@ -170,7 +175,7 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
 
     return (
         <Flip>
-            <BoxWapper $isTurn={isFront} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+            <BoxWapper $isTurn={isFront} $algorithmType={algorithmType} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
 
                 <FrontBox>
                     <BoxTitle>{title}</BoxTitle>
