@@ -18,7 +18,6 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
   const headerHeight = height * 0.1;
 
   const handleMouseDown = (circle: CirclePosition) => {
-    console.log('handleMouseDown');
     updateHandlers(dragMouseMove, handleDrop);
     
     setDraggingCircle(circle);
@@ -27,7 +26,6 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
   };
 
   const handleMouseDownNode = (nodeData: Node) => {
-    console.log('handleMouseDownNode');
     updateHandlers(dragMouseMove, dragMouseUp);
 
     setDraggingNode(nodeData);
@@ -35,24 +33,13 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
     isDragging.current = true;
   };
 
-  const dragMouseMove = (e: PointerEvent | TouchEvent) => {
-    console.log('dragMouseMove');
+  const dragMouseMove = (e: PointerEvent) => {
+    console.log('hi');
 
     if (!isDragging.current) return;
 
-    let new_x: number = 0;
-    let new_y: number = 0;
-    
-    if (e instanceof PointerEvent) {
-      new_x = e.clientX;
-      new_y = e.clientY;
-    } else if (e instanceof TouchEvent && e.touches.length > 0) {
-      new_x = e.touches[0].clientX;
-      new_y = e.touches[0].clientY;
-    }
-
-    const newCx = new_x;
-    const newCy = new_y - headerHeight;
+    const newCx = e.clientX;
+    const newCy = e.clientY - headerHeight;
 
     if (draggingCircleRef.current) {
       draggingCircleRef.current.cx = newCx;
@@ -70,7 +57,7 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
   };
 
   const dragMouseUp = useCallback(() => {
-    console.log('dragMouseUp');
+    console.log('hiii');
 
     setDraggingCircle(null);
     setDraggingNode(null);
@@ -83,7 +70,6 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
   },[updateHandlers]);
 
   const handleDrop = useCallback(() => {
-    console.log('handleDrop');
     if (!draggingCircleRef.current) return;
 
     const newNode: Node = {

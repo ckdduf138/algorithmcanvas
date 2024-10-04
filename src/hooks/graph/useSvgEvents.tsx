@@ -1,57 +1,39 @@
 import { useEffect, useState, useCallback } from 'react';
-import useDeviceCheck from '../useDeviceCheck';
 
 interface SVGEventHandlers {
-  initialMouseMove?: (e: PointerEvent | TouchEvent) => void;
-  initialMouseUp?: (e: PointerEvent | TouchEvent) => void;
+  initialMouseMove?: (e: PointerEvent) => void;
+  initialMouseUp?: (e: PointerEvent) => void;
 }
 
 export const useSVGEvents = ({ initialMouseMove, initialMouseUp }: SVGEventHandlers) => {
-  const [mouseMoveHandler, setMouseMoveHandler] = useState<(e: PointerEvent | TouchEvent) => void>(initialMouseMove || (() => {}));
-  const [mouseUpHandler, setMouseUpHandler] = useState<(e: PointerEvent | TouchEvent) => void>(initialMouseUp || (() => {}));
+  const [mouseMoveHandler, setMouseMoveHandler] = useState<(e: PointerEvent) => void>(initialMouseMove || (() => {}));
+  const [mouseUpHandler, setMouseUpHandler] = useState<(e: PointerEvent) => void>(initialMouseUp || (() => {}));
 
-  const deviceType = useDeviceCheck();
-
-  const handleMouseMove = useCallback((e: PointerEvent | TouchEvent) => {
+  const handleMouseMove = useCallback((e: PointerEvent) => {
     if (mouseMoveHandler) {
       mouseMoveHandler(e);
     }
   }, [mouseMoveHandler]);
 
-  const handleMouseUp = useCallback((e: PointerEvent | TouchEvent) => {
+  const handleMouseUp = useCallback((e: PointerEvent) => {
     if (mouseUpHandler) {
       mouseUpHandler(e);
     }
   }, [mouseUpHandler]);
 
   useEffect(() => {
-
-    if (deviceType === 'desktop') {
-      window.addEventListener('pointermove', handleMouseMove);
-      window.addEventListener('pointerup', handleMouseUp);
-      window.addEventListener('pointercancel', handleMouseUp);
-    }
-    else {
-      window.addEventListener('touchmove', handleMouseMove);
-      window.addEventListener('touchend', handleMouseUp);
-      window.addEventListener('touchcancel', handleMouseUp);
-    }
+    window.addEventListener('pointermove', handleMouseMove);
+    window.addEventListener('pointerup', handleMouseUp);
+    window.addEventListener('pointercancel', handleMouseUp);
 
     return () => {
-      if (deviceType === 'desktop') {
-        window.removeEventListener('pointermove', handleMouseMove);
-        window.removeEventListener('pointerup', handleMouseUp);
-        window.removeEventListener('pointercancel', handleMouseUp);
-      }
-      else {
-        window.removeEventListener('touchmove', handleMouseMove);
-        window.removeEventListener('touchend', handleMouseUp);
-        window.removeEventListener('touchcancel', handleMouseUp);
-      }
+      window.removeEventListener('pointermove', handleMouseMove);
+      window.removeEventListener('pointerup', handleMouseUp);
+      window.removeEventListener('pointercancel', handleMouseUp);
     };
-  }, [handleMouseMove, handleMouseUp, deviceType]);
+  }, [handleMouseMove, handleMouseUp]);
 
-  const updateHandlers = (newMouseMoveHandler?: (e: PointerEvent | TouchEvent) => void, newMouseUpHandler?: (e: PointerEvent | TouchEvent) => void) => {
+  const updateHandlers = (newMouseMoveHandler?: (e: PointerEvent) => void, newMouseUpHandler?: (e: PointerEvent) => void) => {
     setMouseMoveHandler(() => newMouseMoveHandler);
     setMouseUpHandler(() => newMouseUpHandler);
   };

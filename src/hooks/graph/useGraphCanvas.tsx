@@ -63,8 +63,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   const CustomNode: React.FC<{ node: Node }> = ({ node }) => {  
     const foundNodeData: Node | undefined = nodeGraphData.nodes.find(nodes => nodes.id === node.id);
 
-    const handlePointerDown = (e: React.PointerEvent) => {
-      e.preventDefault();
+    const handleMouseDown = () => {
 
       if(isRunning.current) return;
 
@@ -74,7 +73,6 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 
       node.focus = 'selected';
       node.text = 'node';
-
       setSeletedNode(node);
 
       if(selectedEdge) {
@@ -107,7 +105,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         $theme={theme} 
         text={node.text}
         isRunning={isRunning.current}
-        onPointerDown={handlePointerDown}
+        onMouseDown={handleMouseDown}
         onDelete={handleNodeDelete}
       />
     );
