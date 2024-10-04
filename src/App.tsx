@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import HomePage from './pages/page.home';
@@ -23,9 +23,18 @@ import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
 import NotFoundPage from './pages/page.notFound';
 
 import { ThemeProvider } from './context/themeContext';
+import useDeviceCheck from './hooks/useDeviceCheck';
 
 
 const App = () => {
+    const deviceType = useDeviceCheck();
+
+    useEffect(() => {
+        if (deviceType !== 'desktop') {
+            alert('이 웹사이트는 PC에 최적화되어 있습니다.');
+        }
+    }, [deviceType]);
+
     return (
         <ThemeProvider>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
