@@ -77,6 +77,7 @@ const DataCanvasUI: React.FC<DataCanvasUIProps> = ({
       <InputBox
         placeholder={sizePlaceholder}
         inputValue={maxSize.toString()}
+        title={sizePlaceholder}
         handleInputChange={handleMaxSizeChange}
         handleKeyPress={handleKeyPress}
         isValidBtnAdd={true}

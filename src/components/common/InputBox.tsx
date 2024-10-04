@@ -10,6 +10,7 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input<{$isValidBtnAdd: boolean, theme: string}>`
+    position: relative;
     width: 100%;
     padding: 1rem 4rem 1rem 2rem;
     border: 1px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? '#54FF54' : '#FF5454'};
@@ -27,7 +28,6 @@ const Input = styled.input<{$isValidBtnAdd: boolean, theme: string}>`
         outline: 4px solid ${({ $isValidBtnAdd }) => $isValidBtnAdd ? '#54FF54' : '#FF5454'};;
     }
 `;
-
 
 const SvgButton = styled.button<{$isValidBtnAdd: boolean}>`
     position: absolute;
@@ -59,16 +59,29 @@ const SvgButton = styled.button<{$isValidBtnAdd: boolean}>`
     }
 `;
 
+const Title = styled.div<{$isValidBtnAdd: boolean, theme: string}>`
+    position: absolute;
+    left: 30px;
+    top: -22px;
+    background-color: ${({ theme }) => (theme === 'light' ? '#ffffff' : '#15202b')};
+    color: ${({ $isValidBtnAdd }) => ($isValidBtnAdd ? '#54FF54' : '#FF5454')};
+    
+    // text
+    font-size: 24px;
+    font-weight: 600;
+`;
+
 interface InputBoxProps {
     placeholder?: string;
     inputValue?: string;
+    title?: string;
     isValidBtnAdd: boolean;
     handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onclickBtnAdd?: () => void;
 }
 
-const InputBox: React.FC<InputBoxProps> = ({ placeholder, inputValue, isValidBtnAdd, handleInputChange, handleKeyPress, onclickBtnAdd }) => {
+const InputBox: React.FC<InputBoxProps> = ({ placeholder, inputValue, title, isValidBtnAdd, handleInputChange, handleKeyPress, onclickBtnAdd }) => {
     const { theme } = useTheme();
 
     return (
@@ -82,6 +95,13 @@ const InputBox: React.FC<InputBoxProps> = ({ placeholder, inputValue, isValidBtn
                 $isValidBtnAdd={isValidBtnAdd}
                 theme={theme}
             />
+
+            <Title 
+                $isValidBtnAdd={isValidBtnAdd} 
+                theme={theme}
+            >{title}
+            </Title>
+
             <SvgButton
                 onClick={isValidBtnAdd ? onclickBtnAdd : undefined}
                 $isValidBtnAdd={isValidBtnAdd}
