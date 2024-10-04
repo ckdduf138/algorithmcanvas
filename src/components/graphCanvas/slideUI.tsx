@@ -5,6 +5,7 @@ import Button from "../common/buttons";
 import DelaySlider from "../common/delaySlider";
 import { useTheme } from "../../context/themeContext";
 import SegmentedControl, { SegmentOption } from "../common/segmentedControl";
+import { ReactSVG } from "react-svg";
 
 const Container = styled.div<{ $isOpen : boolean, $height: number, $theme: string}>`
     display: flex;
@@ -30,12 +31,16 @@ const ToggleButton = styled.button<{$isOpen : boolean, $height: number, $theme: 
     color: ${(props) => (props.$theme === 'light' ? '#333333' : '#f0f0f0')};;
     background-color: ${(props) => (props.$theme === 'light' ? '#f0f0f0' : '#333333')};
     border: none;
-    border-radius: 30% 30% 0 0;;
+    border-radius: 30% 30% 0 0;
     padding: 2px 20px;
     cursor: pointer;
     transition: bottom 0.3s ease-in-out;
-    font-size: 20px;
     user-select: none;
+
+    svg path {
+        stroke: #D9D9D9;
+        fill: #D9D9D9;
+    }
 `;
 
 interface SlideUIProps {
@@ -75,25 +80,26 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, segmen
     return (
     <>
         <Container $isOpen={isOpen} $height={height * 0.13} $theme={theme}>
-            <Button 
-                onClick={onclickBtnReset} 
-                disabled={dataSize <= 0 || isRunning.current}
-                rightImg={`${process.env.PUBLIC_URL}/images/start-button.svg`}
-            >Reset
-            </Button>
-            
-            <Button 
-                onClick={onclickBtnRandom} 
-                disabled={isRunning.current}
-                rightImg={`${process.env.PUBLIC_URL}/images/start-button.svg`}
-            >Random
-            </Button>
             
             <Button 
                 onClick={onclickBtnStart} 
                 disabled={dataSize <= 0 || isRunning.current}
-                rightImg={`${process.env.PUBLIC_URL}/images/start-button.svg`}
+                rightImg={`${process.env.PUBLIC_URL}/images/play-button.svg`}
             >Start</Button>
+
+            <Button 
+                onClick={onclickBtnRandom} 
+                disabled={isRunning.current}
+                rightImg={`${process.env.PUBLIC_URL}/images/shuffle-button.svg`}
+            >Random
+            </Button>
+            
+            <Button 
+                onClick={onclickBtnReset} 
+                disabled={dataSize <= 0 || isRunning.current}
+                rightImg={`${process.env.PUBLIC_URL}/images/reset-button.svg`}
+            >Reset
+            </Button>
             
             {segmentedControl && options && selected &&
                 <SegmentedControl options={options} selectedValue={selected} onChange={handleChange} />
@@ -102,7 +108,7 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, segmen
             <DelaySlider onDelayChange={handleDelayChange}/> 
         </Container>
         <ToggleButton $isOpen={isOpen} $height={height * 0.23} $theme={theme} onClick={toggleOpen}>
-            {isOpen ?  '⮟' : '⮝'}
+            {isOpen ? <ReactSVG src={`${process.env.PUBLIC_URL}/images/caret-down.svg`}/>  : <ReactSVG src={`${process.env.PUBLIC_URL}/images/caret-up.svg`}/>}
         </ToggleButton>
     </>
     );
