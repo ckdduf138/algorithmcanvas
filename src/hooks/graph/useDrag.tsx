@@ -4,7 +4,9 @@ import { CirclePosition, Node, NodeGraphData } from '../../utils/graphData';
 import { useSVGEvents } from './useSvgEvents';
 import { generateUUID } from '../../utils/common';
 
-export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
+export const useDragCopy = (
+  setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>, setSeletedNode: React.Dispatch<React.SetStateAction<Node | null>>
+) => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);
   const [draggingNode, setDraggingNode] = useState<Node | null>(null);
 
@@ -33,7 +35,7 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
     isDragging.current = true;
   };
 
-  const dragMouseMove = (e: MouseEvent) => {
+  const dragMouseMove = (e: PointerEvent) => {
     if (!isDragging.current) return;
 
     const newCx = e.clientX;
@@ -61,10 +63,20 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
     draggingCircleRef.current = null;
     draggingNodeRef.current = null;
     isDragging.current = false;
-  },[]);
+
+    updateHandlers(() => {}, () => {});
+  },[updateHandlers]);
 
   const handleDrop = useCallback(() => {
     if (!draggingCircleRef.current) return;
+
+    setNodeGraphData((prevData) => ({
+      ...prevData,
+      nodes: prevData.nodes.map((node) => ({
+        ...node,
+        focus: 'inactive',
+      })),
+    }));
 
     const newNode: Node = {
       id: generateUUID(),
@@ -72,16 +84,18 @@ export const useDragCopy = (setNodeGraphData: React.Dispatch<React.SetStateActio
       y: draggingCircleRef.current.cy,
       radius: draggingCircleRef.current.radius,
       text: 'node',
-      focus: 'inactive'
+      focus: 'selected',
     };
-  
+
     setNodeGraphData((prevData) => ({
       ...prevData,
       nodes: [...prevData.nodes, newNode],
     }));
-  
+
+    setSeletedNode(newNode);
+
     dragMouseUp();
-  }, [setNodeGraphData, dragMouseUp]);
+  }, [setNodeGraphData, dragMouseUp, setSeletedNode]);
 
   return {
     draggingCircle,

@@ -28,7 +28,7 @@ const ToggleButton = styled.button<{$isOpen : boolean, $height: number, $theme: 
     bottom: ${(props) => (props.$isOpen ? props.$height + 'px' : '10%')};
     right: 1%;
     transform: translateX(-50%);
-    color: ${(props) => (props.$theme === 'light' ? '#333333' : '#f0f0f0')};;
+    color: ${(props) => (props.$theme === 'light' ? '#333333' : '#f0f0f0')};
     background-color: ${(props) => (props.$theme === 'light' ? '#f0f0f0' : '#333333')};
     border: none;
     border-radius: 30% 30% 0 0;
@@ -38,8 +38,8 @@ const ToggleButton = styled.button<{$isOpen : boolean, $height: number, $theme: 
     user-select: none;
 
     svg path {
-        stroke: #D9D9D9;
-        fill: #D9D9D9;
+        stroke: ${(props) => (props.$theme === 'light' ? '#000' : '#fff')};
+        fill: ${(props) => (props.$theme === 'light' ? '#000' : '#fff')};
     }
 `;
 

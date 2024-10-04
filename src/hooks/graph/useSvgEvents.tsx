@@ -1,45 +1,44 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 interface SVGEventHandlers {
-  initialMouseMove?: (e: MouseEvent) => void;  // 처음에 기본적으로 사용할 MouseMove
-  initialMouseUp?: (e: MouseEvent) => void;    // 처음에 기본적으로 사용할 MouseUp
+  initialMouseMove?: (e: PointerEvent) => void;
+  initialMouseUp?: (e: PointerEvent) => void;
 }
 
 export const useSVGEvents = ({ initialMouseMove, initialMouseUp }: SVGEventHandlers) => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [mouseMoveHandler, setMouseMoveHandler] = useState<(e: PointerEvent) => void>(initialMouseMove || (() => {}));
+  const [mouseUpHandler, setMouseUpHandler] = useState<(e: PointerEvent) => void>(initialMouseUp || (() => {}));
 
-  const [mouseMoveHandler, setMouseMoveHandler] = useState<(e: MouseEvent) => void>(initialMouseMove || (() => {}));
-  const [mouseUpHandler, setMouseUpHandler] = useState<(e: MouseEvent) => void>(initialMouseUp || (() => {}));
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: PointerEvent) => {
     if (mouseMoveHandler) {
       mouseMoveHandler(e);
     }
   }, [mouseMoveHandler]);
 
-  const handleMouseUp = useCallback((e: MouseEvent) => {
+  const handleMouseUp = useCallback((e: PointerEvent) => {
     if (mouseUpHandler) {
       mouseUpHandler(e);
     }
   }, [mouseUpHandler]);
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('pointermove', handleMouseMove);
+    window.addEventListener('pointerup', handleMouseUp);
+    window.addEventListener('pointercancel', handleMouseUp);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('pointermove', handleMouseMove);
+      window.removeEventListener('pointerup', handleMouseUp);
+      window.removeEventListener('pointercancel', handleMouseUp);
     };
-  }, [handleMouseMove, handleMouseUp]); // 수정된 부분
+  }, [handleMouseMove, handleMouseUp]);
 
-  const updateHandlers = (newMouseMoveHandler?: (e: MouseEvent) => void, newMouseUpHandler?: (e: MouseEvent) => void) => {
+  const updateHandlers = (newMouseMoveHandler?: (e: PointerEvent) => void, newMouseUpHandler?: (e: PointerEvent) => void) => {
     setMouseMoveHandler(() => newMouseMoveHandler);
     setMouseUpHandler(() => newMouseUpHandler);
   };
 
   return {
-    svgRef,
     handleMouseMove,
     handleMouseUp,
     updateHandlers,

@@ -211,7 +211,6 @@ const MinimumSpanningTreePage: React.FC = () => {
       <GraphCanvas 
         nodeGraphDatas={nodeGraphDatas}
         draggingCircle={draggingCircle}
-        selectedNode={selectedNode}
         selectedEdge={selectedEdge}
         isWeighted={true}
         draggingEdge={draggingEdge}

@@ -148,7 +148,6 @@ const BFSPage: React.FC = () => {
       <GraphCanvas 
         nodeGraphDatas={nodeGraphDatas}
         draggingCircle={draggingCircle}
-        selectedNode={selectedNode}
         selectedEdge={selectedEdge}
         draggingEdge={draggingEdge}
         isWeighted={false}
