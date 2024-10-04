@@ -75,6 +75,7 @@ const HomePage = () => {
                             <Box
                                 key={index}
                                 title={box.title}
+                                algorithmType={box.algorithmType}
                                 imgSrc={box.imgSrc}
                                 gifSrc={box.gifSrc}
                                 tags={box.tags}
