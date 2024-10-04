@@ -44,8 +44,7 @@ const HomePage = () => {
 
     const home_onSearch = (query: string) => {
         const lowerCaseQuery = query.toLowerCase().trim().replace(/\s+/g, '').replace(/-/g, '');
-        
-        console.log(lowerCaseQuery);
+    
         const exactMatchBoxes = boxes.filter(box => box.title.toLowerCase() === lowerCaseQuery);
         
         if (exactMatchBoxes.length > 0) {

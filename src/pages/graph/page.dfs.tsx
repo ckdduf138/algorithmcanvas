@@ -140,7 +140,6 @@ const DFSPage: React.FC = () => {
       <GraphCanvas 
         nodeGraphDatas={nodeGraphDatas}
         draggingCircle={draggingCircle}
-        selectedNode={selectedNode}
         selectedEdge={selectedEdge}
         isWeighted={false}
         draggingEdge={draggingEdge}
