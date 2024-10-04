@@ -30,7 +30,6 @@ const BottomLine = styled.line`
 interface GraphCanvasProps {
   nodeGraphDatas: { nodes: Node[], links: Link[] };
   draggingCircle: CirclePosition | null;
-  selectedNode: Node | null;
   selectedEdge: boolean;
   isWeighted: boolean;
   draggingEdge: EdgePosition | null;
@@ -111,7 +110,6 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         {/* 복사용 노드 */}
         <Circle cx={width / 3 * 1} cy={adjustedHeight - NodeRadius - 10} r={NodeRadius} $theme={theme} $focusStatus='inactive'
           onPointerDown ={() => {
-            console.log(23);
             if (!isRunning.current) {handleMouseDown({ id: generateUUID(), cx: (width / 3) * 1, cy: adjustedHeight - NodeRadius - 10, radius: NodeRadius });
           }}}
           onMouseOver={() => handleMouseOverNode(width / 3 * 1, adjustedHeight - NodeRadius * 2)}

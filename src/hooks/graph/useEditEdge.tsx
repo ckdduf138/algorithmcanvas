@@ -90,8 +90,6 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
   };
 
   const edgeMouseMove = (e: PointerEvent) => {
-    console.log('bye');
-
     if (!isDragging.current) return;
 
     const newCx = e.clientX;

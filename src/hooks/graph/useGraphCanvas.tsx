@@ -13,11 +13,11 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
 ) => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
   const [selectedEdge, setSeletedEdge] = useState<boolean>(false);
-  const [selectedNode, setSeletedNode] = useState<Node | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
   const isWeightedRef = useRef(false);
 
-  const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode } = useDragCopy(setNodeGraphData);
+  const { draggingCircle, draggingNode, handleMouseDown, handleMouseDownNode } = useDragCopy(setNodeGraphData, setSelectedNode);
 
   const { draggingEdge, edgeMouseDown, createEdgeMouseDown  } = useEditEdge(nodeGraphData, setNodeGraphData, direction);
 
@@ -53,6 +53,8 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         links: updatedLinks
       };
     });
+
+    setSelectedNode(null);
   };
 
   const nodeGraphDatas = {
@@ -61,25 +63,37 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   };
 
   const CustomNode: React.FC<{ node: Node }> = ({ node }) => {  
-    const foundNodeData: Node | undefined = nodeGraphData.nodes.find(nodes => nodes.id === node.id);
-
     const handleMouseDown = () => {
 
       if(isRunning.current) return;
 
       ResetData();
 
-      if(!foundNodeData) return;
-
       node.focus = 'selected';
       node.text = 'node';
-      setSeletedNode(node);
+
+      setNodeGraphData(prevData => {
+        if (!prevData) return prevData;
+      
+        const updatedNodes = prevData.nodes.map((updateNode) => ({
+          ...updateNode,
+          focus: updateNode.id === node.id ? 'selected' : updateNode.focus,
+          text: updateNode.id === node.id ? 'node' : updateNode.text,
+        }));
+  
+        return {
+          ...prevData,
+          nodes: updatedNodes,
+        };
+      });
+      
+      setSelectedNode(node);
 
       if(selectedEdge) {
-        createEdgeMouseDown(foundNodeData, isWeightedRef.current);
+        createEdgeMouseDown(node, isWeightedRef.current);
       }
       else {
-        handleMouseDownNode(foundNodeData);
+        handleMouseDownNode(node);
       }
     };
 
@@ -118,8 +132,6 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     if (!sourceNode || !targetNode) return null;
 
     const handleMouseDown = (e: React.PointerEvent) => {
-      e.stopPropagation();
-      
       if(isRunning.current) return;
 
       ResetData();
@@ -243,7 +255,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   return {
     nodeGraphData,
     setNodeGraphData,
-    setSeletedNode,
+    setSeletedNode: setSelectedNode,
     nodeGraphDatas,
     draggingCircle,
     selectedEdge,

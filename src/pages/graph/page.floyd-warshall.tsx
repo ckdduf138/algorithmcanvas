@@ -16,7 +16,7 @@ const FloydWarshallPage: React.FC = () => {
   const nodeMap = useRef<Map<string, string>>(new Map());
 
   const { 
-    nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
+    nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, ResetData } 
     = useGraphCanvas(isRunning, delayRef, true, true);
 
@@ -181,7 +181,6 @@ const FloydWarshallPage: React.FC = () => {
       <GraphCanvas 
         nodeGraphDatas={nodeGraphDatas}
         draggingCircle={draggingCircle}
-        selectedNode={selectedNode}
         selectedEdge={selectedEdge}
         isWeighted={true}
         draggingEdge={draggingEdge}
