@@ -19,15 +19,29 @@ const StyledHeader = styled.header<{ theme: string }>`
 const HeadTitle = styled.div`
     display: flex;
     cursor: pointer;
-    font-size: 30px;
     user-select: none;
+
+    @media (max-width: 320px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const ColoredText = styled.div`
     display: flex;
+    font-size: 30px;
     width: 40px;
     justify-content: center;
     color: ${(props) => props.color || 'black'};
+
+    @media (max-width: 650px) {
+        width: 30px;
+        font-size: 20px;
+    }
+
+    @media (max-width: 480px) {
+        width: 20px;
+        font-size: 12px;
+    }
 `;
 
 const ToggleContainer = styled.div`
