@@ -136,7 +136,14 @@ const Label = styled.div`
   top: -50px;
 `;
 
-const QueueCanvas: React.FC<{ queue: string[];  isAdding: boolean; isRemoving: boolean }> = ({ queue, isAdding, isRemoving }) => {
+interface QueuecanvasProps {
+  queueRef: React.RefObject<HTMLDivElement>
+  queue: string[];
+  isAdding: boolean;
+  isRemoving: boolean
+};
+
+const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, isAdding, isRemoving }) => {
   const { theme } = useTheme();
 
   return (
@@ -146,7 +153,7 @@ const QueueCanvas: React.FC<{ queue: string[];  isAdding: boolean; isRemoving: b
         <ArrowLine />
       </ArrowLineWapper>
 
-      <QueueRow>
+      <QueueRow ref={queueRef}>
         {queue.length === 0 ? (
           <p>큐가 비어 있습니다.</p>
         ) : (
@@ -185,8 +192,8 @@ const QueueCanvas: React.FC<{ queue: string[];  isAdding: boolean; isRemoving: b
       </ArrowLineWapper>
 
       <BottomTextWapper>
-        <PUSH>PUSH</PUSH>
-        <POP>POP</POP>
+        <PUSH>Enqueue</PUSH>
+        <POP>Eequeque</POP>
       </BottomTextWapper>
     </QueueContainer>
   );

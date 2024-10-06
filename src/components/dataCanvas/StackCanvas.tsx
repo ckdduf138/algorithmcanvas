@@ -95,15 +95,18 @@ const Label = styled.div`
   top: -50px;
 `;
 
-const StackCanvas: React.FC<{ stack: string[]; isAdding: boolean; isRemoving: boolean }> = ({
-  stack,
-  isAdding,
-  isRemoving,
-}) => {
+interface StackCanvasProps {
+  stackRef: React.RefObject<HTMLDivElement>
+  stack: string[];
+  isAdding: boolean;
+  isRemoving: boolean
+};
+
+const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, isAdding, isRemoving }) => {
   const { theme } = useTheme();
   return (
     <StackContainer theme={theme}>
-      <StackBox>
+      <StackBox ref={stackRef}>
         <StackRow>
           {stack.length === 0 ? (
             <p>스택이 비어 있습니다.</p>
