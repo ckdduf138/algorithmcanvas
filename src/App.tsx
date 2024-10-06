@@ -47,12 +47,12 @@ const App = () => {
                     <Route path="stack" element={<StackPage />} />
 
                     {/* 정렬 */}
-                    <Route path="selection_sort" element={<SelectionSortPage />} />
-                    <Route path="insertion_sort" element={<InsertionSortPage />} />
-                    <Route path="bubble_sort" element={<BubbleSortPage />} />
-                    <Route path="merge_sort" element={<MergeSortPage />} />
-                    <Route path="heap_sort" element={<HeapSortPage />} />
-                    <Route path="quick_sort" element={<QuickSortPage />} />
+                    <Route path="selection-sort" element={<SelectionSortPage />} />
+                    <Route path="insertion-sort" element={<InsertionSortPage />} />
+                    <Route path="bubble-sort" element={<BubbleSortPage />} />
+                    <Route path="merge-sort" element={<MergeSortPage />} />
+                    <Route path="heap-sort" element={<HeapSortPage />} />
+                    <Route path="quick-sort" element={<QuickSortPage />} />
 
                     {/* 그래프 */}
                     <Route path="bfs" element={<BFSPage />} />
