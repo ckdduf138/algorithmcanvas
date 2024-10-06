@@ -24,7 +24,8 @@ import NotFoundPage from './pages/page.notFound';
 
 import { ThemeProvider } from './context/themeContext';
 import useDeviceCheck from './hooks/useDeviceCheck';
-
+// import HeapTreePage from './pages/dataStructure/page.heap-tree';
+// import ConvexHullPage from './pages/geometry/page.convex-hull';
 
 const App = () => {
     const deviceType = useDeviceCheck();
@@ -45,6 +46,7 @@ const App = () => {
                     {/* 자료구조 */}
                     <Route path="queue" element={<QueuePage />} />
                     <Route path="stack" element={<StackPage />} />
+                    {/* <Route path="heap-tree" element={<HeapTreePage />} /> */}
 
                     {/* 정렬 */}
                     <Route path="selection-sort" element={<SelectionSortPage />} />
@@ -61,6 +63,9 @@ const App = () => {
                     <Route path="bellman-ford" element={<BellmanFordPage />} />
                     <Route path="floyd-warshall" element={<FloydWarshallPage />} />
                     <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} />
+
+                    {/* 기하학 */}
+                    {/* <Route path="convex-hull" element={<ConvexHullPage />} /> */}
 
                     {/* 404 */}
                     <Route path="404" element={<NotFoundPage />} />

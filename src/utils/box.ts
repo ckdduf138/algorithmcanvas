@@ -2,6 +2,7 @@ export const algorithmTypes: { [key: string]: string[] } = {
     '자료구조': ['#F9B6FF', '#FFC499'],
     '정렬': ['#9AA4FF', '#95E4FF'],
     '그래프': ['#9AFFAA', '#FCFF7E'],
+    '기하학': ['#FFD3B6', '#F1E4D3'],
 };
 
 export const tagColors: { [key: string]: string } = {
@@ -19,6 +20,8 @@ export const tagColors: { [key: string]: string } = {
     '우선순위 큐': '#FFD580',
     '동적계획법': '#FFDAA5',
     '유니온-파인드': '#E1FF9E',
+    '기하학': '#FFD3B6',
+    '브루트 포스': '#D3D3D3'
 };
 
 export interface BoxProps {
@@ -50,6 +53,15 @@ export const boxes: BoxProps[] = [
         tags: ['자료구조', '후입선출'],
         link: 'stack',
         description: '스택에 대한 설명',
+    },
+    {
+        title: '힙 트리',
+        algorithmType: '자료구조',
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['자료구조', '우선순위 큐', '트리'],
+        link: 'heap-tree',
+        description: '힙 트리에 대한 설명',
     },
     {
         title: '선택정렬',
@@ -170,5 +182,14 @@ export const boxes: BoxProps[] = [
         link: 'minimum-spanning-tree',
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
         '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+    },
+    {
+        title: '볼록껍질',
+        algorithmType: '기하학',
+        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        tags: ['기하학', '브루트 포스'],
+        link: 'convex-hull',
+        description: '힙 트리에 대한 설명',
     },
 ];
