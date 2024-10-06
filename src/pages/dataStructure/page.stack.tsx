@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import StackCanvas from '../../components/dataCanvas/StackCanvas';
 import DataCanvasUI from '../../components/dataCanvas/DataCanvasUI';
@@ -10,12 +10,19 @@ const StackPage: React.FC = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
 
+  const stackRef = useRef<HTMLDivElement>(null);
+
   const handlePush = () => {
     if (!inputValue.trim()) {
       alert('추가할 데이터를 입력하세요.');
       return;
     }
     if (stack.length < stackSize || stackSize === 0) {
+
+      if(stackRef.current) {
+        stackRef.current.scrollTop = -stackRef.current.scrollHeight;
+      }
+      
       setStack(prevStack => {
         setIsAdding(true);
         return [...prevStack, inputValue];
@@ -31,8 +38,15 @@ const StackPage: React.FC = () => {
 
   const handlePop = () => {
     if (stack.length > 0) {
+
+      if(stackRef.current) {
+        stackRef.current.scrollTop = -stackRef.current.scrollHeight;
+      }
+
       setIsRemoving(true);
+
       const newStack = [...stack];
+
       setTimeout(() => {
         newStack.pop();
         setStack(newStack);
@@ -52,6 +66,7 @@ const StackPage: React.FC = () => {
   return (
     <Layout subTitle="스택(STACK)">
       <StackCanvas 
+        stackRef={stackRef}
         stack={stack}
         isAdding={isAdding}
         isRemoving={isRemoving}
