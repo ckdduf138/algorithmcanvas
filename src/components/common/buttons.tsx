@@ -8,7 +8,7 @@ const ButtonWapper = styled.button`
   width: 180px;
   min-width: 120px;
   min-height: 42px;
-  padding: 15px 10px;
+  padding: 10px;
   background-color: ${(props) => (props.disabled ? "#ccc" : "#007bff")};
   color: #fff;
   border: none;

@@ -192,7 +192,7 @@ const MinimumSpanningTreePage: React.FC = () => {
       ResetData();
       await handleKruskalStart();
     }
-    else if('Prim') {
+    else if(selectAlgorithm === 'Prim') {
       if(selectedNode) {
         await handlePrimStart(selectedNode.id);
       }
