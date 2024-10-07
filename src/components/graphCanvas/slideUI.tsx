@@ -80,7 +80,6 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, segmen
     return (
     <>
         <Container $isOpen={isOpen} $height={height * 0.13} $theme={theme}>
-            
             <Button 
                 onClick={onclickBtnStart} 
                 disabled={dataSize <= 0 || isRunning.current}

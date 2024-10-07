@@ -10,14 +10,17 @@ export const generateRandomNumbers = (min: number, max: number, number: number):
   return result;
 };
 
+// n -> log10(n) 변환
 export const getLogScale = (value: number) => {
     return Math.log10(value + 2);
 };
 
+// 거리 계산
 export const distance = (x1: number, y1: number, x2: number, y2: number) => {
   return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
 };
 
+// generate UUID
 export function generateUUID(): string {
   let d = new Date().getTime();
   let d2 = (performance && performance.now && (performance.now() * 1000)) || 0;
@@ -34,3 +37,8 @@ export function generateUUID(): string {
       return (c === 'x' ? r : ((r & 0x3) | 0x8)).toString(16);
   });
 }
+
+// get random int
+export const getRandomInt = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};

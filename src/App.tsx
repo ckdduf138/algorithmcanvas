@@ -25,7 +25,7 @@ import NotFoundPage from './pages/page.notFound';
 import { ThemeProvider } from './context/themeContext';
 import useDeviceCheck from './hooks/useDeviceCheck';
 // import HeapTreePage from './pages/dataStructure/page.heap-tree';
-// import ConvexHullPage from './pages/geometry/page.convex-hull';
+import ConvexHullPage from './pages/geometry/page.convex-hull';
 
 const App = () => {
     const deviceType = useDeviceCheck();
@@ -65,7 +65,7 @@ const App = () => {
                     <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} />
 
                     {/* 기하학 */}
-                    {/* <Route path="convex-hull" element={<ConvexHullPage />} /> */}
+                    <Route path="convex-hull" element={<ConvexHullPage />} />
 
                     {/* 404 */}
                     <Route path="404" element={<NotFoundPage />} />
