@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { NodeFocusStatus, NodeRadius } from '../../utils/graphData';
 
@@ -21,7 +21,6 @@ const getStrokeColor = (focusStatus: NodeFocusStatus, theme: string) => {
             return theme === 'light' ? '#d9d9d9' : '#333333';
     }
 };
-
 
 const DeleteButton = styled.g<{ $show: boolean }>`
     cursor: pointer;
@@ -60,8 +59,6 @@ interface CustomCircleProps {
 }
 
 const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme, text, showDeleteBtn = false, onMouseDown, onDelete }) => {
-    const [showDelete, setShowDelete] = useState(false);
-
     const handleDeleteClick = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation();
         
