@@ -54,35 +54,13 @@ interface CustomCircleProps {
     $focusStatus: NodeFocusStatus;
     $theme?: any;
     text: string;
-    isRunning: boolean
+    showDeleteBtn: boolean;
     onMouseDown: () => void;
     onDelete?: (id: string) => void;
 }
 
-const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme, text, isRunning, onMouseDown, onDelete }) => {
+const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme, text, showDeleteBtn = false, onMouseDown, onDelete }) => {
     const [showDelete, setShowDelete] = useState(false);
-
-    let timer: NodeJS.Timeout | null = null;
-
-    const handleMouseEnter = () => {
-        if(isRunning) return;
-        
-        if (timer) clearTimeout(timer);
-        
-        setShowDelete(true);
-
-        timer = setTimeout(() => {
-            setShowDelete(false);
-        }, 2000);
-    };
-
-    const handleMouseLeave = () => {
-        if (timer) clearTimeout(timer);
-
-        timer = setTimeout(() => {
-            setShowDelete(false);
-        }, 2000);
-    };
 
     const handleDeleteClick = (e: React.MouseEvent<SVGElement>) => {
         e.stopPropagation();
@@ -100,11 +78,9 @@ const CustomCircle: React.FC<CustomCircleProps> = ({ id, r, $focusStatus, $theme
                 r={r} 
                 $theme={$theme}
                 onPointerDown={onMouseDown}
-                onPointerEnter={handleMouseEnter}
-                onPointerLeave={handleMouseLeave}
             />
             <CircleText x={0} y={0} $theme={$theme}>{text}</CircleText>
-            <DeleteButton $show={showDelete} onClick={handleDeleteClick}>
+            <DeleteButton $show={showDeleteBtn} onClick={handleDeleteClick}>
                 <path d="M10 0C4.47715 0 0 4.47715 0 10C0 15.5229 4.47715 20 10 20C15.5229 20 20 15.5229 20 10C19.994 4.47961 15.5204 0.00597656 10 0ZM13.3333 12.1558C13.672 12.4675 13.6938 12.9947 13.3821 13.3333C13.0705 13.672 12.5433 13.6938 12.2046 13.3821C12.1877 13.3666 12.1714 13.3503 12.1558 13.3333L10 11.1783L7.845 13.3333C7.51395 13.653 6.98641 13.6439 6.66668 13.3128C6.3548 12.9899 6.3548 12.4779 6.66668 12.155L8.82168 10L6.66668 7.845C6.34695 7.51395 6.35613 6.98641 6.68719 6.66668C7.01012 6.3548 7.52207 6.3548 7.845 6.66668L10 8.82168L12.1558 6.66668C12.4675 6.32805 12.9947 6.30617 13.3333 6.61785C13.672 6.92953 13.6938 7.45672 13.3821 7.79535C13.3666 7.8123 13.3503 7.82855 13.3333 7.84418L11.1783 10L13.3333 12.1558Z" fill="#A9B1BC"/>
             </DeleteButton>
         </>
