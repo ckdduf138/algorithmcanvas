@@ -11,6 +11,8 @@ import SlideUI from '../../components/graphCanvas/slideUI';
 
 const MinimumSpanningTreePage: React.FC = () => {
   const [selectAlgorithm, setSelectAlgorithm] = useState('kruskal');
+  const [rendering, setRendering] = useState(false);
+
   const isRunning = useRef(false);
   const delayRef = useRef(500);
 
@@ -131,7 +133,7 @@ const MinimumSpanningTreePage: React.FC = () => {
     }
 
     isRunning.current = false;
-    setSeletedNode(null);
+    setRendering(!rendering);
   };
 
   const handlePrimStart = async (startNodeId: string) => {

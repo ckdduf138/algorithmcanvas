@@ -100,6 +100,8 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     const handleNodeDelete = (nodeId: string) => {
       if(isRunning.current) return;
 
+      ResetData();
+
       setNodeGraphData(prevData => {
         const updatedNodes = prevData.nodes.filter(node => node.id !== nodeId);
         const updatedLinks = prevData.links.filter(link => link.source !== nodeId && link.target !== nodeId);
@@ -118,7 +120,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
         $focusStatus={node.focus} 
         $theme={theme} 
         text={node.text}
-        isRunning={isRunning.current}
+        showDeleteBtn={node.id === selectedNode?.id}
         onMouseDown={handleMouseDown}
         onDelete={handleNodeDelete}
       />
