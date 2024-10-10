@@ -38,8 +38,8 @@ export const boxes: BoxProps[] = [
     {
         title: '큐',
         algorithmType: '자료구조',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/queue.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/queue.gif`,
         tags: ['자료구조', '선입선출'],
         link: 'queue',
         description: '큐(Queue)는 선입선출(FIFO: First In, First Out) 구조를 가지는 자료구조입니다.<br><br> 큐에서는 먼저 들어온 데이터가 먼저 나가며, 줄을 서는 방식과 유사합니다.<br>' +
@@ -48,8 +48,8 @@ export const boxes: BoxProps[] = [
     {
         title: '스택',
         algorithmType: '자료구조',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/stack.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/stack.gif`,
         tags: ['자료구조', '후입선출'],
         link: 'stack',
         description: '스택에 대한 설명',
@@ -57,8 +57,8 @@ export const boxes: BoxProps[] = [
     {
         title: '힙 트리',
         algorithmType: '자료구조',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/heap-tree.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/heap-tree.gif`,
         tags: ['자료구조', '우선순위 큐', '트리'],
         link: 'heap-tree',
         description: '힙 트리에 대한 설명',
@@ -66,8 +66,8 @@ export const boxes: BoxProps[] = [
     {
         title: '선택정렬',
         algorithmType: '정렬',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/selection-sort.gif`,
         tags: ['정렬', '배열'],
         link: 'selection-sort',
         description: '배열을 순회하면서 가장 작은(또는 큰) 원소를 선택하여 맨 앞부터 차례대로 정렬하는 방식입니다.' +
@@ -76,8 +76,8 @@ export const boxes: BoxProps[] = [
     {
         title: '삽입정렬',
         algorithmType: '정렬',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/insertion-sort.gif`,
         tags: ['정렬', '배열'],
         link: 'insertion-sort',
         description: '배열을 정렬된 부분과 정렬되지 않은 부분으로 나누고, 정렬되지 않은 부분의 원소를 정렬된 부분에 삽입하여 정렬하는 방식입니다.' + 
@@ -86,8 +86,8 @@ export const boxes: BoxProps[] = [
     {
         title: '버블정렬',
         algorithmType: '정렬',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/bubble-sort.gif`,
         tags: ['정렬', '배열'],
         link: 'bubble-sort',
         description: '인접한 두 원소를 비교하며 큰 값을 뒤로 보내면서 정렬하는 방식입니다.' +
@@ -96,8 +96,8 @@ export const boxes: BoxProps[] = [
     {
         title: '병합정렬',
         algorithmType: '정렬',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/merge-sort.gif`,
         tags: ['정렬', '분할정복', '배열'],
         link: 'merge-sort',
         description: '배열을 반으로 나눈 후 각 부분을 재귀적으로 정렬하고, 정렬된 부분을 합병하여 전체를 정렬하는 방식입니다.' +
@@ -106,8 +106,8 @@ export const boxes: BoxProps[] = [
     {
         title: '힙정렬',
         algorithmType: '정렬',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/heap-sort.gif`,
         tags: ['정렬', '힙', '배열'],
         link: 'heap-sort',
         description: '최대 힙 또는 최소 힙을 구성하여 정렬하는 방식으로, 힙을 구성하는 시간이 O(n)이고, 정렬하는 시간이 O(n log n)입니다.' +
@@ -116,8 +116,8 @@ export const boxes: BoxProps[] = [
     {
         title: '퀵정렬',
         algorithmType: '정렬',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/sort.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/quick-sort.gif`,
         tags: ['정렬', '분할정복', '배열'],
         link: 'quick-sort',
         description: '피벗을 기준으로 작은 값은 왼쪽, 큰 값은 오른쪽으로 분할하여 정렬하는 방식입니다.' +
@@ -126,8 +126,8 @@ export const boxes: BoxProps[] = [
         {
         title: 'BFS',
         algorithmType: '그래프',
-        imgSrc: `${process.env.PUBLIC_URL}/images/bfs.jpg`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/bfs.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/bfs.gif`,
         tags: ['그래프', '탐색', '큐'],
         link: 'bfs',
         description: '루트 노드에서 시작하여 인접한 노드를 먼저 탐색하는 그래프 탐색 알고리즘입니다.' +
@@ -136,8 +136,8 @@ export const boxes: BoxProps[] = [
     {
         title: 'DFS',
         algorithmType: '그래프',
-        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/dfs.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/dfs.gif`,
         tags: ['그래프', '탐색', '스택'],
         link: 'dfs',
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
@@ -146,8 +146,8 @@ export const boxes: BoxProps[] = [
     {
         title: '다익스트라',
         algorithmType: '그래프',
-        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/dijkstra.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/dijkstra.gif`,
         tags: ['그래프', '우선순위 큐'],
         link: 'dijkstra',
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
@@ -156,8 +156,8 @@ export const boxes: BoxProps[] = [
     {
         title: '벨만-포드',
         algorithmType: '그래프',
-        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/bellman-ford.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/bellman-ford.gif`,
         tags: ['그래프', '동적계획법'],
         link: 'bellman-ford',
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
@@ -166,8 +166,8 @@ export const boxes: BoxProps[] = [
     {
         title: '플로이드-워셜',
         algorithmType: '그래프',
-        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/floyd-warshall.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/floyd-warshall.gif`,
         tags: ['그래프', '동적계획법'],
         link: 'floyd-warshall',
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
@@ -176,8 +176,8 @@ export const boxes: BoxProps[] = [
     {
         title: '최소 신장 트리',
         algorithmType: '그래프',
-        imgSrc: `${process.env.PUBLIC_URL}/images/dfs.jpg`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/minimum-spanning-tree.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/minimum-spanning-tree.gif`,
         tags: ['그래프', '유니온-파인드'],
         link: 'minimum-spanning-tree',
         description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
@@ -186,8 +186,8 @@ export const boxes: BoxProps[] = [
     {
         title: '볼록껍질',
         algorithmType: '기하학',
-        imgSrc: `${process.env.PUBLIC_URL}/images/sort.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/sort.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/convex-hull.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/convex-hull.gif`,
         tags: ['기하학', '브루트 포스'],
         link: 'convex-hull',
         description: '힙 트리에 대한 설명',
