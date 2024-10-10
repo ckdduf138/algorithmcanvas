@@ -92,7 +92,7 @@ const Label = styled.div`
   font-weight: bold;
   text-align: center;
   position: absolute;
-  top: -50px;
+  top: -40px;
 `;
 
 interface StackCanvasProps {

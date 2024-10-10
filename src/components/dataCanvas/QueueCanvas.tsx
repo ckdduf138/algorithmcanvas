@@ -154,37 +154,46 @@ const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, isAdding, is
       </ArrowLineWapper>
 
       <QueueRow ref={queueRef}>
-        {queue.length === 0 ? (
-          <p>큐가 비어 있습니다.</p>
-        ) : (
-          queue.map((item, index) => (
-            <QueueItem
-              key={index}
-              $isAdding={isAdding && index === 0}
-              $isRemoving={isRemoving && index === queue.length - 1}
-              $theme={theme}
-            >
-              {item}
-              {index === 0 && (
-                <>
-                  <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
-                  <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
-                    Rear
-                  </Label>
-                </>
-              )}
-              {index === queue.length - 1 && (
-                <>
-                  <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
-                  <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
-                    Front
-                  </Label>
-                </>
-              )}
-            </QueueItem>
-          ))
+  {queue.length === 0 ? (
+    <p>큐가 비어 있습니다.</p>
+  ) : (
+    queue.map((item, index) => (
+      <QueueItem
+        key={index}
+        $isAdding={isAdding && index === 0}
+        $isRemoving={isRemoving && index === queue.length - 1}
+        $theme={theme}
+      >
+        {item}
+        {index === 0 && queue.length > 1 && (
+          <>
+            <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
+            <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
+              Rear
+            </Label>
+          </>
         )}
-      </QueueRow>
+        {index === queue.length - 1 && queue.length > 1 && (
+          <>
+            <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
+            <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
+              Front
+            </Label>
+          </>
+        )}
+        {queue.length === 1 && index === 0 && (
+          <>
+            <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
+            <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
+              Rear&Front
+            </Label>
+          </>
+        )}
+      </QueueItem>
+    ))
+  )}
+</QueueRow>
+
 
       <ArrowLineWapper>
         <BottomLine />
