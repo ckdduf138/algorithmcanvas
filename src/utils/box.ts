@@ -42,7 +42,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/queue.gif`,
         tags: ['자료구조', '선입선출'],
         link: 'queue',
-        description: '큐(Queue)는 선입선출(FIFO: First In, First Out) 구조를 가지는 자료구조입니다.<br><br> 큐에서는 먼저 들어온 데이터가 먼저 나가며, 줄을 서는 방식과 유사합니다.<br>' +
+        description: '큐(Queue)는 선입선출(FIFO: First In, First Out) 구조를 가지는 자료구조입니다.<br><br>' +
+        '큐에서는 먼저 들어온 데이터가 먼저 나가며, 줄을 서는 방식과 유사합니다.<br>' +
         '일반적인 큐의 동작은 두 가지 주요 연산으로 이루어집니다.',
     },
     {
@@ -52,7 +53,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/stack.gif`,
         tags: ['자료구조', '후입선출'],
         link: 'stack',
-        description: '스택에 대한 설명',
+        description: '스택(stack)은 후입선출(LIFO; Last In, First Out) 구조를 가지는 자료구조입니다.<br><br>' +
+        '공백인 스택에 자료 추가 시 가장 아래부터 자료가 쌓여 가장 마지막에 삽입한 자료가 가장 먼저 추출되고 삭제되는 자료구조입니다.',
     },
     {
         title: '힙 트리',
@@ -61,7 +63,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/heap-tree.gif`,
         tags: ['자료구조', '우선순위 큐', '트리'],
         link: 'heap-tree',
-        description: '힙 트리에 대한 설명',
+        description: '최대 힙 트리(Maximum Heap Tree)나 최소 힙 트리(Minimum Heap Tree)를 이용하여 정렬하는 알고리즘입니다.<br><br>' +
+        '내림차순으로 정렬 시 최대 힙 트리로 구성하고, 오름차순으로 정렬 시 최소 힙 트리로 구성하여 자료를 추출할 수 있습니다.',
     },
     {
         title: '선택정렬',
@@ -190,6 +193,7 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/convex-hull.gif`,
         tags: ['기하학', '브루트 포스'],
         link: 'convex-hull',
-        description: '힙 트리에 대한 설명',
+        description: '볼록 껍질(convex hull)은 집합으로 주어진 점이나 영역을 포함하는 가장 작은 볼록 집합입니다.<br><br>' +
+        '일반적으로는 유클리드 공간에서 정의되지만, 그 이상으로 확장하는 것도 가능합니다. 볼록 폐포를 계산하는 것은 계산기하학의 연구과제중 하나입니다.',
     },
 ];
