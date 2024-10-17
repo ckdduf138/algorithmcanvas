@@ -62,6 +62,10 @@ const QueuePage: React.FC = () => {
 
   const handleQueueSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSize = Number(event.target.value);
+    if (isNaN(newSize)) {
+      console.error("숫자를 입력하세요.");
+      return;
+    }
     setQueueSize(newSize);
     setQueue([]);
   };
