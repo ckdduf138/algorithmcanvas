@@ -117,23 +117,24 @@ const POP = styled.div`
   justify-content: flex-end;
 `;
 
-const Arrow = styled.div`
+const Arrow = styled.div<{ $theme: string }>`
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 10px 10px 0 10px;
-  border-color: #000 transparent transparent transparent;
+  border-color: ${({ $theme }) => ($theme === 'light' ? '#000' : '#fff')} transparent transparent transparent;
   margin-bottom: 10px;
   position: absolute;
   top: -30px;
 `;
 
-const Label = styled.div`
+const Label = styled.div<{ $theme: string }>`
   font-size: 16px;
   font-weight: bold;
+  color: ${({ $theme }) => ($theme === 'light' ? '#000' : '#fff')};
   text-align: center;
   position: absolute;
-  top: -50px;
+  top: -60px;
 `;
 
 interface QueuecanvasProps {
@@ -167,24 +168,24 @@ const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, isAdding, is
         {item}
         {index === 0 && queue.length > 1 && (
           <>
-            <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
-            <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
+            <Arrow $theme={theme} style={{ left: '50%', transform: 'translateX(-50%)' }} />
+            <Label $theme={theme} style={{ left: '50%', transform: 'translateX(-50%)' }}>
               Rear
             </Label>
           </>
         )}
         {index === queue.length - 1 && queue.length > 1 && (
           <>
-            <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
-            <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
+            <Arrow $theme={theme} style={{ left: '50%', transform: 'translateX(-50%)' }} />
+            <Label $theme={theme} style={{ left: '50%', transform: 'translateX(-50%)' }}>
               Front
             </Label>
           </>
         )}
         {queue.length === 1 && index === 0 && (
           <>
-            <Arrow style={{ left: '50%', transform: 'translateX(-50%)' }} />
-            <Label style={{ left: '50%', transform: 'translateX(-50%)' }}>
+            <Arrow $theme={theme} style={{ left: '50%', transform: 'translateX(-50%)' }} />
+            <Label $theme={theme} style={{ left: '50%', transform: 'translateX(-50%)' }}>
               Rear&Front
             </Label>
           </>

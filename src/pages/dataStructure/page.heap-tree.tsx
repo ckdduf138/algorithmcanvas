@@ -59,26 +59,40 @@ const HeapTreePage: React.FC = () => {
   };
 
   const deleteHeapRoot = async () => {
-    if (heap.length === 0) return;
+    if (heap.length === 0) return; // 힙이 비어있으면 아무것도 하지 않음
     setIsAnimating(true); // 애니메이션 시작
-  
+    
     const newHeap = [...heap];
     const lastValue = newHeap.pop();
-    if (lastValue !== undefined) {
-      newHeap[0] = lastValue;
-      setHeap([...newHeap]);
+  
+    // 루트만 남아있을 경우 바로 삭제 처리
+    if (newHeap.length === 0) {
+      setHeap([]); // 힙을 빈 배열로 설정 (루트 삭제)
+    } else if (lastValue !== undefined) {
+      newHeap[0] = lastValue; // 마지막 값을 루트로 대체
+      setHeap([...newHeap]); // 새로운 힙 설정
   
       let i = 0;
       while (true) {
-        const smallestOrLargest = await compareChildren(newHeap, i);
-        if (smallestOrLargest === i) break;
+        // 리프 노드에 도달했는지 확인 (리프 노드는 자식이 없는 노드)
+        if (2 * i + 1 >= newHeap.length) {
+          break; // 리프 노드에 도달하면 애니메이션을 스킵하고 루프 종료
+        }
   
+        const smallestOrLargest = await compareChildren(newHeap, i); // 자식들과 비교하여 가장 작은/큰 값 선택
+  
+        if (smallestOrLargest === i) {
+          // 애니메이션을 스킵하고 루프 종료
+          break;
+        }
+  
+        // 애니메이션을 보여줄 필요가 없으면, 즉시 교체하고 루프를 계속
         [newHeap[i], newHeap[smallestOrLargest]] = [newHeap[smallestOrLargest], newHeap[i]];
         setHeap([...newHeap]); // 변경 사항 반영
         i = smallestOrLargest;
       }
     }
-    
+  
     setCompareIndices([]); // 비교 끝
     setIsAnimating(false); // 애니메이션 종료
   };
@@ -111,12 +125,15 @@ const HeapTreePage: React.FC = () => {
   
     return smallestOrLargest;
   };
-  
 
   const handleInsert = () => {
     const value = Number(inputValue);
-    if(isAnimating){
+    if (isAnimating) {
       alert('실행 중에는 입력할 수 없습니다.');
+      return;
+    }
+    if (inputValue.trim() === '') { // 값이 없으면
+      alert('값을 입력하세요.'); // 경고 메시지
       return;
     }
     if (isNaN(value)) {
@@ -126,6 +143,10 @@ const HeapTreePage: React.FC = () => {
     isMinHeap ? insertMinHeap(value) : insertMaxHeap(value);
     setInputValue('');
   };
+
+  const handleReset = () => {
+    setHeap([]);  // 힙을 초기화
+  }
 
   const toggleHeapType = () => {
     setHeap([]);  // 힙을 초기화
@@ -142,6 +163,7 @@ const HeapTreePage: React.FC = () => {
         toggleHeapType={toggleHeapType}
         handleInsert={handleInsert}
         handleDelete={deleteHeapRoot}
+        handleReset={handleReset}
         isAnimating={isAnimating} // 애니메이션 상태 전달
         isHeapEmpty={heap.length === 0} // 힙 비어있는지 여부 전달
       />

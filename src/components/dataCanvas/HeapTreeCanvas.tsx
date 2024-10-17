@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../context/themeContext';
+import { useWindowSize } from '../../hooks/getWindowSize'; // 창 크기 가져오는 훅
 
 const ScrollWrapper = styled.div`
-  width: 800px; // 최대 너비
-  height: 700px; // 최대 높이
+  width: 100%;
+  height: 600px; // 최대 높이
   overflow: auto; // 스크롤이 필요할 경우 스크롤바 표시
 `;
 
@@ -18,11 +19,22 @@ const TreeWrapper = styled.svg<{ width: number; height: number }>`
 
 const NodeCircle = styled.circle<{ isRoot?: boolean; isComparing?: boolean; theme: string }>`
   fill: ${({ isRoot, isComparing, theme }) =>
-    isComparing ? (theme === 'light' ? '#ffc107' : '#ffca28') : isRoot ? (theme === 'light' ? '#ff5722' : '#e64a19') : (theme === 'light' ? '#007bff' : '#2196f3')};
-  stroke: #000;
+    isComparing
+      ? theme === 'light'
+        ? '#ffc107'
+        : '#ff9800'
+      : isRoot
+      ? theme === 'light'
+        ? '#ff5722'
+        : '#a33e0f'
+      : theme === 'light'
+      ? '#007bff'
+      : '#005677'}; 
+  stroke: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
   stroke-width: 2;
   transition: fill 0.3s ease;
 `;
+
 
 const NodeText = styled.text<{ theme: string }>`
   font-size: 12px;
@@ -33,6 +45,7 @@ const NodeText = styled.text<{ theme: string }>`
 
 const nodeRadius = 20; // 각 노드의 반지름
 const levelHeight = 70; // 각 레벨 간 높이 간격
+const topBlank = 50;
 
 interface HeapTreeCanvasProps {
   heap: number[];
@@ -41,15 +54,17 @@ interface HeapTreeCanvasProps {
 
 const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices }) => {
   const { theme } = useTheme(); // 테마 가져오기
+  const { width: windowWidth } = useWindowSize(); // 창 크기 가져오기
 
   const calculateDimensions = (heap: number[]) => {
     const totalLevels = Math.floor(Math.log2(heap.length)) + 1;
     const maxNodesAtLevel = 2 ** (totalLevels - 1); // 마지막 레벨의 최대 노드 수
-    // 리프 노드 간의 간격 계산
-    const leafGap = nodeRadius * 2 + 20; // 간격에 따라 조정
-    const width = Math.max(maxNodesAtLevel * (leafGap + nodeRadius), 800); // 리프 노드 수와 간격에 맞춰 너비 설정
+    const leafGap = nodeRadius * 2 + 20; // 리프 노드 간의 간격 계산
 
-    const height = levelHeight * totalLevels; // 높이는 레벨 수에 비례
+    // 전체 화면의 90%를 기준으로 너비 설정
+    const width = Math.max(maxNodesAtLevel * (leafGap + nodeRadius), windowWidth * 0.9);
+
+    const height = levelHeight * totalLevels + topBlank; // 높이는 레벨 수에 비례
     return { width, height };
   };
 
@@ -80,7 +95,7 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices })
     const xGap = gap / 2;
 
     if (index === 0) {
-      return { x: width / 2, y: nodeRadius };
+      return { x: width / 2, y: nodeRadius + topBlank }; // y 값을 조정하여 루트 노드 위치 이동
     }
 
     const parentIndex = Math.floor((index - 1) / 2);
@@ -102,15 +117,18 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices })
           const parentIndex = Math.floor((index - 1) / 2);
           const parentPos = parentIndex >= 0 ? getNodePosition(parentIndex) : null;
           const isComparing = compareIndices.includes(index);
+          const isLeftChild = index === 2 * parentIndex + 1;
+          const parentSin = isLeftChild ? Math.sin(3 * Math.PI / 4) * nodeRadius : Math.sin(Math.PI / 4) * nodeRadius;
+          const parentCos = isLeftChild ? Math.cos(3 * Math.PI / 4) * nodeRadius : Math.cos(Math.PI / 4) * nodeRadius;
           return (
             <React.Fragment key={index}>
               {parentPos && (
                 <line
-                  x1={parentPos.x}
-                  y1={parentPos.y}
+                  x1={parentPos.x + parentCos}
+                  y1={parentPos.y + parentSin}
                   x2={x}
                   y2={y}
-                  stroke="#000"
+                  stroke={theme === 'light' ? '#000' : '#fff'}
                   strokeWidth="2"
                 />
               )}
