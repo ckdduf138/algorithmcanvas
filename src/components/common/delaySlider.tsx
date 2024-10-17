@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useTheme } from '../../context/themeContext';
-import Text from './text';
 
 const SliderContainer = styled.div`
     display: flex;
@@ -10,7 +9,14 @@ const SliderContainer = styled.div`
     font-family: Arial, sans-serif;
 `;
 
+const SliderText = styled.div<{ theme: string }>`
+    color: ${props => props.theme === 'light' ? '#000' : '#fff'};
+    font-size: 16px;
+    user-select: none;
+`;
+
 const Slider = styled.input<{ theme: string }>`
+    position: relative;
     -webkit-appearance: none;
     width: 300px;
     height: 10px;
@@ -24,7 +30,7 @@ const Slider = styled.input<{ theme: string }>`
         appearance: none;
         width: 25px;
         height: 25px;
-        background: ${props => props.theme === 'light' ? '#8A8F95' : '#b8bcbf'};
+        background: #007bff;
         cursor: pointer;
         border-radius: 50%;
     }
@@ -35,6 +41,24 @@ const Slider = styled.input<{ theme: string }>`
         background: #4CAF50;
         cursor: pointer;
         border-radius: 50%;
+    }
+
+    &:before {
+        content: '0.5x';
+        position: absolute;
+        left: 5px;
+        top: -28px;
+        color: ${props => props.theme === 'light' ? '#8A8F95' : '#b8bcbf'};
+        font-size: 16px;
+    }
+
+    &:after {
+        content: '5.0x';
+        position: absolute;
+        right: 5px;
+        top: -28px;
+        color: ${props => props.theme === 'light' ? '#8A8F95' : '#b8bcbf'};
+        font-size: 16px;
     }
 `;
 
@@ -57,12 +81,13 @@ const DelaySlider: React.FC<DelaySliderProps> = ({ onDelayChange }) => {
 
     return (
         <SliderContainer>
-        <Text>{delay.toFixed(1)}x</Text>
-        <Slider theme = {theme}
-            type="range"
-            min="0.5"
-            max="5"
-            step="0.1"
+        <SliderText theme={theme}>{delay.toFixed(1)}x</SliderText>
+        <Slider 
+            theme={theme}
+            type='range'
+            min='0.5'
+            max='5'
+            step='0.1'
             value={delay}
             onChange={handleChange}
         />
