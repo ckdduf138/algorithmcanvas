@@ -22,7 +22,6 @@ const BoxWapper = styled.div<{$isTurn: boolean, $algorithmType: string}>`
     position: relative;
     background: #fff;
     border-radius: 8px;
-    cursor: pointer;
     transform-style: preserve-3d;
     transition: transform 1s;
     transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
@@ -59,7 +58,8 @@ const FrontBox = styled.div`
     align-content: center;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    gap: 10px;
+    cursor: pointer;
 `;
 
 const BackBox = styled.div`
@@ -73,7 +73,7 @@ const BackBox = styled.div`
     align-content: center;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    gap: 10px;
     transform: rotateY(180deg);
 `;
 
@@ -86,16 +86,6 @@ const BoxTitle = styled.div`
     // text
     font-size: 26px;
     font-weight: 600;
-`;
-
-const BoxSubTitle = styled.div`
-    display: flex;
-    width: 90%;
-
-    // text
-    font-weight: 600;
-    font-size: 18px;
-    color: #1E1E1E;
 `;
 
 const BoxImage = styled.img`
@@ -119,6 +109,7 @@ const Tag = styled.span<{ color: string }>`
     background-color: ${({ color }) => color || '#F0F1F2'};
     border-radius: 8px;
     padding: 4px 8px;
+    cursor: pointer;
 
     // text
     font-size: 18px;
@@ -133,22 +124,31 @@ const BoxUI = styled.div`
     justify-content: space-around;
 `;
 
-const PlayButton = styled.div`
+const PlayButton = styled.div<{$algorithmType: string}>`
     display: flex;
-    padding: 16px 60px;
-    border-radius: 40px;
-    background: #007AFF;;
+    width: 100%;
+    padding: 6px 0px;
+    position: absolute;
+    bottom: 0px;
+    border-radius: 0px 0px 8px 8px;
+    background: ${({ $algorithmType }) => `${algorithmTypes[$algorithmType][1]}`};
+    justify-content: center;
+    cursor: pointer;
 
     // text
-    color: #fff;
+    color: #333;
 `;
 
 const TurnImage = styled.img`
     display: flex;
-    width: 30px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 25px;
     padding: 10px;
     border-radius: 999px;
     background: #D9D9D9;
+    cursor: pointer;
 `;
 
 const BoxDescription = styled.div`
@@ -177,8 +177,16 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
         <Flip>
             <BoxWapper $isTurn={isFront} $algorithmType={algorithmType} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
 
-                <FrontBox>
-                    <BoxTitle>{title}</BoxTitle>
+                <FrontBox onClick={onclickedBox}>
+                    <BoxUI>
+                        <BoxTitle>{title}</BoxTitle>
+                        <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.svg`} 
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsFront(false);
+                            }}
+                        />
+                    </BoxUI>
 
                     <BoxImage src={isHover ? gifSrc : imgSrc} alt='알고리즘 예시'/>
 
@@ -192,22 +200,21 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                             </Tag>))
                         }
                     </TagParent>
-
-                    <BoxUI>
-                        <PlayButton onClick={onclickedBox}>▶ PLAY</PlayButton>
-                        <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.svg`} 
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsFront(false);
-                            }}
-                        />
-                    </BoxUI>
                 </FrontBox>
 
                 <BackBox>
+                    <BoxUI>
+                        <BoxTitle>{title}</BoxTitle>
+                        <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.svg`} 
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsFront(true);
+                            }}/>
+                    </BoxUI>
+
                     <BoxDescription dangerouslySetInnerHTML={{ __html: description }} />
                     
-                    <BoxSubTitle>{title}</BoxSubTitle>
+                    {/* <BoxSubTitle>{title}</BoxSubTitle> */}
 
                     <TagParent>
                         {tags.map((tag, index) => (
@@ -220,14 +227,7 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                         }
                     </TagParent>
 
-                    <BoxUI>
-                        <PlayButton onClick={onclickedBox}>▶ PLAY</PlayButton>
-                        <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.svg`} 
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsFront(true);
-                            }}/>
-                    </BoxUI>
+                    <PlayButton onClick={onclickedBox} $algorithmType={algorithmType}>▶ PLAY</PlayButton>
                 </BackBox>
             </BoxWapper>
         </Flip>
