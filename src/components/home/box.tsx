@@ -15,7 +15,7 @@ const Flip = styled.div`
     justify-content: center;
 `;
 
-const BoxWapper = styled.div<{$isTurn: boolean, $algorithmType: string}>`
+const BoxWapper = styled.div<{$rotation: number, $algorithmType: string}>`
     display: inline-block;
     width: calc(100% - 8px);
     height: calc(100% - 8px);
@@ -24,10 +24,9 @@ const BoxWapper = styled.div<{$isTurn: boolean, $algorithmType: string}>`
     border-radius: 8px;
     transform-style: preserve-3d;
     transition: transform 1s;
-    transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
+    transform: ${({ $rotation }) => `rotateY(${$rotation}deg)`};
 
-    // 그라데이션 테두리
-    &: before {
+    &:before {
         content: '';
         position: absolute;
         top: -4px;
@@ -38,12 +37,11 @@ const BoxWapper = styled.div<{$isTurn: boolean, $algorithmType: string}>`
         z-index: -1;
         padding: 0;
         background: ${({ $algorithmType }) => `linear-gradient(${algorithmTypes[$algorithmType][0]}, ${algorithmTypes[$algorithmType][1]})`};
-        transform: ${({$isTurn}) => $isTurn ? '' : 'rotateY(180deg)'};
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     &:hover {
-        transform: ${({$isTurn}) => $isTurn ? 'scale(1.03)' : 'rotateY(180deg) scale(1.03)'};
+        transform: ${({ $rotation }) => `rotateY(${$rotation}deg) scale(1.03)`};
     }
 `;
 
@@ -74,7 +72,7 @@ const BackBox = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    transform: rotateY(180deg);
+    transform: rotateY(180deg)
 `;
 
 const BoxTitle = styled.div`
@@ -160,7 +158,7 @@ const BoxDescription = styled.div`
 `;
 
 const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title, algorithmType, imgSrc, gifSrc, tags, link, description, onTagClick }) => {
-    const [isFront, setIsFront] = useState(true);
+    const [rotation, setRotation] = useState(0);
     const [isHover, setIsHover] = useState(false);
 
     const navigate = useNavigate();
@@ -168,6 +166,7 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
     const onclickedBox = () => {
         navigate(link);
     };
+
     const handleTagClick = (tag: string, event: React.MouseEvent<HTMLSpanElement>) => {
         event.stopPropagation();
         onTagClick(tag);
@@ -175,7 +174,8 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
 
     return (
         <Flip>
-            <BoxWapper $isTurn={isFront} $algorithmType={algorithmType} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+            <BoxWapper $rotation={rotation} $algorithmType={algorithmType} 
+                onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
 
                 <FrontBox onClick={onclickedBox}>
                     <BoxUI>
@@ -183,7 +183,7 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                         <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.svg`} 
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setIsFront(false);
+                                setRotation(rotation + 180);
                             }}
                         />
                     </BoxUI>
@@ -208,14 +208,12 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                         <TurnImage src={`${process.env.PUBLIC_URL}/images/cycle-arrow.svg`} 
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setIsFront(true);
+                                setRotation(rotation + 180);
                             }}/>
                     </BoxUI>
 
                     <BoxDescription dangerouslySetInnerHTML={{ __html: description }} />
-                    
-                    {/* <BoxSubTitle>{title}</BoxSubTitle> */}
-
+                
                     <TagParent>
                         {tags.map((tag, index) => (
                             <Tag
