@@ -21,12 +21,12 @@ import BellmanFordPage from './pages/graph/page.bellman-ford';
 import FloydWarshallPage from './pages/graph/page.floyd-warshall';
 import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
 
+import ConvexHullPage from './pages/geometry/page.convex-hull';
+
 import NotFoundPage from './pages/page.notFound';
 
 import { ThemeProvider } from './context/themeContext';
 import useDeviceCheck from './hooks/useDeviceCheck';
-// import HeapTreePage from './pages/dataStructure/page.heap-tree';
-import ConvexHullPage from './pages/geometry/page.convex-hull';
 
 const App = () => {
     const deviceType = useDeviceCheck();
