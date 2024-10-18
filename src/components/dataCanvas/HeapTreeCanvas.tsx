@@ -90,7 +90,6 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices })
 
   const getNodePosition = (index: number): { x: number; y: number } => {
     const level = Math.floor(Math.log2(index + 1));
-    const maxNodesAtLevel = 2 ** level;
     const gap = nodeGaps[level];
     const xGap = gap / 2;
 
