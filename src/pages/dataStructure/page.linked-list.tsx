@@ -13,59 +13,59 @@ const LinkedListPage: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [saveIndex, setSaveIndex] = useState<number>(0);
 
+  const handleIndexOperation = (operation: 'insert' | 'delete') => {
+    const currentInputIndex = inputIndex;
+  
+    if (currentInputIndex < 0 || (operation === 'insert' && currentInputIndex > linkedList.length) || (operation === 'delete' && currentInputIndex >= linkedList.length)) {
+      animateSearchThroughList(() => {
+        alert('유효한 인덱스를 입력하세요.');
+        setIsAnimating(false);
+      });
+      return;
+    }
+  
+    setSaveIndex(currentInputIndex);
+    setIsAnimating(true);
+    
+    // 애니메이션 실행
+    animateSearch(currentInputIndex - 1, () => {
+      if (operation === 'insert') {
+        const newList = [...linkedList];
+        newList.splice(currentInputIndex, 0, inputValue);
+        setLinkedList(newList);
+        setIsAdding(true);
+        
+        setTimeout(() => {
+          setIsAdding(false);
+          setIsAnimating(false);
+        }, 500);
+        
+        setInputValue('');
+        setSearchIndex(null);
+      } else if (operation === 'delete') {
+        setIsRemoving(true);
+        setTimeout(() => {
+          const newList = [...linkedList];
+          newList.splice(currentInputIndex, 1);
+          setLinkedList(newList);
+          setIsRemoving(false);
+          setIsAnimating(false);
+        }, 500);
+        setSearchIndex(null);
+      }
+    });
+  };
+  
   const handleInsertAtIndex = () => {
     if (inputValue.trim() === '') {
       alert('추가할 데이터가 필요합니다.');
       return;
     }
-    if (inputIndex < 0 || inputIndex > linkedList.length) {
-      animateSearchThroughList(() => {
-        alert('유효한 인덱스를 입력하세요.');
-        // 유효하지 않은 인덱스일 경우 전체 리스트 탐색
-        setIsAnimating(false);
-      });
-      return;
-    }
-
-    setSaveIndex(inputIndex);
-    setIsAnimating(true);
-    animateSearch(inputIndex - 1, () => {
-      const newList = [...linkedList];
-      newList.splice(inputIndex, 0, inputValue);
-      setLinkedList(newList);
-      setIsAdding(true);
-      setTimeout(() => {
-        setIsAdding(false);
-        setIsAnimating(false);
-      }, 500);
-      setInputValue('');
-      setSearchIndex(null);
-    });
+    handleIndexOperation('insert');
   };
-
+  
   const handleDeleteAtIndex = () => {
-    if (inputIndex < 0 || inputIndex >= linkedList.length) {
-      animateSearchThroughList(() => {
-        alert('유효한 인덱스를 입력하세요.');
-        // 유효하지 않은 인덱스일 경우 전체 리스트 탐색
-        setIsAnimating(false);
-      });
-      return;
-    }
-    
-    setSaveIndex(inputIndex);
-    setIsAnimating(true);
-    animateSearch(inputIndex - 1, () => {
-      setIsRemoving(true);
-      setTimeout(() => {
-        const newList = [...linkedList];
-        newList.splice(inputIndex, 1);
-        setLinkedList(newList);
-        setIsRemoving(false);
-        setIsAnimating(false);
-      }, 500);
-      setSearchIndex(null);
-    });
+    handleIndexOperation('delete');
   };
 
   const handleSearchByName = () => {
