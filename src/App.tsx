@@ -6,6 +6,7 @@ import HomePage from './pages/page.home';
 import QueuePage from './pages/dataStructure/page.queue';
 import StackPage from './pages/dataStructure/page.stack';
 import HeapTreePage from './pages/dataStructure/page.heap-tree';
+import LinkedListPage from './pages/dataStructure/page.linked-list';
 
 import SelectionSortPage from './pages/sort/page.selectionSort';
 import InsertionSortPage from './pages/sort/page.insertionSort';
@@ -48,7 +49,8 @@ const App = () => {
                     <Route path="queue" element={<QueuePage />} />
                     <Route path="stack" element={<StackPage />} />
                     {<Route path="heap-tree" element={<HeapTreePage />} />}
-
+                    {<Route path="linked-list" element={<LinkedListPage />} />}
+                    
                     {/* 정렬 */}
                     <Route path="selection-sort" element={<SelectionSortPage />} />
                     <Route path="insertion-sort" element={<InsertionSortPage />} />
