@@ -72,7 +72,7 @@ const QueuePage: React.FC = () => {
     return() => {
       resetAlert();
     }
-  },[]);
+  },[resetAlert]);
 
   return (
     <Layout subTitle="큐(QUEUE)">

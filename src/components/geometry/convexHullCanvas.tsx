@@ -248,7 +248,7 @@ const ConvexHullCanvas: React.FC<ConvexHullCanvasProps> = () => {
         return() => {
             resetAlert();
         }
-    },[]);
+    },[resetAlert]);
 
     return (
     <ConvexHullCanvasContainer>

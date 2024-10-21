@@ -156,7 +156,7 @@ const HeapTreePage: React.FC = () => {
     return() => {
       resetAlert();
     }
-  },[]);
+  },[resetAlert]);
 
   return (
     <Layout subTitle='힙 트리(Heap Tree)'>

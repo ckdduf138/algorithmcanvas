@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 type AlertType = 'info' | 'error' | 'warning' | 'success';
 
@@ -30,9 +30,9 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setAlert({ type, message });
     };
 
-    const resetAlert = () => {
+    const resetAlert = useCallback(() => {
         setAlert(null);
-    };
+    },[]);
 
     return (
         <AlertContext.Provider value={{ notification: alert, sendAlert, resetAlert }}>

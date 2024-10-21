@@ -64,7 +64,7 @@ const StackPage: React.FC = () => {
     return() => {
       resetAlert();
     }
-  },[]);
+  },[resetAlert]);
 
   return (
     <Layout subTitle="스택(STACK)">
