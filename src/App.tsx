@@ -25,8 +25,11 @@ import ConvexHullPage from './pages/geometry/page.convex-hull';
 
 import NotFoundPage from './pages/page.notFound';
 
+import { AlertProvider } from './context/alertContext';
 import { ThemeProvider } from './context/themeContext';
+
 import useDeviceCheck from './hooks/useDeviceCheck';
+import CustomAlert from './components/alert/customAlert';
 
 const App = () => {
     const deviceType = useDeviceCheck();
@@ -39,40 +42,43 @@ const App = () => {
 
     return (
         <ThemeProvider>
-            <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <Routes>
-                    {/* Root */}
-                    <Route path="" element={<HomePage />} />
+            <AlertProvider>
+                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                    <CustomAlert />
+                    <Routes>
+                        {/* Root */}
+                        <Route path="" element={<HomePage />} />
 
-                    {/* 자료구조 */}
-                    <Route path="queue" element={<QueuePage />} />
-                    <Route path="stack" element={<StackPage />} />
-                    {<Route path="heap-tree" element={<HeapTreePage />} />}
+                        {/* 자료구조 */}
+                        <Route path="queue" element={<QueuePage />} />
+                        <Route path="stack" element={<StackPage />} />
+                        {<Route path="heap-tree" element={<HeapTreePage />} />}
 
-                    {/* 정렬 */}
-                    <Route path="selection-sort" element={<SelectionSortPage />} />
-                    <Route path="insertion-sort" element={<InsertionSortPage />} />
-                    <Route path="bubble-sort" element={<BubbleSortPage />} />
-                    <Route path="merge-sort" element={<MergeSortPage />} />
-                    <Route path="heap-sort" element={<HeapSortPage />} />
-                    <Route path="quick-sort" element={<QuickSortPage />} />
+                        {/* 정렬 */}
+                        <Route path="selection-sort" element={<SelectionSortPage />} />
+                        <Route path="insertion-sort" element={<InsertionSortPage />} />
+                        <Route path="bubble-sort" element={<BubbleSortPage />} />
+                        <Route path="merge-sort" element={<MergeSortPage />} />
+                        <Route path="heap-sort" element={<HeapSortPage />} />
+                        <Route path="quick-sort" element={<QuickSortPage />} />
 
-                    {/* 그래프 */}
-                    <Route path="bfs" element={<BFSPage />} />
-                    <Route path="dfs" element={<DFSPage />} />
-                    <Route path="dijkstra" element={<DijkstraPage />} />
-                    <Route path="bellman-ford" element={<BellmanFordPage />} />
-                    <Route path="floyd-warshall" element={<FloydWarshallPage />} />
-                    <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} />
+                        {/* 그래프 */}
+                        <Route path="bfs" element={<BFSPage />} />
+                        <Route path="dfs" element={<DFSPage />} />
+                        <Route path="dijkstra" element={<DijkstraPage />} />
+                        <Route path="bellman-ford" element={<BellmanFordPage />} />
+                        <Route path="floyd-warshall" element={<FloydWarshallPage />} />
+                        <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} />
 
-                    {/* 기하학 */}
-                    <Route path="convex-hull" element={<ConvexHullPage />} />
+                        {/* 기하학 */}
+                        <Route path="convex-hull" element={<ConvexHullPage />} />
 
-                    {/* 404 */}
-                    <Route path="404" element={<NotFoundPage />} />
-                    <Route path="*" element={<Navigate to="404" />} />
-                </Routes>
-            </BrowserRouter>
+                        {/* 404 */}
+                        <Route path="404" element={<NotFoundPage />} />
+                        <Route path="*" element={<Navigate to="404" />} />
+                    </Routes>
+                </BrowserRouter>
+            </AlertProvider>
         </ThemeProvider>
     );
 };

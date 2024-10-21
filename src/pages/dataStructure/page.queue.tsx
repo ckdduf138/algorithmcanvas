@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import QueueCanvas from '../../components/dataCanvas/QueueCanvas';
 import DataCanvasUI from '../../components/dataCanvas/DataCanvasUI';
+import { useAlert } from '../../context/alertContext';
 
 const QueuePage: React.FC = () => {
   const [queue, setQueue] = useState<string[]>([]);
@@ -12,12 +13,9 @@ const QueuePage: React.FC = () => {
 
   const queueRef = useRef<HTMLDivElement>(null);
 
-  const handlePush = () => {
-    if (!inputValue.trim()) {
-      alert('추가할 데이터를 입력하세요.');
-      return;
-    }
+  const { sendAlert, resetAlert } = useAlert();
 
+  const handlePush = () => {
     if (queue.length < queueSize || queueSize === 0) {
 
       if(queueRef.current) {
@@ -35,7 +33,7 @@ const QueuePage: React.FC = () => {
         setIsAdding(false);
       }, 500);
     } else {
-      alert('큐가 가득 찼습니다.');
+      sendAlert('warning', '큐가 가득 찼습니다.');
     }
   };
 
@@ -69,6 +67,12 @@ const QueuePage: React.FC = () => {
     setQueueSize(newSize);
     setQueue([]);
   };
+
+  useEffect(() => {
+    return() => {
+      resetAlert();
+    }
+  },[]);
 
   return (
     <Layout subTitle="큐(QUEUE)">
