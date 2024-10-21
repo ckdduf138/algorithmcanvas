@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import HeapTreeCanvas from '../../components/dataCanvas/HeapTreeCanvas';
 import HeapTreeCanvasUI from '../../components/dataCanvas/HeapTreeCanvasUI';
+import { useAlert } from '../../context/alertContext';
 
 const HeapTreePage: React.FC = () => {
   const [heap, setHeap] = useState<number[]>([]);
@@ -11,6 +12,8 @@ const HeapTreePage: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false); // 애니메이션 진행 중 여부
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const { sendAlert, resetAlert } = useAlert();
 
   // 최소힙 삽입 로직 (애니메이션 추가)
   const insertMinHeap = async (newValue: number) => {
@@ -129,15 +132,11 @@ const HeapTreePage: React.FC = () => {
   const handleInsert = () => {
     const value = Number(inputValue);
     if (isAnimating) {
-      alert('실행 중에는 입력할 수 없습니다.');
-      return;
-    }
-    if (inputValue.trim() === '') { // 값이 없으면
-      alert('값을 입력하세요.'); // 경고 메시지
+      sendAlert('warning', '실행 중에는 입력할 수 없습니다.');
       return;
     }
     if (isNaN(value)) {
-      alert('숫자를 입력하세요.');
+      sendAlert('warning', '정수를 입력하세요.');
       return;
     }
     isMinHeap ? insertMinHeap(value) : insertMaxHeap(value);
@@ -152,6 +151,12 @@ const HeapTreePage: React.FC = () => {
     setHeap([]);  // 힙을 초기화
     setIsMinHeap(!isMinHeap);
   };
+
+  useEffect(() => {
+    return() => {
+      resetAlert();
+    }
+  },[]);
 
   return (
     <Layout subTitle='힙 트리(Heap Tree)'>

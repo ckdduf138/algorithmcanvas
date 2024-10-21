@@ -31,7 +31,7 @@ const StyledAlert = styled.div<{ $type: AlertType; $fade?: boolean }>`
     display: flex;
     min-width: 250px;
     min-height: 30px;
-    position: absolute;
+    position: fixed;
     top: 25px;
     left: calc(50% - 150px);
     align-items: center;
@@ -41,7 +41,6 @@ const StyledAlert = styled.div<{ $type: AlertType; $fade?: boolean }>`
         $type === 'error' ? '#ef4444' :
         $type === 'warning' ? '#f59e0b' :
         '#10b981'};
-
     color: white;
     padding: 0px 15px;
     border-radius: 8px;
@@ -72,7 +71,7 @@ const StyledAlertText = styled.div`
 const CustomAlert = () => {
     const [visibleNotification, setVisibleNotification] = useState<boolean>(false);
 
-    const { notification, resetAlert } = useAlert();
+    const { notification } = useAlert();
 
     const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -81,20 +80,20 @@ const CustomAlert = () => {
 
         timeoutIdRef.current = setTimeout(() => {
             setVisibleNotification(false);
-        }, 50000);
+        }, 5000);
 
         return () => {
             if (timeoutIdRef.current) {
+                console.log('1');
                 clearTimeout(timeoutIdRef.current);
             }
-
-            resetAlert();
         };
-    }, [resetAlert]);
+    }, []);
 
     useEffect(() => {
         if (notification) {
             if (timeoutIdRef.current) {
+                console.log('2');
                 clearTimeout(timeoutIdRef.current);
             }
             const cleanup = handleAlertTiming();
@@ -103,6 +102,7 @@ const CustomAlert = () => {
 
         if (notification === null) {
             if (timeoutIdRef.current) {
+                console.log('3');
                 clearTimeout(timeoutIdRef.current);
             }
         }
