@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Layout from '../../components/layout/layout';
 import { BarGraphData } from '../../utils/graphData';
 import { useAdd, useDelay, useRandom, useReset } from '../../hooks/sort/sort';
 import BarCanvas from '../../components/barCanvas/barCanvas';
 import BarCanvasUI from '../../components/barCanvas/barCanvas.UI';
+import { useAlert } from '../../context/alertContext';
 
 const HeapSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
@@ -16,6 +17,8 @@ const HeapSortPage: React.FC = () => {
     const handleRandom = useRandom(setBarGraphData);
     const handleDelay = useDelay(delayRef);
     
+    const { sendAlert, resetAlert } = useAlert();
+
     const handleStart = async () => {
         barGraphData.forEach(data => {
             data.focus = 'inactive';
@@ -28,6 +31,8 @@ const HeapSortPage: React.FC = () => {
             data.focus = 'completed';
         });
         setBarGraphData([...barGraphData]);
+
+        sendAlert('success', '완료되었습니다.');
     };
 
     const heapSort = async (array: BarGraphData[]) => {
@@ -82,6 +87,12 @@ const HeapSortPage: React.FC = () => {
         array[i].focus = 'inactive';
         setBarGraphData([...array]);
     };
+
+    useEffect(() => {
+        return() => {
+            resetAlert();
+        }
+    },[resetAlert]);
 
     return (
         <Layout subTitle='힙정렬'>

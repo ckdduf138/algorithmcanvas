@@ -1,21 +1,24 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Layout from '../../components/layout/layout';
 import { BarGraphData } from '../../utils/graphData';
 import { useAdd, useDelay, useRandom, useReset } from '../../hooks/sort/sort';
 import BarCanvas from '../../components/barCanvas/barCanvas';
 import BarCanvasUI from '../../components/barCanvas/barCanvas.UI';
+import { useAlert } from '../../context/alertContext';
 
 const BubbleSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const delayRef = useRef(500);
+    
+    const { sendAlert, resetAlert } = useAlert();
 
     const handleAdd = useAdd(setBarGraphData);
     const handleReset = useReset(setBarGraphData);
     const handleRandom = useRandom(setBarGraphData);
     const handleDelay = useDelay(delayRef);
-    
+
     const handleStart = async () => {
         const dataLength = barGraphData.length;
         
@@ -52,7 +55,15 @@ const BubbleSortPage: React.FC = () => {
     
         barGraphData[0].focus = 'completed';
         setBarGraphData([...barGraphData]);
+
+        sendAlert('success', '완료되었습니다.');
     };
+
+    useEffect(() => {
+        return() => {
+            resetAlert();
+        }
+    },[resetAlert]);
 
     return (
         <Layout subTitle='버블정렬'>

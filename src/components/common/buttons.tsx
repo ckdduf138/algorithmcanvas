@@ -7,8 +7,8 @@ const ButtonWapper = styled.button`
   justify-content: space-evenly;
   width: 180px;
   min-width: 120px;
-  min-height: 42px;
-  padding: 10px;
+  min-height: 52px;
+  padding: 0px 10px;
   background-color: ${(props) => (props.disabled ? "#ccc" : "#007bff")};
   color: #fff;
   border: none;
@@ -25,15 +25,20 @@ const ButtonWapper = styled.button`
 `;
 
 const RightImgWapper = styled.div`
-  right: 10%;
+  display: flex;
+  position: relative;
+  left: 10%;
+  width: 24px;
+  min-height: 52px;
+  align-items: center;
 
   svg {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
   
   svg path {
-      stroke: #fff;
+    stroke: #fff;
   }
 `;
 
@@ -49,7 +54,7 @@ const Button: React.FC<ButtonProps> = ({ onClick, disabled = false, children, ri
     <ButtonWapper onClick={onClick} disabled={disabled}>
       {children}
       <RightImgWapper>
-        <ReactSVG src={rightImg} /> 
+        <ReactSVG src={rightImg} wrapper='svg'/> 
       </RightImgWapper>
     </ButtonWapper>
   );

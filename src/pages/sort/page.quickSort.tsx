@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Layout from '../../components/layout/layout';
 import { BarGraphData } from '../../utils/graphData';
 import { useAdd, useDelay, useRandom, useReset } from '../../hooks/sort/sort';
 import BarCanvas from '../../components/barCanvas/barCanvas';
 import BarCanvasUI from '../../components/barCanvas/barCanvas.UI';
+import { useAlert } from '../../context/alertContext';
 
 const QuickSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
@@ -16,6 +17,8 @@ const QuickSortPage: React.FC = () => {
     const handleRandom = useRandom(setBarGraphData);
     const handleDelay = useDelay(delayRef);
     
+    const { sendAlert, resetAlert } = useAlert();
+
     const handleStart = async () => {
         const dataLength = barGraphData.length;
 
@@ -30,6 +33,8 @@ const QuickSortPage: React.FC = () => {
             data.focus = 'completed';
         });
         setBarGraphData([...barGraphData]);
+
+        sendAlert('success', '완료되었습니다.');
     };
 
     const quickSort = async (array: BarGraphData[], low: number, high: number) => {
@@ -80,6 +85,12 @@ const QuickSortPage: React.FC = () => {
 
         return i + 1;
     };
+
+    useEffect(() => {
+        return() => {
+            resetAlert();
+        }
+    },[resetAlert]);
 
     return (
         <Layout subTitle='퀵정렬'>
