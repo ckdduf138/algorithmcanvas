@@ -82,8 +82,9 @@ const BoxTitle = styled.div`
     justify-content: center;
 
     // text
+    font-family: 'SOYOMapleTTF', sans-serif;
+    font-weight: 700;
     font-size: 26px;
-    font-weight: 600;
 `;
 
 const BoxImage = styled.img`
@@ -109,8 +110,9 @@ const Tag = styled.div<{ tag_color: string, tag_hoaver_color: string }>`
     cursor: pointer;
 
     // text
+    font-family: 'SOYOMapleTTF', sans-serif;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 00;
     color: #000;
 
     &:hover {
@@ -158,6 +160,12 @@ const BoxDescription = styled.div`
     width: 90%;
     height: 50%;
     border-radius: 10%;
+
+    // text
+    font-family: 'SOYOMapleTTF', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
 `;
 
 const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title, algorithmType, imgSrc, gifSrc, tags, link, description, onTagClick }) => {
