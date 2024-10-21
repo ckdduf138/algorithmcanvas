@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { algorithmTypes, BoxProps, tagColors } from '../../utils/box';
+import { algorithmTypes, BoxProps, tagColors, tagHoverColors } from '../../utils/box';
 
 // box
 const Flip = styled.div`
@@ -94,8 +94,7 @@ const BoxImage = styled.img`
 const TagParent = styled.div`
     display: flex;
     width: 90%;
-    height: 35px;
-    margin: 2%;
+    padding: 2%;
     overflow: hidden;
     gap: 10px;
     flex-wrap: wrap;
@@ -103,8 +102,8 @@ const TagParent = styled.div`
     justify-content: flex-start;
 `;
 
-const Tag = styled.span<{ color: string }>`
-    background-color: ${({ color }) => color || '#F0F1F2'};
+const Tag = styled.div<{ tag_color: string, tag_hoaver_color: string }>`
+    background-color: ${({ tag_color }) => tag_color || '#F0F1F2'};
     border-radius: 8px;
     padding: 4px 8px;
     cursor: pointer;
@@ -113,6 +112,10 @@ const Tag = styled.span<{ color: string }>`
     font-size: 18px;
     font-weight: 500;
     color: #000;
+
+    &:hover {
+        outline: 3px solid ${({ tag_hoaver_color }) => tag_hoaver_color || '#F0F1F2'};
+    }
 `;
 
 const BoxUI = styled.div`
@@ -194,7 +197,8 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                         {tags.map((tag, index) => (
                             <Tag
                                 key={index}
-                                color={tagColors[tag]}
+                                tag_color={tagColors[tag]}
+                                tag_hoaver_color={tagHoverColors[tag]}
                                 onClick={(e) => handleTagClick(tag, e)}>
                                 {tag}
                             </Tag>))
@@ -218,7 +222,8 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                         {tags.map((tag, index) => (
                             <Tag
                                 key={index}
-                                color={tagColors[tag]}
+                                tag_color={tagColors[tag]}
+                                tag_hoaver_color={tagHoverColors[tag]}
                                 onClick={(e) => handleTagClick(tag, e)}>
                                 {tag}
                             </Tag>))

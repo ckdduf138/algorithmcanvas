@@ -21,7 +21,28 @@ export const tagColors: { [key: string]: string } = {
     '동적계획법': '#FFDAA5',
     '유니온-파인드': '#E1FF9E',
     '기하학': '#FFD3B6',
-    '브루트 포스': '#D3D3D3'
+    '브루트 포스': '#D3D3D3',
+    '트리': '#FFD700'
+};
+
+export const tagHoverColors: { [key: string]: string } = {
+    '자료구조': '#DCA0E2',	
+    '정렬': '#767EC5',	
+    '배열': '#83CAE2',	
+    '그래프': '#88E297',	
+    '탐색': '#E0E26F',	
+    '선입선출': '#E2BC71',	
+    '후입선출': '#E2A0AA',	
+    '분할정복': '#9EE2A0',	
+    '힙': '#E2B291',		
+    '큐': '#E2BC71',		
+    '스택': '#E2A0AA',	
+    '우선순위 큐': '#E2BC71',	
+    '동적계획법': '#E2C193',	
+    '유니온-파인드': '#C7E28C',
+    '기하학': '#E2BBA0',	
+    '브루트 포스': '#B7B7B7',
+    '트리': '#E0B800'
 };
 
 export interface BoxProps {
