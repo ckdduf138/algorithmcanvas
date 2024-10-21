@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { useWindowSize } from '../../hooks/getWindowSize';
@@ -10,6 +10,7 @@ import { Dot, DotStatus } from '../../utils/dotData';
 import CustomDot from './customDot';
 import { generateUUID, getRandomInt } from '../../utils/common';
 import CustomDotLine from './customDotLine';
+import { useAlert } from '../../context/alertContext';
 
 const ConvexHullCanvasContainer = styled.div`
     width: 100%;
@@ -61,6 +62,8 @@ const ConvexHullCanvas: React.FC<ConvexHullCanvasProps> = () => {
     const { width, height } = useWindowSize();
 
     const {theme} = useTheme();
+
+    const { sendAlert, resetAlert } = useAlert();
 
     const isClockwise = (p1: Dot, p2: Dot, p3: Dot): boolean => {
         return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) <= 0;
@@ -182,7 +185,6 @@ const ConvexHullCanvas: React.FC<ConvexHullCanvasProps> = () => {
         await new Promise(resolve => setTimeout(resolve, delayRef.current));
     };
     
-    
     const onclickBtnStart = async () => {
         setRunning(true);
 
@@ -197,9 +199,11 @@ const ConvexHullCanvas: React.FC<ConvexHullCanvasProps> = () => {
             else {
                 await jarvisMarch();
             }
+
+            sendAlert('success', '완료되었습니다.');
         }
         else {
-            alert('생성한 점 개수를 먼저 선택해주세요.');
+            sendAlert('warning', '생성한 점 개수를 먼저 선택해주세요.');
         }
 
         setRunning(false);
@@ -239,6 +243,12 @@ const ConvexHullCanvas: React.FC<ConvexHullCanvasProps> = () => {
 
         setConvexHull([]);
     };
+
+    useEffect(() => {
+        return() => {
+            resetAlert();
+        }
+    },[resetAlert]);
 
     return (
     <ConvexHullCanvasContainer>
