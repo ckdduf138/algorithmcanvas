@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
@@ -8,6 +8,7 @@ import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
 import SlideUI from '../../components/graphCanvas/slideUI';
+import { useAlert } from '../../context/alertContext';
 
 const FloydWarshallPage: React.FC = () => {
   const isRunning = useRef(false);
@@ -21,6 +22,8 @@ const FloydWarshallPage: React.FC = () => {
     = useGraphCanvas(isRunning, delayRef, true, true);
 
   const { randomizeGraphDataInWeightAndDirection, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
+
+  const { sendAlert, resetAlert } = useAlert();
 
   const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus, nodeText?: string) => {
     setNodeGraphData(prevData => {
@@ -146,7 +149,7 @@ const FloydWarshallPage: React.FC = () => {
   
     for (const node of nodes) {
       if ((distances.get(node.id)?.get(node.id) ?? Infinity) < 0) {
-        alert("음수 사이클이 존재합니다.");
+        sendAlert('error', '음수 사이클이 존재합니다.');
 
         updateNodeFocus(node.id, 'error');
         isRunning.current = false;
@@ -174,7 +177,15 @@ const FloydWarshallPage: React.FC = () => {
     console.clear();
 
     await handleStart();
+
+    sendAlert('success', '완료되었습니다.');
   };
+
+  useEffect(() => {
+    return() => {
+      resetAlert();
+    }
+  },[resetAlert]);
 
   return(
     <Layout subTitle='플로이드-워셜(Floyd-Warshall)'>

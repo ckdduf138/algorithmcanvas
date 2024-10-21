@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
@@ -8,6 +8,7 @@ import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
 import SlideUI from '../../components/graphCanvas/slideUI';
+import { useAlert } from '../../context/alertContext';
 
 const BFSPage: React.FC = () => {
   const isRunning = useRef(false);
@@ -19,6 +20,8 @@ const BFSPage: React.FC = () => {
     = useGraphCanvas(isRunning, delayRef);
 
   const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
+
+  const { sendAlert, resetAlert } = useAlert();
 
   const updateNodeFocus = async (nodeId: string, updateState: NodeFocusStatus, nodeDepth?: number) => {
     setNodeGraphData(prevData => {
@@ -137,11 +140,18 @@ const BFSPage: React.FC = () => {
   const onclickBtnStart = async () => {
     if(selectedNode) {
       await handleStart(selectedNode.id);
+      sendAlert('success', '완료되었습니다.');
     }
     else {
-      alert('시작할 노드를 선택해주세요.');
+      sendAlert('info', '시작할 노드를 선택해주세요.');
     }
   };
+
+  useEffect(() => {
+    return() => {
+      resetAlert();
+    }
+  },[resetAlert]);
 
   return(
     <Layout subTitle='너비 우선 탐색(BFS)'>
