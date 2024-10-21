@@ -174,8 +174,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/dijkstra.gif`,
         tags: ['그래프', '우선순위 큐'],
         link: 'dijkstra',
-        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
-        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+        description: '하나의 정점에서 다른 모든 정점까지의 최단 거리를 구하는 알고리즘입니다.' + 
+        '다익스트라가 제안한 알고리즘으로, 흔히 인공위성 GPS 소프트웨어 등에서 가장 많이 사용됩니다. ',
     },
     {
         title: '벨만-포드',
@@ -184,8 +184,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/bellman-ford.gif`,
         tags: ['그래프', '동적계획법'],
         link: 'bellman-ford',
-        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
-        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+        description: '벨먼-포드(Bellman-Ford)는 가중 유향 그래프(Weighted-Directed Graph)에서 최단 경로 문제를 푸는 알고리즘입니다.' +
+        '(정점 - 1)번의 매 단계마다 모든 간선을 전부 확인하므로 시간 복잡도가 O(VE)로 느립니다.',
     },
     {
         title: '플로이드-워셜',
@@ -194,8 +194,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/floyd-warshall.gif`,
         tags: ['그래프', '동적계획법'],
         link: 'floyd-warshall',
-        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
-        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+        description: '플로이드-워셜(Floyd-Warshall)은 그래프에서 가능한 모든 노드 쌍에 대해 최단 거리를 구하는 알고리즘입니다.' + 
+        '시간 복잡도는 O(n^3)입니다. 모든 노드 쌍에 대해 최단 거리를 구하고, 음의 가중치를 가지는 그래프에서도 쓸 수 있습니다.',
     },
     {
         title: '최소 신장 트리',
@@ -204,8 +204,8 @@ export const boxes: BoxProps[] = [
         gifSrc: `${process.env.PUBLIC_URL}/images/box/minimum-spanning-tree.gif`,
         tags: ['그래프', '유니온-파인드'],
         link: 'minimum-spanning-tree',
-        description: '루트 노드에서 시작하여 한 분기로써 탐색을 마치고 다음 분기로 넘어가는 방식의 그래프 탐색 알고리즘입니다.' +
-        '스택이나 재귀 함수를 통해 구현하며, 모든 경로를 탐색하거나 노드 상태를 검사할 때 사용됩니다.',
+        description: '최소 신장 트리란 한 그래프의 스패닝 트리들 중에서 가중값의 합이 가장 작은 것입니다.' + 
+        '신장 트리란 연결 그래프의 부분 그래프로서 그 그래프의 모든 정점과 간선의 부분 집합으로 구성되는 트리입니다.',
     },
     {
         title: '볼록껍질',
