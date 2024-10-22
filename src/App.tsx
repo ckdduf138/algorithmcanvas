@@ -36,7 +36,7 @@ const App = () => {
 
     useEffect(() => {
         if (deviceType !== 'desktop') {
-            alert('이 웹사이트는 PC에 최적화되어 있습니다.');
+            alert('이 웹사이트는 PC에 최적화되어 있습니다. PC에서 확인해 주시기 바랍니다.');
         }
     }, [deviceType]);
 
