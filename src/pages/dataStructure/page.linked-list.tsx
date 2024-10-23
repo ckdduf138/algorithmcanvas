@@ -17,7 +17,7 @@ const LinkedListPage: React.FC = () => {
     const currentInputIndex = inputIndex;
   
     if (currentInputIndex < 0 || (operation === 'insert' && currentInputIndex > linkedList.length) || (operation === 'delete' && currentInputIndex >= linkedList.length)) {
-      animateSearchThroughList(() => {
+      animateSearch(linkedList.length, () => {
         alert('유효한 인덱스를 입력하세요.');
         setIsAnimating(false);
       });
@@ -81,7 +81,7 @@ const LinkedListPage: React.FC = () => {
         setIsAnimating(false);
       });
     } else {
-      animateSearchThroughList(() => {
+      animateSearch(linkedList.length, () => {
         alert(`${inputValue}을(를) 찾을 수 없습니다.`);
         setIsAnimating(false);
       });
@@ -98,7 +98,7 @@ const LinkedListPage: React.FC = () => {
       });
     } else {
       // 유효하지 않은 인덱스일 경우 전체 리스트 탐색
-      animateSearchThroughList(() => {
+      animateSearch(linkedList.length, () => {
         setSearchIndex(null);
         alert('유효한 인덱스를 입력하세요.');
         setIsAnimating(false);
@@ -118,22 +118,7 @@ const LinkedListPage: React.FC = () => {
         setSearchIndex(currentIndex);
         currentIndex++;
       }
-    }, 500);
-  };
-
-  const animateSearchThroughList = (callback: () => void) => {
-    let currentIndex = 0;
-
-    const interval = setInterval(() => {
-      if (currentIndex >= linkedList.length) {
-        clearInterval(interval);
-        setSearchIndex(null);
-        callback();
-      } else {
-        setSearchIndex(currentIndex);
-        currentIndex++;
-      }
-    }, 500);
+    }, 1000);
   };
 
   return (
