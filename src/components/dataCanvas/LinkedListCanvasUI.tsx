@@ -15,6 +15,7 @@ const StyleCanvasUI = styled.div`
   row-gap: 20px;
   padding-top: 2%;
   padding-bottom: 2%;
+  padding: 2%;
 `;
 
 const ButtonWapper = styled.div`
