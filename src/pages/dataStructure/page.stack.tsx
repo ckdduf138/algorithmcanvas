@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import StackCanvas from '../../components/dataCanvas/StackCanvas';
-import DataCanvasUI from '../../components/dataCanvas/DataCanvasUI';
+import StackQueueCanvasUI from '../../components/dataCanvas/StackQueueCanvasUI';
 
 const StackPage: React.FC = () => {
   const [stack, setStack] = useState<string[]>([]);
@@ -75,7 +75,7 @@ const StackPage: React.FC = () => {
         isAdding={isAdding}
         isRemoving={isRemoving}
       />
-      <DataCanvasUI
+      <StackQueueCanvasUI
         data={stack}
         inputValue={inputValue}
         maxSize={stackSize}

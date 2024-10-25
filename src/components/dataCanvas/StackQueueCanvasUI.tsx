@@ -17,12 +17,12 @@ const StyleCanvasUI = styled.div`
   padding-bottom: 2%;
 `;
 
-const ButtonWapper = styled.div`
+const ButtonWrapper = styled.div`
   display: flex;
   gap: 20px;
 `;
 
-interface DataCanvasUIProps {
+interface StackQueueCanvasUIProps {
   data: string[];
   inputValue: string;
   maxSize: number;
@@ -35,7 +35,7 @@ interface DataCanvasUIProps {
   sizePlaceholder: string;
 }
 
-const DataCanvasUI: React.FC<DataCanvasUIProps> = ({
+const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
   data,
   inputValue,
   maxSize,
@@ -82,7 +82,7 @@ const DataCanvasUI: React.FC<DataCanvasUIProps> = ({
         handleKeyPress={handleKeyPress}
         isValidBtnAdd={true}
       />
-      <ButtonWapper>
+      <ButtonWrapper>
         <Button 
           onClick={handlePush} 
           disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0)} 
@@ -95,10 +95,9 @@ const DataCanvasUI: React.FC<DataCanvasUIProps> = ({
           rightImg={`${process.env.PUBLIC_URL}/images/minus-circle.svg`}>
           Pop
         </Button>
-      </ButtonWapper>
-
+      </ButtonWrapper>
     </StyleCanvasUI>
   );
 };
 
-export default DataCanvasUI;
+export default StackQueueCanvasUI;
