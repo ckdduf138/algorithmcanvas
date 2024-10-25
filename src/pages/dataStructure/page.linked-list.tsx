@@ -106,20 +106,39 @@ const LinkedListPage: React.FC = () => {
     }
   };
 
-  const animateSearch = (targetIndex: number, callback: () => void) => {
+  const animateSearch = (targetIndex: number, callback: () => void) => { 
     let currentIndex = 0;
 
-    const interval = setInterval(() => {
-      if (currentIndex > targetIndex) {
-        clearInterval(interval);
+    if (targetIndex === -1) {
         setSearchIndex(null);
         callback();
-      } else {
-        setSearchIndex(currentIndex);
-        currentIndex++;
-      }
+        return;
+    }
+
+    if (targetIndex < -1) {
+        alert('유효한 인덱스를 입력하세요.');
+        setSearchIndex(null);
+        callback();
+        return;
+    }
+
+    setSearchIndex(currentIndex);
+    currentIndex++;
+
+    const interval = setInterval(() => {
+        if (currentIndex > targetIndex) {
+            clearInterval(interval);
+            setSearchIndex(null);
+            callback();
+        } else {
+            setSearchIndex(currentIndex);
+            currentIndex++;
+        }
     }, 1000);
-  };
+};
+
+  
+  
 
   return (
     <Layout subTitle="연결리스트(linked-list)">

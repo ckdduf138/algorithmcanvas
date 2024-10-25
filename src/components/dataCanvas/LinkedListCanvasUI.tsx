@@ -73,7 +73,7 @@ const LinkedListCanvasUI: React.FC<LinkedListCanvasUIProps> = ({
         handleKeyPress={(e) => {
           if (e.key === 'Enter' && !isAnimating) handleInsertAtIndex(); // 애니메이션 중이 아닐 때만 작동
         }}
-        isValidBtnAdd={isValidBtnAdd} // 애니메이션 중일 때 버튼 비활성화
+        isValidBtnAdd={isValidBtnAdd}
         onclickBtnAdd={handleInsertAtIndex}
       />
       <InputBox
@@ -81,6 +81,7 @@ const LinkedListCanvasUI: React.FC<LinkedListCanvasUIProps> = ({
         inputValue={inputIndex.toString()} // 숫자를 문자열로 변환하여 출력
         handleInputChange={handleIndexChange}
         isValidBtnAdd={true}
+        title='인덱스'
       />
       <ButtonWapper>
         <Button

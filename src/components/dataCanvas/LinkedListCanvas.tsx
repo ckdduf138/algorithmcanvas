@@ -34,8 +34,8 @@ const colorChange = keyframes`
 `;
 
 const CanvasContainer = styled.div`
-  width: 100%;
-  height: 600px;
+  width: 90%;
+  height: 500px;
   display: flex;
   align-items: center;
   justify-content: space-around;
