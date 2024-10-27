@@ -11,6 +11,8 @@ const SelectionSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const delayRef = useRef(500);
+    const isPaused = useRef(false);
+    const isStopped = useRef(false);
 
     const handleAdd = useAdd(setBarGraphData);
     const handleReset = useReset(setBarGraphData);
@@ -20,6 +22,9 @@ const SelectionSortPage: React.FC = () => {
     const { sendAlert, resetAlert } = useAlert();
 
     const handleStart = async () => {
+        isPaused.current = false;
+        isStopped.current = false;
+
         const dataLength = barGraphData.length;
 
         barGraphData.forEach(data => {
@@ -28,12 +33,15 @@ const SelectionSortPage: React.FC = () => {
         setBarGraphData([...barGraphData]);
         
         for (let i = 0; i < dataLength; i++) {
-            let index = i;
+            if (isStopped.current) break;
 
+            let index = i;
             barGraphData[i].focus = 'highlight';
             setBarGraphData([...barGraphData]);
 
             for (let j = i + 1; j < dataLength; j++) {
+                if (isStopped.current) break;
+
                 if (index !== j) {
                     barGraphData[j].focus = 'active';
                     setBarGraphData([...barGraphData]);
@@ -42,6 +50,7 @@ const SelectionSortPage: React.FC = () => {
                 const shouldSwapAsc = sortOrder === 'asc' && barGraphData[j].data < barGraphData[index].data;
                 const shouldSwapDesc = sortOrder === 'desc' && barGraphData[j].data > barGraphData[index].data;
                 
+                if (isPaused.current) await new Promise<void>(pauseResume);
                 await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
                 if (shouldSwapAsc || shouldSwapDesc) {
@@ -57,6 +66,9 @@ const SelectionSortPage: React.FC = () => {
                 }
             }
 
+            if (isStopped.current) break;
+            
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
             [barGraphData[i].data, barGraphData[index].data] = [barGraphData[index].data, barGraphData[i].data];
@@ -66,14 +78,37 @@ const SelectionSortPage: React.FC = () => {
             setBarGraphData([...barGraphData]);
         }
 
-        sendAlert('success', '완료되었습니다.');
+        if (!isStopped.current) sendAlert('success', '완료되었습니다.');
+    };
+
+    const pauseResume = (resolve: () => void) => {
+        const interval = setInterval(() => {
+            if (!isPaused.current) {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 100);
+    };
+
+    const handlePause = () => {
+        isPaused.current = true;
+    };
+
+    const handleResume = () => {
+        isPaused.current = false;
+    };
+
+    const handleStop = () => {
+        isStopped.current = true;
+        isPaused.current = false;
     };
 
     useEffect(() => {
-        return() => {
+        return () => {
+            handleStop();
             resetAlert();
-        }
-    },[resetAlert]);
+        };
+    }, [resetAlert]);
 
     return (
         <Layout subTitle='선택정렬'>
@@ -85,6 +120,9 @@ const SelectionSortPage: React.FC = () => {
                 setSortOrder={setSortOrder}
                 handleStart={handleStart}
                 handleDelay={handleDelay}
+                handlePause={handlePause}
+                handleResume={handleResume}
+                handleStop={handleStop}
             />
         </Layout>
     );

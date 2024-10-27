@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import Button from "../common/buttons";
@@ -28,9 +28,12 @@ interface CanvasUIProps {
     handleStart: () => void;
     handleRandom: () => void;
     handleDelay: (delay: number) => void;
+    handlePause?: () => void;
+    handleResume?: () => void;
+    handleStop?: () => void;
 }
 
-const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleRandom, handleDelay }) => {
+const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleRandom, handleDelay, handlePause, handleResume, handleStop }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [dataLength, setDataLength] = useState<number>(0);
     const [isAscending, setIsAscending] = useState<string>('asc');
@@ -39,6 +42,8 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     const [isValidBtnReset, setIsValidBtnReset] = useState<boolean>(false);
     const [isValidBtnRandom, setIsValidBtnRandom] = useState<boolean>(true);
     const [isValidBtnStart, setIsValidBtnStart] = useState<boolean>(false);
+
+    const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
 
     useEffect(() => {
         setIsValidBtnReset(dataLength > 0);
@@ -52,7 +57,7 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
 
     const onclickBtnAdd = () => {
         if (isValidBtnAdd === false) return;
-        if (dataLength !== 0 && isValidBtnStart === false) return;
+        if (dataLength !== 0 && isRunning.current !== 'ready') return;
         
         handleAdd(inputValue);
         setInputValue('');
@@ -72,20 +77,40 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
     };
 
     const onclickBtnStart = async () => {
-        setIsValidBtnAdd(false);
+        if(isRunning.current === 'ready') {
+            isRunning.current = 'play';
 
-        setIsValidBtnReset(false);
-        setIsValidBtnRandom(false);
-        setIsValidBtnStart(false);
+            setIsValidBtnAdd(false);
+            setIsValidBtnReset(false);
+            setIsValidBtnRandom(false);
 
-        await handleStart();
+            if(handleStop)
+            handleStop();
+            
+            await handleStart();
+    
+            setIsValidBtnReset(true);
+            setIsValidBtnRandom(true);
+            setIsValidBtnStart(true);
+        }
+        else if(isRunning.current === 'play') {
+            isRunning.current = 'pause';
 
-        setIsValidBtnReset(true);
-        setIsValidBtnRandom(true);
-        setIsValidBtnStart(true);
+            if(handlePause) handlePause();
+        }
+        else if(isRunning.current === 'pause') {
+            isRunning.current = 'play';
+
+            if(handleResume) handleResume();
+        }
     };
 
     const onclickBtnRandom = async () => {
+        isRunning.current = 'ready';
+
+        if(handleStop)
+        handleStop();
+
         handleRandom();
         setDataLength(20);
 
@@ -123,9 +148,14 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
                 handleKeyPress={handleKeyPress}
                 isValidBtnAdd={isValidBtnAdd}
             />
-            <Button onClick={onclickBtnStart} disabled={!isValidBtnStart} rightImg={`${process.env.PUBLIC_URL}/images/play-button.svg`}>Start</Button>
-            <Button onClick={onclickBtnRandom} disabled={!isValidBtnRandom} rightImg={`${process.env.PUBLIC_URL}/images/shuffle-button.svg`}>Random</Button>
-            <Button onClick={onclickBtnReset} disabled={!isValidBtnReset} rightImg={`${process.env.PUBLIC_URL}/images/reset-button.svg`}>Reset</Button>
+            <Button 
+                disabled={!isValidBtnStart} 
+                rightImg={isRunning.current === 'play' ? `${process.env.PUBLIC_URL}/images/pause-button.svg` : `${process.env.PUBLIC_URL}/images/play-button.svg`} 
+                onClick={onclickBtnStart}>{isRunning.current === 'play' ? 'Pause' : 'Play'}
+            </Button> 
+
+            <Button disabled={!isValidBtnRandom} rightImg={`${process.env.PUBLIC_URL}/images/shuffle-button.svg`} onClick={onclickBtnRandom}>Random</Button>
+            <Button disabled={!isValidBtnReset} rightImg={`${process.env.PUBLIC_URL}/images/reset-button.svg`} onClick={onclickBtnReset}>Reset</Button>
 
             <SegmentedControl options={options} selectedValue={isAscending} onChange={handleSetSort} />
 
