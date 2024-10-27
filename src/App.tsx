@@ -6,6 +6,7 @@ import HomePage from './pages/page.home';
 import QueuePage from './pages/dataStructure/page.queue';
 import StackPage from './pages/dataStructure/page.stack';
 import HeapTreePage from './pages/dataStructure/page.heap-tree';
+import LinkedListPage from './pages/dataStructure/page.linked-list';
 
 import SelectionSortPage from './pages/sort/page.selectionSort';
 import InsertionSortPage from './pages/sort/page.insertionSort';
@@ -49,18 +50,19 @@ const App = () => {
                         {/* Root */}
                         <Route path="" element={<HomePage />} />
 
-                        {/* 자료구조 */}
-                        <Route path="queue" element={<QueuePage />} />
-                        <Route path="stack" element={<StackPage />} />
-                        {<Route path="heap-tree" element={<HeapTreePage />} />}
-
-                        {/* 정렬 */}
-                        <Route path="selection-sort" element={<SelectionSortPage />} />
-                        <Route path="insertion-sort" element={<InsertionSortPage />} />
-                        <Route path="bubble-sort" element={<BubbleSortPage />} />
-                        <Route path="merge-sort" element={<MergeSortPage />} />
-                        <Route path="heap-sort" element={<HeapSortPage />} />
-                        <Route path="quick-sort" element={<QuickSortPage />} />
+                    {/* 자료구조 */}
+                    <Route path="queue" element={<QueuePage />} />
+                    <Route path="stack" element={<StackPage />} />
+                    {<Route path="heap-tree" element={<HeapTreePage />} />}
+                    {<Route path="linked-list" element={<LinkedListPage />} />}
+                    
+                    {/* 정렬 */}
+                    <Route path="selection-sort" element={<SelectionSortPage />} />
+                    <Route path="insertion-sort" element={<InsertionSortPage />} />
+                    <Route path="bubble-sort" element={<BubbleSortPage />} />
+                    <Route path="merge-sort" element={<MergeSortPage />} />
+                    <Route path="heap-sort" element={<HeapSortPage />} />
+                    <Route path="quick-sort" element={<QuickSortPage />} />
 
                         {/* 그래프 */}
                         <Route path="bfs" element={<BFSPage />} />

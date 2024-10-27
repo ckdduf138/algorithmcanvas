@@ -22,7 +22,8 @@ export const tagColors: { [key: string]: string } = {
     '유니온-파인드': '#E1FF9E',
     '기하학': '#FFD3B6',
     '브루트 포스': '#D3D3D3',
-    '트리': '#FFD700'
+    '트리': '#FFD700',
+    '연결리스트': '#A5D6FF',
 };
 
 export const tagHoverColors: { [key: string]: string } = {
@@ -42,7 +43,8 @@ export const tagHoverColors: { [key: string]: string } = {
     '유니온-파인드': '#C7E28C',
     '기하학': '#E2BBA0',	
     '브루트 포스': '#B7B7B7',
-    '트리': '#E0B800'
+    '트리': '#E0B800',
+    '연결리스트': '#8AB7E3',
 };
 
 export interface BoxProps {
@@ -86,6 +88,15 @@ export const boxes: BoxProps[] = [
         link: 'heap-tree',
         description: '최대 힙 트리(Maximum Heap Tree)나 최소 힙 트리(Minimum Heap Tree)를 이용하여 정렬하는 알고리즘입니다.<br><br>' +
         '내림차순으로 정렬 시 최대 힙 트리로 구성하고, 오름차순으로 정렬 시 최소 힙 트리로 구성하여 자료를 추출할 수 있습니다.',
+    },
+    {
+        title: '연결 리스트',
+        algorithmType: '자료구조',
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/heap-tree.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/heap-tree.gif`,
+        tags: ['자료구조', '연결리스트'],
+        link: 'linked-list',
+        description: '연결리스트 설명',
     },
     {
         title: '선택정렬',

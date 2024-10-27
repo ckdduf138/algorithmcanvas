@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import QueueCanvas from '../../components/dataCanvas/QueueCanvas';
-import DataCanvasUI from '../../components/dataCanvas/DataCanvasUI';
+import StackQueueCanvasUI from '../../components/dataCanvas/StackQueueCanvasUI';
 import { useAlert } from '../../context/alertContext';
 
 const QueuePage: React.FC = () => {
@@ -82,7 +82,7 @@ const QueuePage: React.FC = () => {
         isAdding={isAdding}
         isRemoving={isRemoving}
       />
-      <DataCanvasUI
+      <StackQueueCanvasUI
         data={queue}
         inputValue={inputValue}
         maxSize={queueSize}
