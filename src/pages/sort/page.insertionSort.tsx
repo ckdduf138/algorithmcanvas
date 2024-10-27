@@ -11,6 +11,8 @@ const InsertionSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const delayRef = useRef(500);
+    const isPaused = useRef(false);
+    const isStopped = useRef(false);
 
     const handleAdd = useAdd(setBarGraphData);
     const handleReset = useReset(setBarGraphData);
@@ -28,7 +30,8 @@ const InsertionSortPage: React.FC = () => {
         setBarGraphData([...barGraphData]);
 
         for (let i = 0; i < dataLength; i++) {
-
+            if (isStopped.current) return;
+            
             barGraphData.forEach(data => {
                 data.focus = 'inactive';
             });
@@ -38,15 +41,19 @@ const InsertionSortPage: React.FC = () => {
             barGraphData[i].focus = 'active';
             setBarGraphData([...barGraphData]);
 
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
             while (j > 0) {
+                if (isStopped.current) return;
+
                 barGraphData[j - 1].focus = 'active';
                 setBarGraphData([...barGraphData]);
 
                 const shouldSwapAsc = sortOrder === 'asc' && barGraphData[j].data < barGraphData[j - 1].data;
                 const shouldSwapDesc = sortOrder === 'desc' && barGraphData[j].data > barGraphData[j - 1].data;
 
+                if (isPaused.current) await new Promise<void>(pauseResume);
                 await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
                 if (shouldSwapAsc || shouldSwapDesc) {
@@ -63,6 +70,7 @@ const InsertionSortPage: React.FC = () => {
                     break;
                 }
 
+                if (isPaused.current) await new Promise<void>(pauseResume);
                 await new Promise(resolve => setTimeout(resolve, delayRef.current));
             }
         }
@@ -72,11 +80,36 @@ const InsertionSortPage: React.FC = () => {
         });
         setBarGraphData([...barGraphData]);
 
-        sendAlert('success', '완료되었습니다.');
+        if (!isStopped.current) sendAlert('success', '완료되었습니다.');
+    };
+
+    const pauseResume = (resolve: () => void) => {
+        const checkPaused = () => {
+            if (!isPaused.current) {
+                resolve();
+            } else {
+                requestAnimationFrame(checkPaused);
+            }
+        };
+        checkPaused();
+    };
+    
+    const handlePause = () => {
+        isPaused.current = true;
+    };
+
+    const handleResume = () => {
+        isPaused.current = false;
+    };
+
+    const handleStop = () => {
+        isStopped.current = true;
+        isPaused.current = false;
     };
 
     useEffect(() => {
         return() => {
+            handleStop();
             resetAlert();
         }
     },[resetAlert]);
@@ -91,6 +124,8 @@ const InsertionSortPage: React.FC = () => {
                 setSortOrder={setSortOrder}
                 handleStart={handleStart}
                 handleDelay={handleDelay}
+                handlePause={handlePause}
+                handleResume={handleResume}
             />
         </Layout>
     );

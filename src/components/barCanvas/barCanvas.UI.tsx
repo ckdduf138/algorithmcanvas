@@ -30,10 +30,9 @@ interface CanvasUIProps {
     handleDelay: (delay: number) => void;
     handlePause?: () => void;
     handleResume?: () => void;
-    handleStop?: () => void;
 }
 
-const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleRandom, handleDelay, handlePause, handleResume, handleStop }) => {
+const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortOrder, handleStart, handleRandom, handleDelay, handlePause, handleResume }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [dataLength, setDataLength] = useState<number>(0);
     const [isAscending, setIsAscending] = useState<string>('asc');
@@ -83,12 +82,11 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
             setIsValidBtnAdd(false);
             setIsValidBtnReset(false);
             setIsValidBtnRandom(false);
-
-            if(handleStop)
-            handleStop();
             
             await handleStart();
     
+            isRunning.current = 'ready';
+
             setIsValidBtnReset(true);
             setIsValidBtnRandom(true);
             setIsValidBtnStart(true);
@@ -107,9 +105,6 @@ const BarCanvasUI: React.FC<CanvasUIProps> = ({ handleAdd, handleReset, setSortO
 
     const onclickBtnRandom = async () => {
         isRunning.current = 'ready';
-
-        if(handleStop)
-        handleStop();
 
         handleRandom();
         setDataLength(20);

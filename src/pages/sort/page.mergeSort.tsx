@@ -11,6 +11,8 @@ const MergeSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const delayRef = useRef(500);
+    const isPaused = useRef(false);
+    const isStopped = useRef(false);
 
     const handleAdd = useAdd(setBarGraphData);
     const handleReset = useReset(setBarGraphData);
@@ -34,7 +36,7 @@ const MergeSortPage: React.FC = () => {
         });
         setBarGraphData([...barGraphData]);
 
-        sendAlert('success', '완료되었습니다.');
+        if (!isStopped.current) sendAlert('success', '완료되었습니다.');
     };
 
     const mergeSort = async (array: BarGraphData[], start: number, end: number) => {
@@ -42,9 +44,15 @@ const MergeSortPage: React.FC = () => {
 
         const mid = Math.floor((start + end) / 2);
 
+        if (isStopped.current) return;
+
         await mergeSort(array, start, mid);
 
+        if (isStopped.current) return;
+
         await mergeSort(array, mid + 1, end);
+
+        if (isStopped.current) return;
 
         await merge(array, start, mid, end);
     };
@@ -61,9 +69,13 @@ const MergeSortPage: React.FC = () => {
         setBarGraphData([...array]);
     
         while (i < leftArray.length && j < rightArray.length) {
+
+            if (isStopped.current) return;
+
             array[k].focus = 'highlight';
             setBarGraphData([...array]);
     
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
     
             if (sortOrder === 'asc' ? leftArray[i].data <= rightArray[j].data : leftArray[i].data >= rightArray[j].data) {
@@ -78,24 +90,34 @@ const MergeSortPage: React.FC = () => {
             setBarGraphData([...array]);
     
             k++;
+
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
         }
     
         while (i < leftArray.length) {
+            if (isStopped.current) return;
+
             array[k] = { ...leftArray[i] };  // 전체 객체 복사
             array[k].focus = 'completed';
             i++;
             k++;
             setBarGraphData([...array]);
+
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
         }
     
         while (j < rightArray.length) {
+            if (isStopped.current) return;
+
             array[k] = { ...rightArray[j] };  // 전체 객체 복사
             array[k].focus = 'completed';
             j++;
             k++;
             setBarGraphData([...array]);
+
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
         }
     
@@ -105,8 +127,33 @@ const MergeSortPage: React.FC = () => {
         setBarGraphData([...array]);
     };
 
+    const pauseResume = (resolve: () => void) => {
+        const checkPaused = () => {
+            if (!isPaused.current) {
+                resolve();
+            } else {
+                requestAnimationFrame(checkPaused);
+            }
+        };
+        checkPaused();
+    };
+
+    const handlePause = () => {
+        isPaused.current = true;
+    };
+
+    const handleResume = () => {
+        isPaused.current = false;
+    };
+
+    const handleStop = () => {
+        isStopped.current = true;
+        isPaused.current = false;
+    };
+
     useEffect(() => {
         return() => {
+            handleStop();
             resetAlert();
         }
     },[resetAlert]);
@@ -121,6 +168,8 @@ const MergeSortPage: React.FC = () => {
                 setSortOrder={setSortOrder}
                 handleStart={handleStart}
                 handleDelay={handleDelay}
+                handlePause={handlePause}
+                handleResume={handleResume}
             />
         </Layout>
     );

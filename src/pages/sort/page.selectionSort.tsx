@@ -67,7 +67,7 @@ const SelectionSortPage: React.FC = () => {
             }
 
             if (isStopped.current) break;
-            
+
             if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
@@ -82,12 +82,14 @@ const SelectionSortPage: React.FC = () => {
     };
 
     const pauseResume = (resolve: () => void) => {
-        const interval = setInterval(() => {
+        const checkPaused = () => {
             if (!isPaused.current) {
-                clearInterval(interval);
                 resolve();
+            } else {
+                requestAnimationFrame(checkPaused);
             }
-        }, 100);
+        };
+        checkPaused();
     };
 
     const handlePause = () => {
@@ -122,7 +124,6 @@ const SelectionSortPage: React.FC = () => {
                 handleDelay={handleDelay}
                 handlePause={handlePause}
                 handleResume={handleResume}
-                handleStop={handleStop}
             />
         </Layout>
     );

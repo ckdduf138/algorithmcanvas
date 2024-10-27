@@ -11,6 +11,8 @@ const QuickSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const delayRef = useRef(500);
+    const isPaused = useRef(false);
+    const isStopped = useRef(false);
 
     const handleAdd = useAdd(setBarGraphData);
     const handleReset = useReset(setBarGraphData);
@@ -27,6 +29,9 @@ const QuickSortPage: React.FC = () => {
         });
         setBarGraphData([...barGraphData]);
 
+        console.log(isStopped.current);
+        if (isStopped.current) return;
+
         await quickSort(barGraphData, 0, dataLength - 1);
 
         barGraphData.forEach(data => {
@@ -34,12 +39,16 @@ const QuickSortPage: React.FC = () => {
         });
         setBarGraphData([...barGraphData]);
 
-        sendAlert('success', '완료되었습니다.');
+        if (!isStopped.current) sendAlert('success', '완료되었습니다.');
     };
 
     const quickSort = async (array: BarGraphData[], low: number, high: number) => {
         if (low < high) {
+            if (isStopped.current) return;
+
             const pi = await partition(array, low, high);
+
+            if (isStopped.current) return;
 
             await quickSort(array, low, pi - 1);
 
@@ -54,13 +63,17 @@ const QuickSortPage: React.FC = () => {
         array[pivotIndex].focus = 'highlight';
         setBarGraphData([...array]);
 
+        if (isPaused.current) await new Promise<void>(pauseResume);
         await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
         let i = low - 1;
         for (let j = low; j < high; j++) {
+            if (isStopped.current) break;
+
             array[j].focus = 'active';
             setBarGraphData([...array]);
 
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
             if (sortOrder === 'asc' ? array[j].data <= pivotValue : array[j].data >= pivotValue) {
@@ -81,13 +94,39 @@ const QuickSortPage: React.FC = () => {
         array[i + 1].focus = 'completed';
         setBarGraphData([...array]);
 
+        if (isPaused.current) await new Promise<void>(pauseResume);
         await new Promise(resolve => setTimeout(resolve, delayRef.current));
 
         return i + 1;
     };
 
+    const pauseResume = (resolve: () => void) => {
+        const checkPaused = () => {
+            if (!isPaused.current) {
+                resolve();
+            } else {
+                requestAnimationFrame(checkPaused);
+            }
+        };
+        checkPaused();
+    };
+
+    const handlePause = () => {
+        isPaused.current = true;
+    };
+
+    const handleResume = () => {
+        isPaused.current = false;
+    };
+
+    const handleStop = () => {
+        isStopped.current = true;
+        isPaused.current = false;
+    };
+
     useEffect(() => {
         return() => {
+            handleStop();
             resetAlert();
         }
     },[resetAlert]);
@@ -102,6 +141,8 @@ const QuickSortPage: React.FC = () => {
                 setSortOrder={setSortOrder}
                 handleStart={handleStart}
                 handleDelay={handleDelay}
+                handlePause={handlePause}
+                handleResume={handleResume}
             />
         </Layout>
     );
