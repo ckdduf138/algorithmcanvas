@@ -101,14 +101,14 @@ const LinkedListCanvasUI: React.FC<LinkedListCanvasUIProps> = ({
         <Button
           onClick={handleSearchByName}
           disabled={linkedList.length === 0 || isAnimating} // 애니메이션 중일 때 비활성화
-          rightImg={`${process.env.PUBLIC_URL}/images/search-bar.svg`}
+          rightImg={`${process.env.PUBLIC_URL}/images/linked-list-search.svg`}
         >
           이름 검색
         </Button>
         <Button
           onClick={handleSearchByIndex}
           disabled={linkedList.length === 0 || isAnimating} // 애니메이션 중일 때 비활성화
-          rightImg={`${process.env.PUBLIC_URL}/images/search-bar.svg`}
+          rightImg={`${process.env.PUBLIC_URL}/images/linked-list-search.svg`}
         >
           인덱스 검색
         </Button>

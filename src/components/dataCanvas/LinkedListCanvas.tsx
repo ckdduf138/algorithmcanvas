@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 
@@ -113,23 +113,36 @@ const HeadArrow = styled.div`
   margin-right: 10px;
 `;
 
-const HeadLabel = styled.div<{ $theme: string }>` // 테마 prop 추가
+const HeadLabel = styled.div<{ $theme: string }>`
   margin: 15px;
   font-size: 12px;
   font-weight: bold;
-  color: ${({ $theme }) => ($theme === 'light' ? '#000' : '#fff')}; // 테마에 따라 색상 변경
+  color: ${({ $theme }) => ($theme === 'light' ? '#000' : '#fff')};
 `;
 
 interface LinkedListCanvasProps {
   linkedList: string[];
   searchIndex: number | null;
-  inputIndex: number; // 추가된 props
+  inputIndex: number;
   isAdding: boolean;
   isRemoving: boolean;
 }
 
 const LinkedListCanvas: React.FC<LinkedListCanvasProps> = ({ linkedList, searchIndex, inputIndex, isAdding, isRemoving }) => {
-  const { theme } = useTheme(); // 테마 가져오기
+  const { theme } = useTheme();
+  const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    // 검색 중인 노드로 스크롤 이동
+    if (searchIndex !== null && nodeRefs.current[searchIndex]) {
+      nodeRefs.current[searchIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      });
+    }
+  }, [searchIndex]);
+
   return (
     <CanvasContainer>
       {linkedList.length === 0 ? (
@@ -140,7 +153,7 @@ const LinkedListCanvas: React.FC<LinkedListCanvasProps> = ({ linkedList, searchI
             {index === 0 && (
               <>
                 <HeadArrow>
-                  <HeadLabel $theme={theme}>head</HeadLabel> {/* 테마 전달 */}
+                  <HeadLabel $theme={theme}>head</HeadLabel>
                 </HeadArrow>
                 <ArrowLineWapper
                   $isAdding={isAdding && inputIndex === 0}
@@ -152,13 +165,14 @@ const LinkedListCanvas: React.FC<LinkedListCanvasProps> = ({ linkedList, searchI
               </>
             )}
             <NodeContainer
+              ref={(el) => (nodeRefs.current[index] = el)}
               isSearching={searchIndex === index}
               $isAdding={isAdding && index === inputIndex}
               $isRemoving={isRemoving && index === inputIndex}
-              $theme={theme} // 테마 전달
+              $theme={theme}
             >
               <DataSection>{node}</DataSection>
-              <PointerSection isNext={searchIndex !== null && ( index === searchIndex - 1 || index === searchIndex)} $theme={theme}>
+              <PointerSection isNext={searchIndex !== null && (index === searchIndex - 1 || index === searchIndex)} $theme={theme}>
                 {index === linkedList.length - 1 ? 'NULL' : `*${index + 1}번째 요소의 주소`}
               </PointerSection>
             </NodeContainer>
