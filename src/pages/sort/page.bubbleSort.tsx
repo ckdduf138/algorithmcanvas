@@ -11,7 +11,9 @@ const BubbleSortPage: React.FC = () => {
     const [barGraphData, setBarGraphData] = useState<BarGraphData[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const delayRef = useRef(500);
-    
+    const isPaused = useRef(false);
+    const isStopped = useRef(false);
+
     const { sendAlert, resetAlert } = useAlert();
 
     const handleAdd = useAdd(setBarGraphData);
@@ -29,10 +31,13 @@ const BubbleSortPage: React.FC = () => {
     
         for (let i = 0; i < dataLength - 1; i++) {
             for (let j = 0; j < dataLength - 1 - i; j++) {
+                if (isStopped.current) return;
+
                 barGraphData[j].focus = 'active';
                 barGraphData[j + 1].focus = 'active';
                 setBarGraphData([...barGraphData]);
     
+                if (isPaused.current) await new Promise<void>(pauseResume);
                 await new Promise(resolve => setTimeout(resolve, delayRef.current));
     
                 const shouldSwapAsc = sortOrder === 'asc' && barGraphData[j].data > barGraphData[j + 1].data;
@@ -47,6 +52,9 @@ const BubbleSortPage: React.FC = () => {
                 setBarGraphData([...barGraphData]);
             }
     
+            if (isStopped.current) return;
+            
+            if (isPaused.current) await new Promise<void>(pauseResume);
             await new Promise(resolve => setTimeout(resolve, delayRef.current));
     
             barGraphData[dataLength - 1 - i].focus = 'completed';
@@ -56,11 +64,36 @@ const BubbleSortPage: React.FC = () => {
         barGraphData[0].focus = 'completed';
         setBarGraphData([...barGraphData]);
 
-        sendAlert('success', '완료되었습니다.');
+        if (!isStopped.current) sendAlert('success', '완료되었습니다.');
+    };
+
+    const pauseResume = (resolve: () => void) => {
+        const checkPaused = () => {
+            if (!isPaused.current) {
+                resolve();
+            } else {
+                requestAnimationFrame(checkPaused);
+            }
+        };
+        checkPaused();
+    };
+    
+    const handlePause = () => {
+        isPaused.current = true;
+    };
+
+    const handleResume = () => {
+        isPaused.current = false;
+    };
+
+    const handleStop = () => {
+        isStopped.current = true;
+        isPaused.current = false;
     };
 
     useEffect(() => {
         return() => {
+            handleStop();
             resetAlert();
         }
     },[resetAlert]);
@@ -75,6 +108,8 @@ const BubbleSortPage: React.FC = () => {
                 setSortOrder={setSortOrder}
                 handleStart={handleStart}
                 handleDelay={handleDelay}
+                handlePause={handlePause}
+                handleResume={handleResume}
             />
         </Layout>
     );
