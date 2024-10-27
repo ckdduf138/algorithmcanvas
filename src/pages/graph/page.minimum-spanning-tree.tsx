@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
@@ -8,6 +8,7 @@ import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
 import SlideUI from '../../components/graphCanvas/slideUI';
+import { useAlert } from '../../context/alertContext';
 
 const MinimumSpanningTreePage: React.FC = () => {
   const [selectAlgorithm, setSelectAlgorithm] = useState('kruskal');
@@ -22,6 +23,8 @@ const MinimumSpanningTreePage: React.FC = () => {
     = useGraphCanvas(isRunning, delayRef);
 
   const { randomizeGraphDataInWeight, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
+
+  const { sendAlert, resetAlert } = useAlert();
 
   const options = [
     { value: 'kruskal', label: 'kruskal' },
@@ -87,32 +90,32 @@ const MinimumSpanningTreePage: React.FC = () => {
     const rank = new Map<string, number>();
 
     nodes.forEach((node) => {
-        parent.set(node.id, node.id);
-        rank.set(node.id, 0);
-        updateNodeFocus(node.id, 'inactive');
+      parent.set(node.id, node.id);
+      rank.set(node.id, 0);
+      updateNodeFocus(node.id, 'inactive');
     });
 
     const find = (nodeId: string): string => {
-        if (parent.get(nodeId) !== nodeId) {
-            parent.set(nodeId, find(parent.get(nodeId)!));
-        }
-        return parent.get(nodeId)!;
+      if (parent.get(nodeId) !== nodeId) {
+        parent.set(nodeId, find(parent.get(nodeId)!));
+      }
+      return parent.get(nodeId)!;
     };
 
     const union = (nodeId1: string, nodeId2: string) => {
-        const root1 = find(nodeId1);
-        const root2 = find(nodeId2);
+      const root1 = find(nodeId1);
+      const root2 = find(nodeId2);
 
-        if (root1 !== root2) {
-            if (rank.get(root1)! > rank.get(root2)!) {
-                parent.set(root2, root1);
-            } else if (rank.get(root1)! < rank.get(root2)!) {
-                parent.set(root1, root2);
-            } else {
-                parent.set(root2, root1);
-                rank.set(root1, rank.get(root1)! + 1);
-            }
+      if (root1 !== root2) {
+        if (rank.get(root1)! > rank.get(root2)!) {
+          parent.set(root2, root1);
+        } else if (rank.get(root1)! < rank.get(root2)!) {
+          parent.set(root1, root2); 
+        } else {
+          parent.set(root2, root1);
+          rank.set(root1, rank.get(root1)! + 1);
         }
+      }
     };
 
     const sortedLinks = [...links].sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0));
@@ -120,16 +123,16 @@ const MinimumSpanningTreePage: React.FC = () => {
     const mstEdges: { source: string; target: string; weight: number }[] = [];
 
     for (const { source, target, weight } of sortedLinks) {
-        if (find(source) !== find(target)) {
-            mstEdges.push({ source, target, weight: weight ?? 0 });
-            union(source, target);
+      if (find(source) !== find(target)) {
+        mstEdges.push({ source, target, weight: weight ?? 0 });
+        union(source, target);
 
-            await updateEdgeFocus(source, target, 'active');
-            updateEdgeFocus(source, target, 'success');
+        await updateEdgeFocus(source, target, 'active');
+        updateEdgeFocus(source, target, 'success');
 
-            await updateNodeFocus(source, 'success');
-            await updateNodeFocus(target, 'success');
-        }
+        await updateNodeFocus(source, 'success');
+        await updateNodeFocus(target, 'success');
+      }
     }
 
     isRunning.current = false;
@@ -157,19 +160,19 @@ const MinimumSpanningTreePage: React.FC = () => {
     addEdges(startNodeId);
 
     while (mstSet.size < nodes.length && edgeQueue.length > 0) {
-        edgeQueue.sort((a, b) => a.weight - b.weight);
+      edgeQueue.sort((a, b) => a.weight - b.weight);
 
-        const { source, target } = edgeQueue.shift()!;
-        if (!mstSet.has(target)) {
-            mstSet.add(target);
+      const { source, target } = edgeQueue.shift()!;
+      if (!mstSet.has(target)) {
+        mstSet.add(target);
 
-            await updateEdgeFocus(source, target, 'active');
-            updateEdgeFocus(source, target, 'success');
+        await updateEdgeFocus(source, target, 'active');
+        updateEdgeFocus(source, target, 'success');
 
-            await updateNodeFocus(target, 'success');
+        await updateNodeFocus(target, 'success');
 
-            addEdges(target);
-        }
+        addEdges(target);
+      }
     }
 
     await updateNodeFocus(startNodeId, 'success');
@@ -197,9 +200,10 @@ const MinimumSpanningTreePage: React.FC = () => {
     else if(selectAlgorithm === 'Prim') {
       if(selectedNode) {
         await handlePrimStart(selectedNode.id);
+        sendAlert('success', '완료되었습니다.');
       }
       else {
-        alert('시작할 노드를 선택해주세요.');
+        sendAlert('info', '시작할 노드를 선택해주세요.');
       }
     }
   };
@@ -207,6 +211,12 @@ const MinimumSpanningTreePage: React.FC = () => {
   const handleSetAlgorithm = (option: string) => {
     setSelectAlgorithm(option);
   };
+
+  useEffect(() => {
+    return() => {
+      resetAlert();
+    }
+  },[resetAlert]);
 
   return(
     <Layout subTitle='최소 신장 트리(Minimum Spanning Tree)'>

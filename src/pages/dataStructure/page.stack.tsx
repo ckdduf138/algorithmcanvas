@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import StackCanvas from '../../components/dataCanvas/StackCanvas';
 import StackQueueCanvasUI from '../../components/dataCanvas/StackQueueCanvasUI';
+import { useAlert } from '../../context/alertContext';
 
 const StackPage: React.FC = () => {
   const [stack, setStack] = useState<string[]>([]);
@@ -12,11 +13,9 @@ const StackPage: React.FC = () => {
 
   const stackRef = useRef<HTMLDivElement>(null);
 
+  const { sendAlert, resetAlert } = useAlert();
+
   const handlePush = () => {
-    if (!inputValue.trim()) {
-      alert('추가할 데이터를 입력하세요.');
-      return;
-    }
     if (stack.length < stackSize || stackSize === 0) {
 
       if(stackRef.current) {
@@ -32,40 +31,40 @@ const StackPage: React.FC = () => {
         setIsAdding(false);
       }, 500);
     } else {
-      alert('스택이 가득 찼습니다.');
+      sendAlert('warning', '스택이 가득 찼습니다.');
     }
   };
 
   const handlePop = () => {
-    if (stack.length > 0) {
-
-      if(stackRef.current) {
-        stackRef.current.scrollTop = -stackRef.current.scrollHeight;
-      }
-
-      setIsRemoving(true);
-
-      const newStack = [...stack];
-
-      setTimeout(() => {
-        newStack.pop();
-        setStack(newStack);
-        setIsRemoving(false);
-      }, 500);
-    } else {
-      alert('스택에 데이터가 없습니다.');
+    if(stackRef.current) {
+      stackRef.current.scrollTop = -stackRef.current.scrollHeight;
     }
+
+    setIsRemoving(true);
+
+    const newStack = [...stack];
+
+    setTimeout(() => {
+      newStack.pop();
+      setStack(newStack);
+      setIsRemoving(false);
+    }, 500);
   };
 
   const handleStackSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSize = Number(event.target.value);
     if (isNaN(newSize)) {
-      console.error("숫자를 입력하세요.");
       return;
     }
     setStackSize(newSize);
     setStack([]);
   };
+
+  useEffect(() => {
+    return() => {
+      resetAlert();
+    }
+  },[resetAlert]);
 
   return (
     <Layout subTitle="스택(STACK)">
