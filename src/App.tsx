@@ -48,7 +48,7 @@ const App = () => {
                     <CustomAlert />
                     <Routes>
                         {/* Root */}
-                        <Route path="" element={<HomePage />} />
+                        <Route path="/" element={<HomePage />} />
 
                         {/* 자료구조 */}
                         <Route path="queue" element={<QueuePage />} />
@@ -74,6 +74,9 @@ const App = () => {
 
                         {/* 기하학 */}
                         <Route path="convex-hull" element={<ConvexHullPage />} />
+
+                        {/* Github Pages 예외 */}
+                        <Route path="index" element={<Navigate to="/" />} />
 
                         {/* 404 */}
                         <Route path="404" element={<NotFoundPage />} />
