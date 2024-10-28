@@ -75,12 +75,12 @@ const App = () => {
                         {/* 기하학 */}
                         <Route path="convex-hull" element={<ConvexHullPage />} />
 
+                        {/* Github Pages 예외 */}
+                        <Route path="index" element={<Navigate to="" />} />
+                        
                         {/* 404 */}
                         <Route path="404" element={<NotFoundPage />} />
                         <Route path="*" element={<Navigate to="404" />} />
-
-                        {/* Github Pages 예외 */}
-                        <Route path="index" element={<Navigate to="" />} />
                     </Routes>
                 </BrowserRouter>
             </AlertProvider>
