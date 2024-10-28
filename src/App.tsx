@@ -53,8 +53,8 @@ const App = () => {
                         {/* 자료구조 */}
                         <Route path="queue" element={<QueuePage />} />
                         <Route path="stack" element={<StackPage />} />
-                        {<Route path="heap-tree" element={<HeapTreePage />} />}
-                        {<Route path="linked-list" element={<LinkedListPage />} />}
+                        <Route path="heap-tree" element={<HeapTreePage />} />
+                        <Route path="linked-list" element={<LinkedListPage />} />
                         
                         {/* 정렬 */}
                         <Route path="selection-sort" element={<SelectionSortPage />} />
