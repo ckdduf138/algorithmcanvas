@@ -92,8 +92,8 @@ export const boxes: BoxProps[] = [
     {
         title: '연결 리스트',
         algorithmType: '자료구조',
-        imgSrc: `${process.env.PUBLIC_URL}/images/box/heap-tree.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/box/heap-tree.gif`,
+        imgSrc: `${process.env.PUBLIC_URL}/images/box/linked-list.png`,
+        gifSrc: `${process.env.PUBLIC_URL}/images/box/linked-list.gif`,
         tags: ['자료구조', '연결리스트'],
         link: 'linked-list',
         description: '연결 리스트(linked list)는 동일한 성격을 가진 자료들이 비연속적인 공간에 링크를 통해 순서대로 연결된 선형 자료구조입니다.<br><br>' +
