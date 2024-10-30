@@ -33,22 +33,22 @@ const ColoredText = styled.div`
     justify-content: center;
     color: ${(props) => props.color || 'black'};
 
-    @media (max-width: 650px) {
+    @media (max-width: 960px) {
         width: 30px;
         font-size: 20px;
-    }
-
-    @media (max-width: 480px) {
-        width: 20px;
-        font-size: 12px;
     }
 `;
 
 const ToggleContainer = styled.div`
     position: absolute;
-    right: 3%;
+    top: 20px;
+    right: 20px;
     display: flex;
     align-items: center;
+
+    @media (max-width: 790px) {
+        display: none;
+    }
 `;
 
 const SubtitleWapper = styled.div`
