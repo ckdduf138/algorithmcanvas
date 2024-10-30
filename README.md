@@ -8,6 +8,8 @@
 
 친화적 학습 플랫폼으로 누구나 쉽게 사용하도록 설계하였습니다.
 
+![main](https://github.com/user-attachments/assets/f69cbe8c-be0a-49bd-812d-3d8df4e6fb59)
+
 <img src="https://algorithmcanvas.com/images/favicon.svg" style="width: 28px; height: 28px;" align='left' />
 <a href="https://algorithmcanvas.com" target="_blank">웹 사이트 보러 가기</a>
 
@@ -28,14 +30,22 @@
 **자료구조 시각화**
 >스택, 큐, 힙 등의 자료구조를 시각화하여 동작 원리를 설명합니다.
 
+![queue](https://github.com/user-attachments/assets/16e75d5d-65c0-4563-8614-6d666e006216)
+
 **정렬 알고리즘 시각화**
 >버블 정렬, 삽입 정렬, 선택 정렬, 퀵 정렬 등 다양한 정렬 알고리즘의 동작을 단계별로 확인할 수 있습니다.
+
+![sort](https://github.com/user-attachments/assets/82db68d0-ebe4-4112-bb08-a6dc9c647cb6)
 
 **그래프 알고리즘 시각화**
 >최단 경로, 최소 신장 트리 등 그래프 알고리즘을 시각적으로 표현하여 쉽게 이해할 수 있도록 합니다.
 
+![bfs](https://github.com/user-attachments/assets/ac8e3f10-f7f8-4c05-b37a-d7ec34cbacf4)
+
 **기하학 알고리즘 시각화**
 >볼록 껍질 등 기하학 알고리즘을 시각화하여 직관적으로 이해할 수 있게 합니다.
+
+![convex](https://github.com/user-attachments/assets/786f47d3-a1c7-4ce3-a622-1a8b5897a0d9)
 
 ---
 
