@@ -11,13 +11,13 @@ import SlideUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const DijkstraPage: React.FC = () => {
-  const isRunning = useRef(false);
+  const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
   const delayRef = useRef(500);
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick } 
-    = useGraphCanvas(isRunning, delayRef, true, true);
+    = useGraphCanvas(isRunning.current, delayRef, true, true);
 
   const { randomizeGraphDataInWeightAndDirection, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -66,7 +66,7 @@ const DijkstraPage: React.FC = () => {
   }
 
   const handleStart = async (startNodeId: string) => {
-    isRunning.current = true;
+    isRunning.current = 'play';
 
     const { nodes, links } = nodeGraphData;
   
@@ -124,13 +124,13 @@ const DijkstraPage: React.FC = () => {
                 }
             }
 
-            isRunning.current = false;
+            isRunning.current = 'ready';
             setSeletedNode(null);
             return;
         }
     }
 
-    isRunning.current = false;
+    isRunning.current = 'ready';
     setSeletedNode(null);
   };
 
@@ -171,7 +171,7 @@ const DijkstraPage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
       />
@@ -179,7 +179,7 @@ const DijkstraPage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         delayRef={delayRef} 
         onclickBtnRandom={() => handleRandomizeGraphData(5)}
         onclickBtnReset={handleResetGraphData}

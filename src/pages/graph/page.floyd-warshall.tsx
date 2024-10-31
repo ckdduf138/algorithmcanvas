@@ -11,7 +11,7 @@ import SlideUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const FloydWarshallPage: React.FC = () => {
-  const isRunning = useRef(false);
+  const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
   const delayRef = useRef(500);
 
   const nodeMap = useRef<Map<string, string>>(new Map());
@@ -19,7 +19,7 @@ const FloydWarshallPage: React.FC = () => {
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, ResetData } 
-    = useGraphCanvas(isRunning, delayRef, true, true);
+    = useGraphCanvas(isRunning.current, delayRef, true, true);
 
   const { randomizeGraphDataInWeightAndDirection, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -91,7 +91,7 @@ const FloydWarshallPage: React.FC = () => {
   };
 
   const handleStart = async () => {
-    isRunning.current = true;
+    isRunning.current = 'play';
 
     const { nodes, links } = nodeGraphData;
 
@@ -152,13 +152,13 @@ const FloydWarshallPage: React.FC = () => {
         sendAlert('error', '음수 사이클이 존재합니다.');
 
         updateNodeFocus(node.id, 'error');
-        isRunning.current = false;
+        isRunning.current = 'ready';
         setSeletedNode(null);
         return;
       }
     }
   
-    isRunning.current = false;
+    isRunning.current = 'ready';
     setSeletedNode(null);
   };
 
@@ -198,7 +198,7 @@ const FloydWarshallPage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
       />
@@ -206,7 +206,7 @@ const FloydWarshallPage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         delayRef={delayRef} 
         onclickBtnRandom={() => handleRandomizeGraphData(5)}
         onclickBtnReset={handleResetGraphData}

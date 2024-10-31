@@ -14,13 +14,13 @@ const MinimumSpanningTreePage: React.FC = () => {
   const [selectAlgorithm, setSelectAlgorithm] = useState('kruskal');
   const [rendering, setRendering] = useState(false);
 
-  const isRunning = useRef(false);
+  const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
   const delayRef = useRef(500);
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, ResetData } 
-    = useGraphCanvas(isRunning, delayRef);
+    = useGraphCanvas(isRunning.current, delayRef);
 
   const { randomizeGraphDataInWeight, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -83,7 +83,7 @@ const MinimumSpanningTreePage: React.FC = () => {
   }
 
   const handleKruskalStart = async () => {
-    isRunning.current = true;
+    isRunning.current = 'play';
 
     const { nodes, links } = nodeGraphData;
     const parent = new Map<string, string>();
@@ -135,12 +135,12 @@ const MinimumSpanningTreePage: React.FC = () => {
       }
     }
 
-    isRunning.current = false;
+    isRunning.current = 'ready';
     setRendering(!rendering);
   };
 
   const handlePrimStart = async (startNodeId: string) => {
-    isRunning.current = true;
+    isRunning.current = 'play';
 
     const { nodes, links } = nodeGraphData;
     const mstSet = new Set<string>();
@@ -177,7 +177,7 @@ const MinimumSpanningTreePage: React.FC = () => {
 
     await updateNodeFocus(startNodeId, 'success');
 
-    isRunning.current = false;
+    isRunning.current = 'ready';
     setSeletedNode(null);
 };
 
@@ -229,7 +229,7 @@ const MinimumSpanningTreePage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
       />
@@ -237,7 +237,7 @@ const MinimumSpanningTreePage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         delayRef={delayRef}
         segmentedControl={true}
         options={options}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
@@ -11,13 +11,17 @@ import SlideUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const BFSPage: React.FC = () => {
-  const isRunning = useRef(false);
+  const [isRunningState, setIsRunnigState] = useState<'play' | 'pause' | 'ready'>('ready');
+  const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
+  
   const delayRef = useRef(500);
-
+  const isPaused = useRef(false);
+  const isStopped = useRef(false);
+  
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick } 
-    = useGraphCanvas(isRunning, delayRef);
+    = useGraphCanvas(isRunning.current, delayRef);
 
   const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -75,8 +79,9 @@ const BFSPage: React.FC = () => {
   }
 
   const handleStart = async (startNodeId: string) => {
-    isRunning.current = true;
-  
+    isRunning.current = 'play';
+    setIsRunnigState('play');
+
     const { nodes, links } = nodeGraphData;
   
     const visited = new Map<string, boolean>();
@@ -89,9 +94,12 @@ const BFSPage: React.FC = () => {
     visited.set(startNodeId, true);
     nodeDepthMap.set(startNodeId, 0);
   
+    if (isPaused.current) await new Promise<void>(pauseResume);
     await updateNodeFocus(startNodeId, 'selected', 0);
   
     while (queue.length > 0) {
+      if (isStopped.current) return;
+
       const current = queue.shift();
 
       if (!current) continue;
@@ -107,12 +115,15 @@ const BFSPage: React.FC = () => {
         .map((link) => (link.source === currentNodeId ? link.target : link.source));
   
       for (const neighborId of neighbors) {
+        if (isStopped.current) return;
+
         if (!visited.get(neighborId)) {
           visited.set(neighborId, true);
   
           queue.push([neighborId, currentDepth + 1]);
           nodeDepthMap.set(neighborId, currentDepth + 1);
   
+          if (isPaused.current) await new Promise<void>(pauseResume);
           await updateEdgeFocus(currentNodeId, neighborId, 'active');
           updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
@@ -121,10 +132,15 @@ const BFSPage: React.FC = () => {
       }
     }
   
+    if (isPaused.current) await new Promise<void>(pauseResume);
     new Promise((resolve) => setTimeout(resolve, delayRef.current));
   
-    isRunning.current = false;
+    isRunning.current = 'ready';
+    setIsRunnigState('ready');
+
     setSeletedNode(null);
+
+    if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
   
   const handleRandomizeGraphData = (numNodes: number) => {
@@ -139,17 +155,50 @@ const BFSPage: React.FC = () => {
 
   const onclickBtnStart = async () => {
     if(selectedNode) {
-      await handleStart(selectedNode.id);
-      sendAlert('success', '완료되었습니다.');
+
+      console.log('onclickBtnStart: ');
+
+      if(isRunning.current === 'ready') {
+        await handleStart(selectedNode.id);
+      }
+      else if(isRunning.current === 'play') {
+        console.log('play:' + isRunning.current);
+        isPaused.current = true;
+        isRunning.current = 'pause';
+        setIsRunnigState('pause');
+      }
+      else if(isRunning.current === 'pause') {
+        console.log('pause:' + isRunning.current);
+        isPaused.current = false;
+        isRunning.current = 'play';
+        setIsRunnigState('play');
+      }
     }
     else {
       sendAlert('info', '시작할 노드를 선택해주세요.');
     }
   };
 
+  const pauseResume = (resolve: () => void) => {
+    const checkPaused = () => {
+      if (!isPaused.current) {
+        resolve();
+      } else {
+        requestAnimationFrame(checkPaused);
+      }
+    };
+    checkPaused();
+  };
+
+  const handleStop = () => {
+    isStopped.current = true;
+    isPaused.current = false;
+  };
+
   useEffect(() => {
     return() => {
       resetAlert();
+      handleStop();
     }
   },[resetAlert]);
 
@@ -164,7 +213,7 @@ const BFSPage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
       />
@@ -172,7 +221,7 @@ const BFSPage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning}
+        isRunning={isRunningState}
         delayRef={delayRef} 
         onclickBtnRandom={() => handleRandomizeGraphData(5)}
         onclickBtnReset={handleResetGraphData}

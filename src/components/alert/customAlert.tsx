@@ -84,7 +84,6 @@ const CustomAlert = () => {
 
         return () => {
             if (timeoutIdRef.current) {
-                console.log('1');
                 clearTimeout(timeoutIdRef.current);
             }
         };
@@ -93,7 +92,6 @@ const CustomAlert = () => {
     useEffect(() => {
         if (notification) {
             if (timeoutIdRef.current) {
-                console.log('2');
                 clearTimeout(timeoutIdRef.current);
             }
             const cleanup = handleAlertTiming();
@@ -102,7 +100,6 @@ const CustomAlert = () => {
 
         if (notification === null) {
             if (timeoutIdRef.current) {
-                console.log('3');
                 clearTimeout(timeoutIdRef.current);
             }
         }
