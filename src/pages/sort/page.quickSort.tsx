@@ -29,7 +29,6 @@ const QuickSortPage: React.FC = () => {
         });
         setBarGraphData([...barGraphData]);
 
-        console.log(isStopped.current);
         if (isStopped.current) return;
 
         await quickSort(barGraphData, 0, dataLength - 1);

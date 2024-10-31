@@ -45,7 +45,7 @@ const ToggleButton = styled.button<{$isOpen : boolean, $height: number, $theme: 
 
 interface SlideUIProps {
     dataSize: number;
-    isRunning: React.MutableRefObject<boolean>;
+    isRunning: 'play' | 'pause' | 'ready';
     delayRef: React.MutableRefObject<number>;
     segmentedControl?: boolean;
     options?: SegmentOption[];
@@ -80,23 +80,24 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, segmen
     return (
     <>
         <Container $isOpen={isOpen} $height={height * 0.13} $theme={theme}>
-            <Button 
-                onClick={onclickBtnStart} 
-                disabled={dataSize <= 0 || isRunning.current}
-                rightImg={`${process.env.PUBLIC_URL}/images/play-button.svg`}
-            >Start</Button>
 
             <Button 
-                onClick={onclickBtnRandom} 
-                disabled={isRunning.current}
+                disabled={dataSize <= 0} 
+                rightImg={isRunning === 'play' ? `${process.env.PUBLIC_URL}/images/pause-button.svg` : `${process.env.PUBLIC_URL}/images/play-button.svg`} 
+                onClick={onclickBtnStart}>{isRunning === 'play' ? 'Pause' : 'Play'}
+            </Button> 
+
+            <Button 
+                disabled={isRunning !== 'ready'}
                 rightImg={`${process.env.PUBLIC_URL}/images/shuffle-button.svg`}
+                onClick={onclickBtnRandom} 
             >Random
             </Button>
             
-            <Button 
-                onClick={onclickBtnReset} 
-                disabled={dataSize <= 0 || isRunning.current}
+            <Button  
+                disabled={dataSize <= 0 || isRunning !== 'ready'}
                 rightImg={`${process.env.PUBLIC_URL}/images/reset-button.svg`}
+                onClick={onclickBtnReset}
             >Reset
             </Button>
             

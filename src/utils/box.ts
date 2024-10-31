@@ -199,16 +199,16 @@ export const boxes: BoxProps[] = [
         description: '벨먼-포드(Bellman-Ford)는 가중 유향 그래프(Weighted-Directed Graph)에서 최단 경로 문제를 푸는 알고리즘입니다.<br><br>' +
         '(정점 - 1)번의 매 단계마다 모든 간선을 전부 확인하므로 시간 복잡도가 O(VE)로 느립니다.',
     },
-    {
-        title: '플로이드-워셜',
-        algorithmType: '그래프',
-        imgSrc: `${process.env.PUBLIC_URL}/images/box/floyd-warshall.png`,
-        gifSrc: `${process.env.PUBLIC_URL}/images/box/floyd-warshall.gif`,
-        tags: ['그래프', '동적계획법'],
-        link: 'floyd-warshall',
-        description: '플로이드-워셜(Floyd-Warshall)은 그래프에서 가능한 모든 노드 쌍에 대해 최단 거리를 구하는 알고리즘입니다.<br><br>' + 
-        '시간 복잡도는 O(n^3)입니다. 모든 노드 쌍에 대해 최단 거리를 구하고, 음의 가중치를 가지는 그래프에서도 쓸 수 있습니다.',
-    },
+    // {
+    //     title: '플로이드-워셜',
+    //     algorithmType: '그래프',
+    //     imgSrc: `${process.env.PUBLIC_URL}/images/box/floyd-warshall.png`,
+    //     gifSrc: `${process.env.PUBLIC_URL}/images/box/floyd-warshall.gif`,
+    //     tags: ['그래프', '동적계획법'],
+    //     link: 'floyd-warshall',
+    //     description: '플로이드-워셜(Floyd-Warshall)은 그래프에서 가능한 모든 노드 쌍에 대해 최단 거리를 구하는 알고리즘입니다.<br><br>' + 
+    //     '시간 복잡도는 O(n^3)입니다. 모든 노드 쌍에 대해 최단 거리를 구하고, 음의 가중치를 가지는 그래프에서도 쓸 수 있습니다.',
+    // },
     {
         title: '최소 신장 트리',
         algorithmType: '그래프',

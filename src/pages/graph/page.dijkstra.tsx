@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
@@ -11,13 +11,16 @@ import SlideUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const DijkstraPage: React.FC = () => {
-  const isRunning = useRef(false);
+  const [isRunningState, setIsRunnigState] = useState<'play' | 'pause' | 'ready'>('ready');
+  const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
   const delayRef = useRef(500);
+  const isPaused = useRef(false);
+  const isStopped = useRef(false);
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick } 
-    = useGraphCanvas(isRunning, delayRef);
+    = useGraphCanvas(isRunning.current, delayRef);
 
   const { randomizeGraphDataInWeight, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -75,8 +78,9 @@ const DijkstraPage: React.FC = () => {
   }
 
   const handleStart = async (startNodeId: string) => {
-    isRunning.current = true;
-  
+    isRunning.current = 'play';
+    setIsRunnigState('play');
+
     const { nodes, links } = nodeGraphData;
   
     const visited = new Map<string, boolean>();
@@ -97,9 +101,13 @@ const DijkstraPage: React.FC = () => {
       priorityQueue.sort((a, b) => a[1] - b[1]);
     };
   
+    if (isPaused.current) await new Promise<void>(pauseResume);
+
     await updateNodeFocus(startNodeId, 'selected', 0);
   
     while (priorityQueue.length > 0) {
+      if (isStopped.current) return;
+
       sortQueue();
       const [currentNodeId, currentDistance] = priorityQueue.shift()!;
   
@@ -117,6 +125,8 @@ const DijkstraPage: React.FC = () => {
         }));
   
       for (const { neighborId, weight } of neighbors) {
+        if (isStopped.current) return;
+
         if (!visited.get(neighborId)) {
           const distanceThroughCurrent = currentDistance + (weight ?? 0);
   
@@ -126,6 +136,8 @@ const DijkstraPage: React.FC = () => {
   
             priorityQueue.push([neighborId, distanceThroughCurrent]);
   
+            if (isPaused.current) await new Promise<void>(pauseResume);
+
             await updateEdgeFocus(currentNodeId, neighborId, 'active');
             updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
@@ -135,8 +147,12 @@ const DijkstraPage: React.FC = () => {
       }
     }
   
-    isRunning.current = false;
+    isRunning.current = 'ready';
+    setIsRunnigState('ready');
+
     setSeletedNode(null);
+
+    if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
     
   const handleRandomizeGraphData = (numNodes: number) => {
@@ -151,16 +167,45 @@ const DijkstraPage: React.FC = () => {
 
   const onclickBtnStart = async () => {
     if(selectedNode) {
-      await handleStart(selectedNode.id);
-      sendAlert('success', '완료되었습니다.');
+      
+      if(isRunning.current === 'ready') {
+        await handleStart(selectedNode.id);
+      }
+      else if(isRunning.current === 'play') {
+        isPaused.current = true;
+        isRunning.current = 'pause';
+        setIsRunnigState('pause');
+      }
+      else if(isRunning.current === 'pause') {
+        isPaused.current = false;
+        isRunning.current = 'play';
+        setIsRunnigState('play');
+      }
     }
     else {
       sendAlert('info', '시작할 노드를 선택해주세요.');
     }
   };
 
+  const pauseResume = (resolve: () => void) => {
+    const checkPaused = () => {
+      if (!isPaused.current) {
+        resolve();
+      } else {
+        requestAnimationFrame(checkPaused);
+      }
+    };
+    checkPaused();
+  };
+
+  const handleStop = () => {
+    isStopped.current = true;
+    isPaused.current = false;
+  };
+
   useEffect(() => {
     return() => {
+      handleStop();
       resetAlert();
     }
   },[resetAlert]);
@@ -177,7 +222,7 @@ const DijkstraPage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
       />
@@ -185,7 +230,7 @@ const DijkstraPage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning}
+        isRunning={isRunningState}
         delayRef={delayRef} 
         onclickBtnRandom={() => handleRandomizeGraphData(5)}
         onclickBtnReset={handleResetGraphData}

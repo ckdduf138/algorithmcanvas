@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
@@ -11,13 +11,16 @@ import SlideUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const DFSPage: React.FC = () => {
-  const isRunning = useRef(false);
+  const [isRunningState, setIsRunnigState] = useState<'play' | 'pause' | 'ready'>('ready');
+  const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
   const delayRef = useRef(500);
+  const isPaused = useRef(false);
+  const isStopped = useRef(false);
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick } 
-    = useGraphCanvas(isRunning, delayRef);
+    = useGraphCanvas(isRunning.current, delayRef);
 
   const { randomizeGraphData, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -75,8 +78,9 @@ const DFSPage: React.FC = () => {
   }
 
   const handleStart = async (startNodeId: string) => {
-    isRunning.current = true;
-  
+    isRunning.current = 'play';
+    setIsRunnigState('play');
+
     const { nodes, links } = nodeGraphData;
   
     const visited = new Map<string, boolean>();
@@ -86,10 +90,13 @@ const DFSPage: React.FC = () => {
     nodes.forEach((node) => visited.set(node.id, false));
     
     const dfs = async (currentNodeId: string, currentDepth: number) => {
+      if (isStopped.current) return;
+
       visited.set(currentNodeId, true);
       nodeDepthMap.set(currentNodeId, currentDepth);
   
       if(currentNodeId !== startNodeId) {
+        if (isPaused.current) await new Promise<void>(pauseResume);
         await updateNodeFocus(currentNodeId, 'active', currentDepth);
       }
   
@@ -102,6 +109,9 @@ const DFSPage: React.FC = () => {
   
       for (const neighborId of neighbors) {
         if (!visited.get(neighborId)) {
+          if (isStopped.current) return;
+
+          if (isPaused.current) await new Promise<void>(pauseResume);
           await updateEdgeFocus(currentNodeId, neighborId, 'active');
           updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
@@ -115,8 +125,12 @@ const DFSPage: React.FC = () => {
   
     new Promise((resolve) => setTimeout(resolve, delayRef.current));
 
-    isRunning.current = false;
+    isRunning.current = 'ready';
+    setIsRunnigState('ready');
+
     setSeletedNode(null);
+
+    if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
     
   const handleRandomizeGraphData = (numNodes: number) => {
@@ -131,16 +145,45 @@ const DFSPage: React.FC = () => {
 
   const onclickBtnStart = async () => {
     if(selectedNode) {
-      await handleStart(selectedNode.id);
-      sendAlert('success', '완료되었습니다.');
+
+      if(isRunning.current === 'ready') {
+        await handleStart(selectedNode.id);
+      }
+      else if(isRunning.current === 'play') {
+        isPaused.current = true;
+        isRunning.current = 'pause';
+        setIsRunnigState('pause');
+      }
+      else if(isRunning.current === 'pause') {
+        isPaused.current = false;
+        isRunning.current = 'play';
+        setIsRunnigState('play');
+      }
     }
     else {
       sendAlert('info', '시작할 노드를 선택해주세요.');
     }
   };
   
+  const pauseResume = (resolve: () => void) => {
+    const checkPaused = () => {
+      if (!isPaused.current) {
+        resolve();
+      } else {
+        requestAnimationFrame(checkPaused);
+      }
+    };
+    checkPaused();
+  };
+
+  const handleStop = () => {
+    isStopped.current = true;
+    isPaused.current = false;
+  };
+
   useEffect(() => {
     return() => {
+      handleStop();
       resetAlert();
     }
   },[resetAlert]);
@@ -156,7 +199,7 @@ const DFSPage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
       />
@@ -164,7 +207,7 @@ const DFSPage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning}
+        isRunning={isRunningState}
         delayRef={delayRef} 
         onclickBtnRandom={() => handleRandomizeGraphData(5)}
         onclickBtnReset={handleResetGraphData}

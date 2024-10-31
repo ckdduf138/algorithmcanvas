@@ -5,7 +5,7 @@ export type EdgeFocusStatus = 'inactive' | 'active' | 'completed' | 'success' |'
 export const NodeRadius = 50;
 
 export const NodeGraphWidthPadding = 50;
-export const NodeGraphHeightPadding = 120;
+export const NodeGraphHeightPadding = 150;
 
 export interface BarGraphData {
     data: number;

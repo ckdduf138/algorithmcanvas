@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useGraphCanvas } from '../../hooks/graph/useGraphCanvas';
 import { useGraphCanvasUI } from '../../hooks/graph/useGraphCanvasUI';
@@ -11,15 +11,18 @@ import SlideUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const FloydWarshallPage: React.FC = () => {
-  const isRunning = useRef(false);
+  const [isRunningState, setIsRunnigState] = useState<'play' | 'pause' | 'ready'>('ready');
+  const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
   const delayRef = useRef(500);
+  const isPaused = useRef(false);
+  const isStopped = useRef(false);
 
   const nodeMap = useRef<Map<string, string>>(new Map());
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, ResetData } 
-    = useGraphCanvas(isRunning, delayRef, true, true);
+    = useGraphCanvas(isRunning.current, delayRef, true, true);
 
   const { randomizeGraphDataInWeightAndDirection, resetGraphData } = useGraphCanvasUI(setNodeGraphData);
 
@@ -91,7 +94,8 @@ const FloydWarshallPage: React.FC = () => {
   };
 
   const handleStart = async () => {
-    isRunning.current = true;
+    isRunning.current = 'play';
+    setIsRunnigState('play');
 
     const { nodes, links } = nodeGraphData;
 
@@ -124,6 +128,8 @@ const FloydWarshallPage: React.FC = () => {
     for (const k of nodes) {
       for (const i of nodes) {
         for (const j of nodes) {
+          if (isStopped.current) return;
+
           const distIK = distances.get(i.id)?.get(k.id) ?? Infinity;
           const distKJ = distances.get(k.id)?.get(j.id) ?? Infinity;
           const distIJ = distances.get(i.id)?.get(j.id) ?? Infinity;
@@ -132,11 +138,17 @@ const FloydWarshallPage: React.FC = () => {
             distances.get(i.id)?.set(j.id, distIK + distKJ);
             previous.get(i.id)?.set(j.id, previous.get(k.id)?.get(j.id) ?? null);
   
+            if (isPaused.current) await new Promise<void>(pauseResume);
+
             await updateEdgeFocus(i.id, k.id, 'active');
             updateEdgeFocus(i.id, k.id, 'inactive');
 
+            if (isPaused.current) await new Promise<void>(pauseResume);
+
             await updateEdgeFocus(k.id, j.id, 'active');
             updateEdgeFocus(k.id, j.id, 'inactive');
+
+            if (isPaused.current) await new Promise<void>(pauseResume);
 
             await updateEdgeFocus(i.id, j.id, 'active');
             updateEdgeFocus(i.id, j.id, 'inactive');
@@ -148,18 +160,24 @@ const FloydWarshallPage: React.FC = () => {
     }
   
     for (const node of nodes) {
+      if (isStopped.current) return;
+
       if ((distances.get(node.id)?.get(node.id) ?? Infinity) < 0) {
         sendAlert('error', '음수 사이클이 존재합니다.');
 
         updateNodeFocus(node.id, 'error');
-        isRunning.current = false;
+        isRunning.current = 'ready';
         setSeletedNode(null);
         return;
       }
     }
   
-    isRunning.current = false;
+    isRunning.current = 'ready';
+    setIsRunnigState('ready');
+
     setSeletedNode(null);
+
+    if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
 
   const handleRandomizeGraphData = (numNodes: number) => {
@@ -176,13 +194,41 @@ const FloydWarshallPage: React.FC = () => {
     ResetData();
     console.clear();
 
-    await handleStart();
+    if(isRunning.current === 'ready') {
+      await handleStart();
+    }
+    else if(isRunning.current === 'play') {
+      isPaused.current = true;
+      isRunning.current = 'pause';
+      setIsRunnigState('pause');
+    }
+    else if(isRunning.current === 'pause') {
+      isPaused.current = false;
+      isRunning.current = 'play';
+      setIsRunnigState('play');
+    }
 
-    sendAlert('success', '완료되었습니다.');
+  };
+
+  const pauseResume = (resolve: () => void) => {
+    const checkPaused = () => {
+      if (!isPaused.current) {
+        resolve();
+      } else {
+        requestAnimationFrame(checkPaused);
+      }
+    };
+    checkPaused();
+  };
+
+  const handleStop = () => {
+    isStopped.current = true;
+    isPaused.current = false;
   };
 
   useEffect(() => {
     return() => {
+      handleStop();
       resetAlert();
     }
   },[resetAlert]);
@@ -198,7 +244,7 @@ const FloydWarshallPage: React.FC = () => {
         CustomNode={CustomNode}
         CustomLink={CustomLink}
         delayRef={delayRef}
-        isRunning={isRunning}
+        isRunning={isRunning.current}
         handleMouseDown={handleMouseDown}
         handleEdgeClick={handleEdgeClick}
       />
@@ -206,7 +252,7 @@ const FloydWarshallPage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning}
+        isRunning={isRunningState}
         delayRef={delayRef} 
         onclickBtnRandom={() => handleRandomizeGraphData(5)}
         onclickBtnReset={handleResetGraphData}
