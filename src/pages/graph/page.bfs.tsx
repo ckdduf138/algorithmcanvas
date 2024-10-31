@@ -124,6 +124,7 @@ const BFSPage: React.FC = () => {
           nodeDepthMap.set(neighborId, currentDepth + 1);
   
           if (isPaused.current) await new Promise<void>(pauseResume);
+          
           await updateEdgeFocus(currentNodeId, neighborId, 'active');
           updateEdgeFocus(currentNodeId, neighborId, 'completed');
   
@@ -156,19 +157,15 @@ const BFSPage: React.FC = () => {
   const onclickBtnStart = async () => {
     if(selectedNode) {
 
-      console.log('onclickBtnStart: ');
-
       if(isRunning.current === 'ready') {
         await handleStart(selectedNode.id);
       }
       else if(isRunning.current === 'play') {
-        console.log('play:' + isRunning.current);
         isPaused.current = true;
         isRunning.current = 'pause';
         setIsRunnigState('pause');
       }
       else if(isRunning.current === 'pause') {
-        console.log('pause:' + isRunning.current);
         isPaused.current = false;
         isRunning.current = 'play';
         setIsRunnigState('play');

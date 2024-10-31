@@ -14,8 +14,11 @@ const MinimumSpanningTreePage: React.FC = () => {
   const [selectAlgorithm, setSelectAlgorithm] = useState('kruskal');
   const [rendering, setRendering] = useState(false);
 
+  const [isRunningState, setIsRunnigState] = useState<'play' | 'pause' | 'ready'>('ready');
   const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
   const delayRef = useRef(500);
+  const isPaused = useRef(false);
+  const isStopped = useRef(false);
 
   const { 
     nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
@@ -84,6 +87,7 @@ const MinimumSpanningTreePage: React.FC = () => {
 
   const handleKruskalStart = async () => {
     isRunning.current = 'play';
+    setIsRunnigState('play');
 
     const { nodes, links } = nodeGraphData;
     const parent = new Map<string, string>();
@@ -123,24 +127,36 @@ const MinimumSpanningTreePage: React.FC = () => {
     const mstEdges: { source: string; target: string; weight: number }[] = [];
 
     for (const { source, target, weight } of sortedLinks) {
+      if (isStopped.current) return;
+
       if (find(source) !== find(target)) {
         mstEdges.push({ source, target, weight: weight ?? 0 });
         union(source, target);
 
+        if (isPaused.current) await new Promise<void>(pauseResume);
+
         await updateEdgeFocus(source, target, 'active');
         updateEdgeFocus(source, target, 'success');
 
+        if (isPaused.current) await new Promise<void>(pauseResume);
+
         await updateNodeFocus(source, 'success');
+
+        if (isPaused.current) await new Promise<void>(pauseResume);
+
         await updateNodeFocus(target, 'success');
       }
     }
 
     isRunning.current = 'ready';
+    setIsRunnigState('ready');
+
     setRendering(!rendering);
   };
 
   const handlePrimStart = async (startNodeId: string) => {
     isRunning.current = 'play';
+    setIsRunnigState('play');
 
     const { nodes, links } = nodeGraphData;
     const mstSet = new Set<string>();
@@ -160,14 +176,20 @@ const MinimumSpanningTreePage: React.FC = () => {
     addEdges(startNodeId);
 
     while (mstSet.size < nodes.length && edgeQueue.length > 0) {
+      if (isStopped.current) return;
+
       edgeQueue.sort((a, b) => a.weight - b.weight);
 
       const { source, target } = edgeQueue.shift()!;
       if (!mstSet.has(target)) {
         mstSet.add(target);
 
+        if (isPaused.current) await new Promise<void>(pauseResume);
+
         await updateEdgeFocus(source, target, 'active');
         updateEdgeFocus(source, target, 'success');
+
+        if (isPaused.current) await new Promise<void>(pauseResume);
 
         await updateNodeFocus(target, 'success');
 
@@ -175,12 +197,17 @@ const MinimumSpanningTreePage: React.FC = () => {
       }
     }
 
+    if (isPaused.current) await new Promise<void>(pauseResume);
+
     await updateNodeFocus(startNodeId, 'success');
 
     isRunning.current = 'ready';
-    setSeletedNode(null);
-};
+    setIsRunnigState('ready');
 
+    setSeletedNode(null);
+
+    if (!isStopped.current) sendAlert('success', '완료되었습니다.');
+  };
 
   const handleRandomizeGraphData = (numNodes: number) => {
     setSeletedNode(null);
@@ -194,13 +221,39 @@ const MinimumSpanningTreePage: React.FC = () => {
 
   const onclickBtnStart = async () => {
     if(selectAlgorithm === 'kruskal') {
-      ResetData();
-      await handleKruskalStart();
+      if(isRunning.current === 'ready') {
+        ResetData();
+        await handleKruskalStart();
+      }
+      else if(isRunning.current === 'play') {
+        isPaused.current = true;
+        isRunning.current = 'pause';
+        setIsRunnigState('pause');
+      }
+      else if(isRunning.current === 'pause') {
+        isPaused.current = false;
+        isRunning.current = 'play';
+        setIsRunnigState('play');
+      }
+
     }
     else if(selectAlgorithm === 'Prim') {
       if(selectedNode) {
-        await handlePrimStart(selectedNode.id);
-        sendAlert('success', '완료되었습니다.');
+
+        if(isRunning.current === 'ready') {
+          await handlePrimStart(selectedNode.id);
+        }
+        else if(isRunning.current === 'play') {
+          isPaused.current = true;
+          isRunning.current = 'pause';
+          setIsRunnigState('pause');
+        }
+        else if(isRunning.current === 'pause') {
+          isPaused.current = false;
+          isRunning.current = 'play';
+          setIsRunnigState('play');
+        }
+
       }
       else {
         sendAlert('info', '시작할 노드를 선택해주세요.');
@@ -212,9 +265,26 @@ const MinimumSpanningTreePage: React.FC = () => {
     setSelectAlgorithm(option);
   };
 
+  const pauseResume = (resolve: () => void) => {
+    const checkPaused = () => {
+      if (!isPaused.current) {
+        resolve();
+      } else {
+        requestAnimationFrame(checkPaused);
+      }
+    };
+    checkPaused();
+  };
+
+  const handleStop = () => {
+    isStopped.current = true;
+    isPaused.current = false;
+  };
+
   useEffect(() => {
     return() => {
       resetAlert();
+      handleStop();
     }
   },[resetAlert]);
 
@@ -237,7 +307,7 @@ const MinimumSpanningTreePage: React.FC = () => {
       {/* UI */}
       <SlideUI 
         dataSize={nodeGraphDatas.nodes.length}
-        isRunning={isRunning.current}
+        isRunning={isRunningState}
         delayRef={delayRef}
         segmentedControl={true}
         options={options}
