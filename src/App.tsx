@@ -19,7 +19,7 @@ import BFSPage from './pages/graph/page.bfs';
 import DFSPage from './pages/graph/page.dfs';
 import DijkstraPage from './pages/graph/page.dijkstra';
 import BellmanFordPage from './pages/graph/page.bellman-ford';
-import FloydWarshallPage from './pages/graph/page.floyd-warshall';
+// import FloydWarshallPage from './pages/graph/page.floyd-warshall';
 import MinimumSpanningTreePage from './pages/graph/page.minimum-spanning-tree';
 
 import ConvexHullPage from './pages/geometry/page.convex-hull';
@@ -69,7 +69,7 @@ const App = () => {
                         <Route path="dfs" element={<DFSPage />} />
                         <Route path="dijkstra" element={<DijkstraPage />} />
                         <Route path="bellman-ford" element={<BellmanFordPage />} />
-                        <Route path="floyd-warshall" element={<FloydWarshallPage />} />
+                        {/* <Route path="floyd-warshall" element={<FloydWarshallPage />} /> */}
                         <Route path="minimum-spanning-tree" element={<MinimumSpanningTreePage />} />
 
                         {/* 기하학 */}

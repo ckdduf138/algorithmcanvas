@@ -8,7 +8,7 @@ import { useTheme } from '../../context/themeContext';
 import CustomCircle from '../../components/graphCanvas/customCircle';
 import CustomLine from '../../components/graphCanvas/customLine';
 
-export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, delayRef : React.MutableRefObject<number>, 
+export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef : React.MutableRefObject<number>, 
   isNegativeWeightAllowed: boolean = false, direction: boolean = false
 ) => {
   const [nodeGraphData, setNodeGraphData] = useState<NodeGraphData>({nodes: [], links: []});
@@ -26,7 +26,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   const {theme} = useTheme();
 
   const handleEdgeClick = (isWeighted: boolean) => {
-    if(isRunning.current) return;
+    if(isRunning === 'play') return;
 
     isWeightedRef.current = isWeighted;
     setSeletedEdge(!selectedEdge);
@@ -65,7 +65,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
   const CustomNode: React.FC<{ node: Node }> = ({ node }) => {  
     const handleMouseDown = () => {
 
-      if(isRunning.current) return;
+      if(isRunning === 'play') return;
 
       ResetData();
 
@@ -98,7 +98,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     };
 
     const handleNodeDelete = (nodeId: string) => {
-      if(isRunning.current) return;
+      if(isRunning === 'play') return;
 
       ResetData();
 
@@ -134,7 +134,7 @@ export const useGraphCanvas = (isRunning : React.MutableRefObject<boolean>, dela
     if (!sourceNode || !targetNode) return null;
 
     const handleMouseDown = (e: React.PointerEvent) => {
-      if(isRunning.current) return;
+      if(isRunning === 'play') return;
 
       ResetData();
 
