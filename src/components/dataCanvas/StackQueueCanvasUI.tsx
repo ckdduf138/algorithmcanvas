@@ -81,7 +81,7 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
       />
       <InputBox
         placeholder={sizePlaceholder}
-        inputValue={maxSize.toString()}
+        inputValue={maxSize > 0 ? maxSize.toString() : '∞'}
         title={sizePlaceholder}
         handleInputChange={handleMaxSizeChange}
         handleKeyPress={handleKeyPress}
