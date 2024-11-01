@@ -47,14 +47,14 @@ const QueueRow = styled.div`
   overflow-x: auto;
 `;
 
-const QueueItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string }>`
+const QueueItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string; $isFull: boolean}>`
   display: flex;
   min-width: 80px;
   min-height: 80px;
   justify-content: center;
   align-items: center;
   background-color: ${({ $theme }) => ($theme === 'light' ? '#fff' : '#444')};
-  border: 1px solid #ccc;
+  border: 2px solid ${({ $isFull }) => ($isFull ? '#800' : '#ccc')};
   margin: 5px;
   text-align: center;
   border-radius: 4px;
@@ -140,11 +140,12 @@ const Label = styled.div<{ $theme: string }>`
 interface QueuecanvasProps {
   queueRef: React.RefObject<HTMLDivElement>
   queue: string[];
+  queueSize: number;
   isAdding: boolean;
   isRemoving: boolean
 };
 
-const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, isAdding, isRemoving }) => {
+const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, queueSize, isAdding, isRemoving }) => {
   const { theme } = useTheme();
 
   return (
@@ -164,6 +165,7 @@ const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, isAdding, is
         $isAdding={isAdding && index === 0}
         $isRemoving={isRemoving && index === queue.length - 1}
         $theme={theme}
+        $isFull={queueSize === queue.length}
       >
         {item}
         {index === 0 && queue.length > 1 && (
@@ -194,8 +196,6 @@ const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, isAdding, is
     ))
   )}
 </QueueRow>
-
-
       <ArrowLineWapper>
         <BottomLine />
         <ArrowLine />

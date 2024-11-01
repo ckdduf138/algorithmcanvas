@@ -73,6 +73,7 @@ const StackPage: React.FC = () => {
         stack={stack}
         isAdding={isAdding}
         isRemoving={isRemoving}
+        stackSize={stackSize}
       />
       <StackQueueCanvasUI
         data={stack}

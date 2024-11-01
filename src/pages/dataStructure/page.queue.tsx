@@ -79,6 +79,7 @@ const QueuePage: React.FC = () => {
       <QueueCanvas 
         queueRef={queueRef}
         queue={queue}
+        queueSize={queueSize}
         isAdding={isAdding}
         isRemoving={isRemoving}
       />
