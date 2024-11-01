@@ -44,7 +44,7 @@ const LinkedListPage: React.FC = () => {
         
         setInputValue('');
         setSearchIndex(null);
-        sendAlert('success', `인덱스 ${currentInputIndex}의 ${inputValue}가 연결 리스트에 추가되었습니다.`);
+        sendAlert('success', `인덱스 ${currentInputIndex}에 ${inputValue}(이)가 연결 리스트에 추가되었습니다.`);
       } else if (operation === 'delete') {
         setIsRemoving(true);
         setTimeout(() => {
@@ -53,7 +53,7 @@ const LinkedListPage: React.FC = () => {
           setLinkedList(newList);
           setIsRemoving(false);
           setIsAnimating(false);
-          sendAlert('success', `인덱스 ${currentInputIndex}의 ${inputValue}가 연결 리스트에서 삭제되었습니다.`);
+          sendAlert('success', `인덱스 ${currentInputIndex}의 ${inputValue}(이)가 연결 리스트에서 삭제되었습니다.`);
         }, 500);
         setSearchIndex(null);
       }
