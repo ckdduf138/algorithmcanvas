@@ -33,6 +33,8 @@ interface StackQueueCanvasUIProps {
   handleMaxSizeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   addItemPlaceholder: string;
   sizePlaceholder: string;
+  isAdding: boolean;
+  isRemoving: boolean;
 }
 
 const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
@@ -45,8 +47,11 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
   handleMaxSizeChange,
   addItemPlaceholder,
   sizePlaceholder,
+  isAdding,
+  isRemoving,
 }) => {
   const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
+  const isAnimating = isAdding || isRemoving;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -85,13 +90,13 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
       <ButtonWrapper>
         <Button 
           onClick={handlePush} 
-          disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0)} 
+          disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0) || isAnimating} 
           rightImg={`${process.env.PUBLIC_URL}/images/add-circle.svg`}>
           Push
         </Button>
         <Button 
           onClick={handlePop} 
-          disabled={data.length === 0}
+          disabled={data.length === 0 || isAnimating}
           rightImg={`${process.env.PUBLIC_URL}/images/minus-circle.svg`}>
           Pop
         </Button>
