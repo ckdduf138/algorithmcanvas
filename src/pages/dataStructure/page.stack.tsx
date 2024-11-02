@@ -73,6 +73,7 @@ const StackPage: React.FC = () => {
         stack={stack}
         isAdding={isAdding}
         isRemoving={isRemoving}
+        stackSize={stackSize}
       />
       <StackQueueCanvasUI
         data={stack}
@@ -85,6 +86,8 @@ const StackPage: React.FC = () => {
         handleMaxSizeChange={handleStackSizeChange}
         addItemPlaceholder="추가할 데이터를 입력하세요"
         sizePlaceholder="스택 크기" 
+        isAdding={isAdding}
+        isRemoving={isRemoving}
       />
     </Layout>
   );

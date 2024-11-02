@@ -36,10 +36,6 @@ interface HeapTreeCanvasUIProps {
   isHeapEmpty: boolean; // 힙이 비어있는지 여부 추가
 }
 
-const options = [
-  { value: 'min', label: '최소힙' },
-  { value: 'max', label: '최대힙' },
-];
 
 const HeapTreeCanvasUI: React.FC<HeapTreeCanvasUIProps> = ({
   inputValue,
@@ -52,6 +48,10 @@ const HeapTreeCanvasUI: React.FC<HeapTreeCanvasUIProps> = ({
   isAnimating, // 애니메이션 상태 사용
   isHeapEmpty, // 힙이 비어있는지 여부 사용
 }) => {
+  const options = [
+    { value: 'min', label: '최소힙' , disabled: isAnimating},
+    { value: 'max', label: '최대힙' , disabled: isAnimating},
+  ];
   return (
     <StyleCanvasUI>
       <InputBox

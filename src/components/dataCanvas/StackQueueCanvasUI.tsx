@@ -33,6 +33,8 @@ interface StackQueueCanvasUIProps {
   handleMaxSizeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   addItemPlaceholder: string;
   sizePlaceholder: string;
+  isAdding: boolean;
+  isRemoving: boolean;
 }
 
 const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
@@ -45,8 +47,11 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
   handleMaxSizeChange,
   addItemPlaceholder,
   sizePlaceholder,
+  isAdding,
+  isRemoving,
 }) => {
   const [isValidBtnAdd, setIsValidBtnAdd] = useState<boolean>(false);
+  const isAnimating = isAdding || isRemoving;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -55,7 +60,7 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && isValidBtnAdd) {
+    if (event.key === 'Enter' && isValidBtnAdd && !isAnimating) {
       handlePush();
     }
   };
@@ -75,8 +80,8 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
         onclickBtnAdd={handlePush}
       />
       <InputBox
-        placeholder={sizePlaceholder}
-        inputValue={maxSize.toString()}
+        placeholder={maxSize === 0 ? '∞' : sizePlaceholder} // 무한대 기호를 placeholder로 설정
+        inputValue={maxSize === 0 ? '' : maxSize.toString()} // maxSize가 0일 때 빈 문자열을 유지
         title={sizePlaceholder}
         handleInputChange={handleMaxSizeChange}
         handleKeyPress={handleKeyPress}
@@ -85,13 +90,13 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
       <ButtonWrapper>
         <Button 
           onClick={handlePush} 
-          disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0)} 
+          disabled={!isValidBtnAdd || (maxSize === data.length && maxSize !== 0) || isAnimating} 
           rightImg={`${process.env.PUBLIC_URL}/images/add-circle.svg`}>
           Push
         </Button>
         <Button 
           onClick={handlePop} 
-          disabled={data.length === 0}
+          disabled={data.length === 0 || isAnimating}
           rightImg={`${process.env.PUBLIC_URL}/images/minus-circle.svg`}>
           Pop
         </Button>

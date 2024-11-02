@@ -59,14 +59,14 @@ const StackRow = styled.div`
   align-items: center;
 `;
 
-const StackItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string }>`
+const StackItem = styled.div<{ $isAdding: boolean; $isRemoving: boolean; $theme: string; $isFull: boolean }>`
   display: flex;
   min-width: 180px;
   min-height: 80px;
   justify-content: center;
   align-items: center;
   background-color: ${({ $theme }) => ($theme === 'light' ? '#fff' : '#444')};
-  border: 1px solid #ccc;
+  border: 2px solid ${({ $isFull }) => ($isFull ? '#800' : '#ccc')};
   margin: 5px;
   text-align: center;
   border-radius: 4px;
@@ -99,12 +99,14 @@ const Label = styled.div<{ $theme: string }>`
 interface StackCanvasProps {
   stackRef: React.RefObject<HTMLDivElement>
   stack: string[];
+  stackSize: number; // 스택의 최대 크기
   isAdding: boolean;
   isRemoving: boolean
 };
 
-const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, isAdding, isRemoving }) => {
+const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, stackSize, isAdding, isRemoving }) => {
   const { theme } = useTheme();
+
   return (
     <StackContainer theme={theme}>
       <StackBox ref={stackRef}>
@@ -118,11 +120,12 @@ const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, isAdding, is
                 $isAdding={isAdding && index === stack.length - 1}
                 $isRemoving={isRemoving && index === stack.length - 1}
                 $theme={theme}
+                $isFull={stack.length === stackSize} // 스택이 가득 찼는지 여부
               >
                 {item}
                 {index === stack.length - 1 && (
                   <>
-                    <Arrow $theme={theme}/>
+                    <Arrow $theme={theme} />
                     <Label $theme={theme}>Top</Label>
                   </>
                 )}
