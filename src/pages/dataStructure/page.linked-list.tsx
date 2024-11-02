@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../../components/layout/layout';
 import LinkedListCanvas from '../../components/dataCanvas/LinkedListCanvas';
 import LinkedListCanvasUI from '../../components/dataCanvas/LinkedListCanvasUI';
+import { useAlert } from '../../context/alertContext';
 
 const LinkedListPage: React.FC = () => {
   const [linkedList, setLinkedList] = useState<string[]>([]);
@@ -12,13 +13,14 @@ const LinkedListPage: React.FC = () => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [saveIndex, setSaveIndex] = useState<number>(0);
+  const { sendAlert, resetAlert } = useAlert();
 
   const handleIndexOperation = (operation: 'insert' | 'delete') => {
     const currentInputIndex = inputIndex;
   
     if (currentInputIndex < 0 || (operation === 'insert' && currentInputIndex > linkedList.length) || (operation === 'delete' && currentInputIndex >= linkedList.length)) {
       animateSearch(linkedList.length, () => {
-        alert('유효한 인덱스를 입력하세요.');
+        sendAlert('warning', '유효한 인덱스를 입력하세요.');
         setIsAnimating(false);
       });
       return;
@@ -30,6 +32,7 @@ const LinkedListPage: React.FC = () => {
     // 애니메이션 실행
     animateSearch(currentInputIndex - 1, () => {
       if (operation === 'insert') {
+        const inputedElement = inputValue;
         const newList = [...linkedList];
         newList.splice(currentInputIndex, 0, inputValue);
         setLinkedList(newList);
@@ -42,14 +45,17 @@ const LinkedListPage: React.FC = () => {
         
         setInputValue('');
         setSearchIndex(null);
+        sendAlert('success', `인덱스 ${currentInputIndex}에 ${inputedElement}(이)가 연결 리스트에 추가되었습니다.`);
       } else if (operation === 'delete') {
         setIsRemoving(true);
         setTimeout(() => {
+          const deletedElement = linkedList[currentInputIndex];
           const newList = [...linkedList];
           newList.splice(currentInputIndex, 1);
           setLinkedList(newList);
           setIsRemoving(false);
           setIsAnimating(false);
+          sendAlert('success', `인덱스 ${currentInputIndex}의 ${deletedElement}(이)가 연결 리스트에서 삭제되었습니다.`);
         }, 500);
         setSearchIndex(null);
       }
@@ -58,7 +64,7 @@ const LinkedListPage: React.FC = () => {
   
   const handleInsertAtIndex = () => {
     if (inputValue.trim() === '') {
-      alert('추가할 데이터가 필요합니다.');
+      sendAlert('info', '추가할 데이터를 입력하세요.');
       return;
     }
     handleIndexOperation('insert');
@@ -70,19 +76,19 @@ const LinkedListPage: React.FC = () => {
 
   const handleSearchByName = () => {
     if (inputValue.trim() === '') {
-      alert('데이터를 입력하세요');
+      sendAlert('info', '검색할 데이터를 입력하세요.');
       return;
     }
     setIsAnimating(true);
     const index = linkedList.indexOf(inputValue);
     if (index !== -1) {
       animateSearch(index, () => {
-        alert(`첫번째 ${inputValue}는 인덱스 ${index}에 있습니다.`);
+        sendAlert('success', `첫 번째 ${inputValue}는 인덱스 ${index}에 있습니다.`);
         setIsAnimating(false);
       });
     } else {
       animateSearch(linkedList.length, () => {
-        alert(`${inputValue}을(를) 찾을 수 없습니다.`);
+        sendAlert('warning', `${inputValue}을(를) 찾을 수 없습니다.`);
         setIsAnimating(false);
       });
     }
@@ -93,14 +99,13 @@ const LinkedListPage: React.FC = () => {
     if (idx >= 0 && idx < linkedList.length) {
       setIsAnimating(true);
       animateSearch(idx, () => {
-        alert(`인덱스 ${idx}의 값은 ${linkedList[idx]}입니다.`);
+        sendAlert('success', `인덱스 ${idx}의 값은 ${linkedList[idx]}입니다.`);
         setIsAnimating(false);
       });
     } else {
-      // 유효하지 않은 인덱스일 경우 전체 리스트 탐색
       animateSearch(linkedList.length, () => {
         setSearchIndex(null);
-        alert('유효한 인덱스를 입력하세요.');
+        sendAlert('warning', '유효한 인덱스를 입력하세요.');
         setIsAnimating(false);
       });
     }
@@ -116,7 +121,7 @@ const LinkedListPage: React.FC = () => {
     }
 
     if (targetIndex < -1) {
-        alert('유효한 인덱스를 입력하세요.');
+        sendAlert('warning', '유효한 인덱스를 입력하세요.');
         setSearchIndex(null);
         callback();
         return;
@@ -135,10 +140,13 @@ const LinkedListPage: React.FC = () => {
             currentIndex++;
         }
     }, 1000);
-};
+  };
 
-  
-  
+  useEffect(() => {
+    return () => {
+      resetAlert();
+    };
+  }, [resetAlert]);
 
   return (
     <Layout subTitle="연결리스트(linked-list)">

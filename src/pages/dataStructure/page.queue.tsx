@@ -79,6 +79,7 @@ const QueuePage: React.FC = () => {
       <QueueCanvas 
         queueRef={queueRef}
         queue={queue}
+        queueSize={queueSize}
         isAdding={isAdding}
         isRemoving={isRemoving}
       />
@@ -93,6 +94,8 @@ const QueuePage: React.FC = () => {
         handleMaxSizeChange={handleQueueSizeChange}
         addItemPlaceholder="추가할 데이터를 입력하세요" 
         sizePlaceholder="큐 크기"
+        isAdding={isAdding}
+        isRemoving={isRemoving}
       />
     </Layout>
   );
