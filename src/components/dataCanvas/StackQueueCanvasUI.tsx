@@ -60,7 +60,7 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && isValidBtnAdd) {
+    if (event.key === 'Enter' && isValidBtnAdd && !isAnimating) {
       handlePush();
     }
   };
@@ -80,8 +80,8 @@ const StackQueueCanvasUI: React.FC<StackQueueCanvasUIProps> = ({
         onclickBtnAdd={handlePush}
       />
       <InputBox
-        placeholder={sizePlaceholder}
-        inputValue={maxSize > 0 ? maxSize.toString() : '∞'}
+        placeholder={maxSize === 0 ? '∞' : sizePlaceholder} // 무한대 기호를 placeholder로 설정
+        inputValue={maxSize === 0 ? '' : maxSize.toString()} // maxSize가 0일 때 빈 문자열을 유지
         title={sizePlaceholder}
         handleInputChange={handleMaxSizeChange}
         handleKeyPress={handleKeyPress}
