@@ -17,22 +17,22 @@ const QueueContainer = styled.div<{ theme: string }>`
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateX(-100px);
+    transform: translateX(-40px) scaleX(0);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scaleX(1);
   }
 `;
 
 const fadeOut = keyframes`
   from {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scaleX(1);
   }
   to {
     opacity: 0;
-    transform: translateX(100px);
+    transform: translateX(40px) scaleX(0);
   }
 `;
 
