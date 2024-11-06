@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 
@@ -147,6 +147,17 @@ interface QueuecanvasProps {
 
 const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, queueSize, isAdding, isRemoving }) => {
   const { theme } = useTheme();
+
+  useEffect(() => {
+    if (queueRef.current) {
+      if(isAdding){
+        queueRef.current.scrollLeft = 0;
+      }
+      else if(isRemoving){
+        queueRef.current.scrollLeft = queueRef.current.scrollWidth;
+      }
+    }
+  }, [isAdding, isRemoving]);
 
   return (
     <QueueContainer theme={theme}>

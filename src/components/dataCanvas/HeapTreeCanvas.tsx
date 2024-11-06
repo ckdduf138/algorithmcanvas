@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 import { useWindowSize } from '../../hooks/getWindowSize'; // 창 크기 가져오는 훅
@@ -32,7 +32,7 @@ const NodeCircle = styled.circle<{ isRoot?: boolean; isComparing?: boolean; them
       : '#005677'}; 
   stroke: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
   stroke-width: 2;
-  transition: fill 0.3s ease;
+  transition: fill 0.5s ease;
 `;
 
 
@@ -50,11 +50,13 @@ const topBlank = 50;
 interface HeapTreeCanvasProps {
   heap: number[];
   compareIndices: number[]; // 비교 중인 노드들의 인덱스
+  autoScroll: boolean;
 }
 
-const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices }) => {
+const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices, autoScroll }) => {
   const { theme } = useTheme(); // 테마 가져오기
   const { width: windowWidth } = useWindowSize(); // 창 크기 가져오기
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const calculateDimensions = (heap: number[]) => {
     const totalLevels = Math.floor(Math.log2(heap.length)) + 1;
@@ -108,8 +110,20 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices })
     return { x, y };
   };
 
+  useEffect(() => {
+    // 비교 중인 노드들 중 첫 번째 노드로 스크롤 이동
+    if (compareIndices.length > 0 && scrollRef.current && autoScroll) {
+      const { x, y } = getNodePosition(compareIndices[0]);
+      scrollRef.current.scrollTo({
+        left: x - scrollRef.current.clientWidth / 2,
+        top: y - scrollRef.current.clientHeight / 2,
+        behavior: 'smooth',
+      });
+    }
+  }, [compareIndices]); // compareIndices가 변경될 때마다 스크롤 이동
+  
   return (
-    <ScrollWrapper>
+    <ScrollWrapper ref={scrollRef}>
       <TreeWrapper viewBox={`0 0 ${width} ${height}`} width={width} height={height}>
         {heap.map((value, index) => {
           const { x, y } = getNodePosition(index);
