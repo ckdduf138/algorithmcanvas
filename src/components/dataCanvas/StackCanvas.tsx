@@ -111,7 +111,7 @@ const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, stackSize, i
     if ((isAdding || isRemoving) && stackRef.current) {
       stackRef.current.scrollTop = -stackRef.current.scrollHeight;
     }
-  }, [isAdding, isRemoving]);
+  }, [isAdding, isRemoving, stackRef]);
 
   return (
     <StackContainer theme={theme}>

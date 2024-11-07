@@ -157,7 +157,7 @@ const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, queueSize, i
         queueRef.current.scrollLeft = queueRef.current.scrollWidth;
       }
     }
-  }, [isAdding, isRemoving]);
+  }, [isAdding, isRemoving, queueRef]);
 
   return (
     <QueueContainer theme={theme}>

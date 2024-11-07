@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 import { useWindowSize } from '../../hooks/getWindowSize'; // 창 크기 가져오는 훅
@@ -58,58 +58,49 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices, a
   const { width: windowWidth } = useWindowSize(); // 창 크기 가져오기
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const calculateDimensions = (heap: number[]) => {
+  // Dimensions 및 nodeGaps 계산을 하나의 useMemo로 통합
+  const { width, height, nodeGaps } = useMemo(() => {
     const totalLevels = Math.floor(Math.log2(heap.length)) + 1;
-    const maxNodesAtLevel = 2 ** (totalLevels - 1); // 마지막 레벨의 최대 노드 수
-    const leafGap = nodeRadius * 2 + 20; // 리프 노드 간의 간격 계산
-
-    // 전체 화면의 90%를 기준으로 너비 설정
-    const width = Math.max(maxNodesAtLevel * (leafGap + nodeRadius), windowWidth * 0.9);
-
-    const height = levelHeight * totalLevels + topBlank; // 높이는 레벨 수에 비례
-    return { width, height };
-  };
-
-  const { width, height } = calculateDimensions(heap);
-
-  const calculateNodeGaps = (heap: number[]) => {
-    const levelNodeGaps: number[] = [];
-    const totalLevels = Math.floor(Math.log2(heap.length)) + 1;
-    const leafLevel = totalLevels - 1;
+    const maxNodesAtLevel = 2 ** (totalLevels - 1);
     const leafGap = nodeRadius * 2 + 20;
+    const width = Math.max(maxNodesAtLevel * (leafGap + nodeRadius), windowWidth * 0.9);
+    const height = levelHeight * totalLevels + topBlank;
+
+    const levelNodeGaps: number[] = [];
+    const leafLevel = totalLevels - 1;
     levelNodeGaps[leafLevel] = leafGap;
 
     for (let level = leafLevel - 1; level >= 0; level--) {
-      const childGap = levelNodeGaps[level + 1];
-      const parentGap = 2 * (childGap + nodeRadius * 2);
+      const parentGap = 2 * (levelNodeGaps[level + 1] + nodeRadius * 2);
       levelNodeGaps[level] = parentGap;
     }
 
-    return levelNodeGaps;
-  };
+    return { width, height, nodeGaps: levelNodeGaps };
+  }, [heap, windowWidth]);
 
-  const nodeGaps = calculateNodeGaps(heap);
-
-  const getNodePosition = (index: number): { x: number; y: number } => {
-    const level = Math.floor(Math.log2(index + 1));
-    const gap = nodeGaps[level];
-    const xGap = gap / 2;
-
-    if (index === 0) {
-      return { x: width / 2, y: nodeRadius + topBlank }; // y 값을 조정하여 루트 노드 위치 이동
-    }
-
-    const parentIndex = Math.floor((index - 1) / 2);
-    const parentPos = getNodePosition(parentIndex);
-    const isLeftChild = index === 2 * parentIndex + 1;
-
-    const childOffset = xGap / 2 + nodeRadius;
-    const x = isLeftChild ? parentPos.x - childOffset : parentPos.x + childOffset;
-    const y = parentPos.y + levelHeight;
-
-    return { x, y };
-  };
-
+  const getNodePosition = useCallback(
+    (index: number): { x: number; y: number } => {
+      const level = Math.floor(Math.log2(index + 1));
+      const gap = nodeGaps[level];
+      const xGap = gap / 2;
+  
+      if (index === 0) {
+        return { x: width / 2, y: nodeRadius + topBlank };
+      }
+  
+      const parentIndex = Math.floor((index - 1) / 2);
+      const parentPos = getNodePosition(parentIndex);
+      const isLeftChild = index === 2 * parentIndex + 1;
+  
+      const childOffset = xGap / 2 + nodeRadius;
+      const x = isLeftChild ? parentPos.x - childOffset : parentPos.x + childOffset;
+      const y = parentPos.y + levelHeight;
+  
+      return { x, y };
+    },
+    [nodeGaps, width, nodeRadius, topBlank, levelHeight]
+  );
+  
   useEffect(() => {
     // 비교 중인 노드들 중 첫 번째 노드로 스크롤 이동
     if (compareIndices.length > 0 && scrollRef.current && autoScroll) {
@@ -120,7 +111,7 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices, a
         behavior: 'smooth',
       });
     }
-  }, [compareIndices]); // compareIndices가 변경될 때마다 스크롤 이동
+  }, [compareIndices, autoScroll]);
   
   return (
     <ScrollWrapper ref={scrollRef}>
