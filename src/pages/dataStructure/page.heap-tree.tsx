@@ -8,6 +8,7 @@ const HeapTreePage: React.FC = () => {
   const [heap, setHeap] = useState<number[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [isMinHeap, setIsMinHeap] = useState<boolean>(true);
+  const [isScroll, setIsScroll] = useState<boolean>(true);
   const [compareIndices, setCompareIndices] = useState<number[]>([]);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const { sendAlert, resetAlert } = useAlert();
@@ -34,6 +35,10 @@ const HeapTreePage: React.FC = () => {
       [newHeap[parent], newHeap[i]] = [newHeap[i], newHeap[parent]];
       setHeap([...newHeap]);
       i = parent;
+    }
+    if(i <= 0){
+      setCompareIndices([0]);
+      await sleep(500);
     }
 
     sendAlert('success', `${newValue}가 힙에 삽입되었습니다.`);
@@ -131,6 +136,10 @@ const HeapTreePage: React.FC = () => {
     setIsMinHeap(!isMinHeap);
     sendAlert('info', `${isMinHeap ? '최대' : '최소'} 힙으로 변경되었습니다.`);
   };
+  const toggleAutoScroll = () => {
+    setIsScroll(!isScroll);
+    sendAlert('info', `자동 스크롤이 ${isScroll ? '비활성화' : '활성화'}되었습니다.`);
+  };
 
   useEffect(() => {
     return () => {
@@ -140,12 +149,14 @@ const HeapTreePage: React.FC = () => {
 
   return (
     <Layout subTitle="힙 트리(Heap Tree)">
-      <HeapTreeCanvas heap={heap} compareIndices={compareIndices} />
+      <HeapTreeCanvas heap={heap} compareIndices={compareIndices} autoScroll={isScroll}/>
       <HeapTreeCanvasUI
         inputValue={inputValue}
         isMinHeap={isMinHeap}
+        isScroll={isScroll}
         setInputValue={setInputValue}
         toggleHeapType={toggleHeapType}
+        toggleAutoScroll={toggleAutoScroll}
         handleInsert={handleInsert}
         handleDelete={deleteHeapRoot}
         handleReset={handleReset}

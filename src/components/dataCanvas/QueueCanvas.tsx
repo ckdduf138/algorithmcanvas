@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 
@@ -17,22 +17,22 @@ const QueueContainer = styled.div<{ theme: string }>`
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateX(-100px);
+    transform: translateX(-40px) scaleX(0);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scaleX(1);
   }
 `;
 
 const fadeOut = keyframes`
   from {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scaleX(1);
   }
   to {
     opacity: 0;
-    transform: translateX(100px);
+    transform: translateX(40px) scaleX(0);
   }
 `;
 
@@ -147,6 +147,17 @@ interface QueuecanvasProps {
 
 const QueueCanvas: React.FC<QueuecanvasProps> = ({ queueRef, queue, queueSize, isAdding, isRemoving }) => {
   const { theme } = useTheme();
+
+  useEffect(() => {
+    if (queueRef.current) {
+      if(isAdding){
+        queueRef.current.scrollLeft = 0;
+      }
+      else if(isRemoving){
+        queueRef.current.scrollLeft = queueRef.current.scrollWidth;
+      }
+    }
+  }, [isAdding, isRemoving, queueRef]);
 
   return (
     <QueueContainer theme={theme}>
