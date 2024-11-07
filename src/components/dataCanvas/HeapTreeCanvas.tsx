@@ -98,7 +98,7 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices, a
   
       return { x, y };
     },
-    [nodeGaps, width, nodeRadius, topBlank, levelHeight]
+    [nodeGaps, width]
   );
   
   useEffect(() => {
@@ -111,7 +111,7 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices, a
         behavior: 'smooth',
       });
     }
-  }, [compareIndices, autoScroll]);
+  }, [compareIndices, autoScroll, getNodePosition]);
   
   return (
     <ScrollWrapper ref={scrollRef}>
