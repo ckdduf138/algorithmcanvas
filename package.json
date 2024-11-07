@@ -16,6 +16,7 @@
     "@visx/mock-data": "^3.3.0",
     "@visx/network": "^3.3.0",
     "@visx/shape": "^3.5.0",
+    "js-cookie": "^3.0.5",
     "matter-js": "^0.19.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -53,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/matter-js": "^0.19.6",
     "gh-pages": "^6.1.1"
   }

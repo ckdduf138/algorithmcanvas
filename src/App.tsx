@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+import Cookies from 'js-cookie';
 
 import HomePage from './pages/page.home';
 
@@ -31,15 +33,28 @@ import { ThemeProvider } from './context/themeContext';
 
 import useDeviceCheck from './hooks/useDeviceCheck';
 import CustomAlert from './components/alert/customAlert';
+import Modal from './components/modal/modal';
 
 const App = () => {
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const deviceType = useDeviceCheck();
 
     useEffect(() => {
+        const hasVisited = Cookies.get('hasVisited');
+
+        if (!hasVisited) {
+            setIsModalVisible(true);
+            Cookies.set('hasVisited', 'true', { expires: 100 });
+        }
+
         if (deviceType !== 'desktop') {
             alert('이 웹사이트는 PC에 최적화되어 있습니다. PC에서 확인해 주시기 바랍니다.');
         }
     }, [deviceType]);
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+    };
 
     return (
         <ThemeProvider>
@@ -82,6 +97,10 @@ const App = () => {
                         <Route path="404" element={<NotFoundPage />} />
                         <Route path="*" element={<Navigate to="404" />} />
                     </Routes>
+
+                    {/* 모달창 표시 */}
+                    {isModalVisible && <Modal onClose={handleCloseModal} />}
+
                 </BrowserRouter>
             </AlertProvider>
         </ThemeProvider>
