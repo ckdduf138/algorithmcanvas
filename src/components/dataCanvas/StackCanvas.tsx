@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useTheme } from '../../context/themeContext';
 
@@ -17,22 +17,22 @@ const StackContainer = styled.div<{ theme: string }>`
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(-100px);
+    transform: translateY(-100px) scaleY(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scaleY(1);
   }
 `;
 
 const fadeOut = keyframes`
   from {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scaleY(1);
   }
   to {
     opacity: 0;
-    transform: translateY(-100px);
+    transform: translateY(-100px) scaleY(0);
   }
 `;
 
@@ -99,13 +99,19 @@ const Label = styled.div<{ $theme: string }>`
 interface StackCanvasProps {
   stackRef: React.RefObject<HTMLDivElement>
   stack: string[];
-  stackSize: number; // 스택의 최대 크기
+  stackSize: number;
   isAdding: boolean;
-  isRemoving: boolean
-};
+  isRemoving: boolean;
+}
 
 const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, stackSize, isAdding, isRemoving }) => {
   const { theme } = useTheme();
+
+  useEffect(() => {
+    if ((isAdding || isRemoving) && stackRef.current) {
+      stackRef.current.scrollTop = -stackRef.current.scrollHeight;
+    }
+  }, [isAdding, isRemoving, stackRef]);
 
   return (
     <StackContainer theme={theme}>
@@ -120,7 +126,7 @@ const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, stackSize, i
                 $isAdding={isAdding && index === stack.length - 1}
                 $isRemoving={isRemoving && index === stack.length - 1}
                 $theme={theme}
-                $isFull={stack.length === stackSize} // 스택이 가득 찼는지 여부
+                $isFull={stack.length === stackSize}
               >
                 {item}
                 {index === stack.length - 1 && (
@@ -139,3 +145,4 @@ const StackCanvas: React.FC<StackCanvasProps> = ({ stackRef, stack, stackSize, i
 };
 
 export default StackCanvas;
+

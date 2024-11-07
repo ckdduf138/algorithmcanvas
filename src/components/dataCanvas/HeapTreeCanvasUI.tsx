@@ -27,8 +27,10 @@ const ButtonWapper = styled.div`
 interface HeapTreeCanvasUIProps {
   inputValue: string;
   isMinHeap: boolean;
+  isScroll: boolean;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   toggleHeapType: () => void;
+  toggleAutoScroll: () => void;
   handleInsert: () => void;
   handleDelete: () => void;
   handleReset: () => void; // 리셋 핸들러 추가
@@ -40,17 +42,23 @@ interface HeapTreeCanvasUIProps {
 const HeapTreeCanvasUI: React.FC<HeapTreeCanvasUIProps> = ({
   inputValue,
   isMinHeap,
+  isScroll,
   setInputValue,
   toggleHeapType,
+  toggleAutoScroll,
   handleInsert,
   handleDelete,
   handleReset, // 리셋 핸들러 사용
   isAnimating, // 애니메이션 상태 사용
   isHeapEmpty, // 힙이 비어있는지 여부 사용
 }) => {
-  const options = [
+  const isMinHeapOptions = [
     { value: 'min', label: '최소힙' , disabled: isAnimating},
     { value: 'max', label: '최대힙' , disabled: isAnimating},
+  ];
+  const isScrollOptions = [
+    { value: 'scroll', label: '자동스크롤'},
+    { value: 'notScroll', label: '수동스크롤'},
   ];
   return (
     <StyleCanvasUI>
@@ -88,10 +96,15 @@ const HeapTreeCanvasUI: React.FC<HeapTreeCanvasUIProps> = ({
         </Button>
       </ButtonWapper>
       <SegmentedControl
-          options={options}
+          options={isMinHeapOptions}
           selectedValue={isMinHeap ? 'min' : 'max'}
           onChange={toggleHeapType}
         />
+      <SegmentedControl
+        options={isScrollOptions}
+        selectedValue={isScroll ? 'scroll' : 'notScroll'}
+        onChange={toggleAutoScroll}
+      />
     </StyleCanvasUI>
   );
 };
