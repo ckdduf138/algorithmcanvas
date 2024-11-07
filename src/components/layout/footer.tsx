@@ -25,7 +25,6 @@ const Footer: React.FC = () => {
             <FooterText>
                 <Text fontSize='20px'>algorithm-canvas</Text>
                 <Text>© 2024 - 2024</Text>
-                <Text>한국어 | English</Text>
             </FooterText>
         </StyledFooter>
     );

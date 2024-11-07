@@ -15,7 +15,6 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-    width: 55%;
     min-width: 400px;
     background: white;
     padding: 30px;
@@ -61,15 +60,15 @@ const Modal: React.FC<ModalProps> = ({ onClose }) => {
         <Heading>알고리즘 캔버스에 오신 것을 환영합니다!</Heading>
 
         <Content>
-            알고리즘 시각화를 통해 쉽게 이해할 수 있는 학습 플랫폼입니다. 다양한 알고리즘을 실시간으로 경험할 수 있습니다.
+            Algorithm Canvas는 다양한 알고리즘을 실시간 시뮬레이션하여 쉽게 이해할 수 있는 학습 플랫폼입니다!
         </Content>
 
         <Content>
-            동작 과정을 직접 실행하여 문제 해결 능력을 향상시켜보세요! 사용 친화적으로 설계된 UI로 쉽게 사용하실 수 있습니다.
+            사용 친화적으로 설계된 UI로 동작 과정을 실행하며 문제 해결 능력을 향상시켜보세요!
         </Content>
 
         <Content>
-            Algorithm Canvas와 함께 깊이 있는 학습을 경험해 봅시다!
+            Algorithm Canvas와 함께 깊이 있는 학습을 시작해 봅시다!
         </Content>
 
         <Button onClick={onClose}>시작하기</Button>
