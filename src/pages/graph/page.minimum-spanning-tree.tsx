@@ -12,7 +12,6 @@ import { useAlert } from '../../context/alertContext';
 
 const MinimumSpanningTreePage: React.FC = () => {
   const [selectAlgorithm, setSelectAlgorithm] = useState('kruskal');
-  const [rendering, setRendering] = useState(false);
 
   const [isRunningState, setIsRunnigState] = useState<'play' | 'pause' | 'ready'>('ready');
   const isRunning = useRef<'play' | 'pause' | 'ready'>('ready');
@@ -151,7 +150,7 @@ const MinimumSpanningTreePage: React.FC = () => {
     isRunning.current = 'ready';
     setIsRunnigState('ready');
 
-    setRendering(!rendering);
+    if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
 
   const handlePrimStart = async (startNodeId: string) => {
