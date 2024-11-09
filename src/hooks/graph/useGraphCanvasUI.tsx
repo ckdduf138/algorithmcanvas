@@ -92,9 +92,11 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
       const source = nodes[i].id;
       const target = nodes[i + 1].id;
       const linkKey = `${source}-${target}`;
+      const reverseLinkKey = `${target}-${source}`;
 
       links.push({ source, target, focus: 'inactive', weight: Math.floor(Math.random() * numNodes * 2) - 5, direction: true });
       existingLinks.add(linkKey);
+      existingLinks.add(reverseLinkKey);
     }
 
     for (let i = 0; i < numNodes; i++) {
@@ -106,10 +108,12 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
       }
 
       const linkKey = `${source}-${target}`;
-      
-      if (!existingLinks.has(linkKey)) {
+      const reverseLinkKey = `${target}-${source}`;
+
+      if (!existingLinks.has(linkKey) && !existingLinks.has(reverseLinkKey)) {
         links.push({ source, target, focus: 'inactive', weight: Math.floor(Math.random() * numNodes * 2) - 5, direction: true });
         existingLinks.add(linkKey);
+        existingLinks.add(reverseLinkKey);
       }
     }
 
