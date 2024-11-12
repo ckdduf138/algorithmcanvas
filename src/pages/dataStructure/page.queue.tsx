@@ -49,7 +49,7 @@ const QueuePage: React.FC = () => {
       const newQueue = [...queue];
 
       setTimeout(() => {
-        newQueue.shift();
+        newQueue.pop();
         setQueue(newQueue);
         setIsRemoving(false);
       }, 500);
