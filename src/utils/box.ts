@@ -63,7 +63,7 @@ export const boxes: BoxProps[] = [
         algorithmType: '자료구조',
         imgSrc: `${process.env.PUBLIC_URL}/images/box/queue.png`,
         gifSrc: `${process.env.PUBLIC_URL}/images/box/queue.gif`,
-        tags: ['자료구조', '선입선출'],
+        tags: ['자료구조', '선입선출', '큐'],
         link: 'queue',
         description: '큐(Queue)는 선입선출(FIFO: First In, First Out) 구조를 가지는 자료구조입니다.<br><br>' +
         '큐에서는 먼저 들어온 데이터가 먼저 나가며, 줄을 서는 방식과 유사합니다.<br>' +
@@ -74,7 +74,7 @@ export const boxes: BoxProps[] = [
         algorithmType: '자료구조',
         imgSrc: `${process.env.PUBLIC_URL}/images/box/stack.png`,
         gifSrc: `${process.env.PUBLIC_URL}/images/box/stack.gif`,
-        tags: ['자료구조', '후입선출'],
+        tags: ['자료구조', '후입선출', '스택'],
         link: 'stack',
         description: '스택(stack)은 후입선출(LIFO; Last In, First Out) 구조를 가지는 자료구조입니다.<br><br>' +
         '공백인 스택에 자료 추가 시 가장 아래부터 자료가 쌓여 가장 마지막에 삽입한 자료가 가장 먼저 추출되고 삭제되는 자료구조입니다.',
@@ -214,7 +214,7 @@ export const boxes: BoxProps[] = [
         algorithmType: '그래프',
         imgSrc: `${process.env.PUBLIC_URL}/images/box/minimum-spanning-tree.png`,
         gifSrc: `${process.env.PUBLIC_URL}/images/box/minimum-spanning-tree.gif`,
-        tags: ['그래프', '유니온-파인드'],
+        tags: ['그래프', '트리', '유니온-파인드'],
         link: 'minimum-spanning-tree',
         description: '최소 신장 트리란 한 그래프의 스패닝 트리들 중에서 가중값의 합이 가장 작은 것입니다.<br><br>' + 
         '신장 트리란 연결 그래프의 부분 그래프로서 그 그래프의 모든 정점과 간선의 부분 집합으로 구성되는 트리입니다.',
