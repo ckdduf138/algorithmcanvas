@@ -57,10 +57,15 @@ const SubtitleWapper = styled.div`
     border-radius: 7px;
     position: absolute;
     min-width: 50px;
+    max-width: 300px;
     left: 3%;
     align-items: center;
     justify-content: center;
     background: #8D57FF;
+
+    @media (max-width: 1430px) {
+        display: none;
+    }
 `;
 
 const Subtitle = styled.div<{ theme: string }>`
