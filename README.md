@@ -8,7 +8,7 @@
 
 친화적 학습 플랫폼으로 누구나 쉽게 사용하도록 설계하였습니다.
 
-![main](https://github.com/user-attachments/assets/f69cbe8c-be0a-49bd-812d-3d8df4e6fb59)
+https://github.com/user-attachments/assets/666ce298-ee64-4921-a132-4397e9c14b16
 
 <img src="https://algorithmcanvas.com/images/favicon.svg" style="width: 28px; height: 28px;" align='left' />
 <a href="https://algorithmcanvas.com" target="_blank">웹 사이트 보러 가기</a>
