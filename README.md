@@ -61,3 +61,6 @@ https://github.com/user-attachments/assets/666ce298-ee64-4921-a132-4397e9c14b16
 ![html5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![css](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white)
 ![typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+
+## ETC
+- **notion**: https://stream-vein-0ef.notion.site/1362f64668d780adbd27c5ff441a8953
