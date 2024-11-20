@@ -21,30 +21,30 @@ const NodeCircle = styled.circle<{ isRoot?: boolean; isComparing?: boolean; them
   fill: ${({ isRoot, isComparing, theme }) =>
     isComparing
       ? theme === 'light'
-        ? '#ffc107'
-        : '#ff9800'
+        ? '#FFA500'
+        : '#FFA500'
       : isRoot
       ? theme === 'light'
-        ? '#ff5722'
-        : '#a33e0f'
+        ? '#6D9EEB '
+        : '#6D9EEB '
       : theme === 'light'
-      ? '#007bff'
-      : '#005677'}; 
+      ? '#D9D9D9'
+      : '#D9D9D9'}; 
   stroke: ${({ theme }) => (theme === 'light' ? '#000' : '#fff')};
-  stroke-width: 2;
+  stroke-width: 2.5;
   transition: fill 0.5s ease;
 `;
 
 
 const NodeText = styled.text<{ theme: string }>`
-  font-size: 12px;
-  fill: ${({ theme }) => (theme === 'light' ? '#fff' : '#fff')};
+  font-size: 28px;
+  fill: ${({ theme }) => (theme === 'light' ? '#000' : '#000')};
   text-anchor: middle;
   dominant-baseline: middle;
 `;
 
-const nodeRadius = 20; // 각 노드의 반지름
-const levelHeight = 70; // 각 레벨 간 높이 간격
+const nodeRadius = 40; // 각 노드의 반지름
+const levelHeight = 100; // 각 레벨 간 높이 간격
 const topBlank = 50;
 
 interface HeapTreeCanvasProps {
@@ -63,7 +63,7 @@ const HeapTreeCanvas: React.FC<HeapTreeCanvasProps> = ({ heap, compareIndices, a
     const totalLevels = Math.floor(Math.log2(heap.length)) + 1;
     const maxNodesAtLevel = 2 ** (totalLevels - 1);
     const leafGap = nodeRadius * 2 + 20;
-    const width = Math.max(maxNodesAtLevel * (leafGap + nodeRadius), windowWidth * 0.9);
+    const width = Math.max(maxNodesAtLevel * (leafGap + nodeRadius), windowWidth * 0.98);
     const height = levelHeight * totalLevels + topBlank;
 
     const levelNodeGaps: number[] = [];
