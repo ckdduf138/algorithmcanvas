@@ -7,7 +7,7 @@ const FooterContainer = styled.footer<{ theme: string }>`
     width: 100%;
     min-height: 10%;
     text-align: center;
-    padding: 10px;
+    padding: 10px 0px 10px 0px;
     background-color: ${({ theme: themeType }) => (themeType === 'light' ? '#f7f8f9' : '#0b131b')};
 `;
 
