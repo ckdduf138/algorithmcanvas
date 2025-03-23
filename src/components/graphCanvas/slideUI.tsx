@@ -9,12 +9,15 @@ import { ReactSVG } from "react-svg";
 
 const Container = styled.div<{ $isOpen : boolean, $height: number, $theme: string}>`
     display: flex;
+    flex-wrap: wrap;
     position: fixed;
     align-items: center;
     justify-content: center;
     bottom: 10%;
     left: 0;
     right: 0;
+    width: 100%;
+    min-width: 650px;
     height: ${(props) => (props.$isOpen ? props.$height + 'px' : '0')};
     background-color: ${(props) => (props.$theme === 'light' ? '#f0f0f0' : '#333333')};
     gap: 1%;
@@ -24,9 +27,9 @@ const Container = styled.div<{ $isOpen : boolean, $height: number, $theme: strin
 `;
 
 const ToggleButton = styled.button<{$isOpen : boolean, $height: number, $theme: string}>`
-    position: fixed;
+    position: absolute;
     bottom: ${(props) => (props.$isOpen ? props.$height + 'px' : '10%')};
-    right: 1%;
+    right: 30px;
     transform: translateX(-50%);
     color: ${(props) => (props.$theme === 'light' ? '#333333' : '#f0f0f0')};
     background-color: ${(props) => (props.$theme === 'light' ? '#f0f0f0' : '#333333')};
