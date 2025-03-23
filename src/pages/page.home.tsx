@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+
 import styled from 'styled-components';
+
 import Box from '../components/home/box';
 import Layout from '../components/layout/layout';
 import Search from '../components/home/search';
 import { boxes } from '../utils/box';
 import { useTheme } from '../context/themeContext';
+import FloatingButton from '../components/home/floatingButton';
+import FeedbackModal from '../components/home/feedbackModal';
 
 const HomeSearch = styled.div`
     display: flex;
@@ -40,6 +44,8 @@ const NoSearch = styled.div<{ theme: string }>`
 const HomePage = () => {
     const [filteredBoxes, setFilteredBoxes] = useState(boxes);
     const [query, setQuery] = useState('');
+    const [isModalOpen, setModalOpen] = useState(false);
+    
     const { theme } = useTheme();
 
     const home_onSearch = (query: string) => {
@@ -70,6 +76,10 @@ const HomePage = () => {
         home_onSearch(tag);
     };
     
+    const handleSubmitFeedback = () => {
+        alert("피드백이 제출되었습니다!");
+      };
+
     return (
         <Layout subTitle=''>
             <HomeSearch>
@@ -96,6 +106,13 @@ const HomePage = () => {
                     )}
                 </HomeBoxes>
             </HomeContent>
+
+            <FloatingButton onClick={() => setModalOpen(true)} />
+            <FeedbackModal
+                isOpen={isModalOpen}
+                onClose={() => setModalOpen(false)}
+                onSubmit={handleSubmitFeedback}
+            />
         </Layout>
     );
 };
