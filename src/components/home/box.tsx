@@ -87,14 +87,19 @@ const BoxTitle = styled.div`
     font-size: 26px;
 `;
 
-const BoxImage = styled.img`
+const BoxImageWapper = styled.div`
     width: 80%;
-    height: 50%;
+    height: 212px;
+`;
+
+const BoxImage = styled.img`
+    width: 100%;
+    height: 100%;
 `;
 
 const TagParent = styled.div`
     display: flex;
-    width: 90%;
+    width: 95%;
     padding: 2%;
     overflow: hidden;
     gap: 10px;
@@ -199,7 +204,10 @@ const Box: React.FC<BoxProps & { onTagClick: (tag: string) => void }> = ({ title
                         />
                     </BoxUI>
 
-                    <BoxImage src={isHover ? gifSrc : imgSrc} alt='알고리즘 예시'/>
+                    <BoxImageWapper>
+                        <BoxImage src={isHover ? gifSrc : imgSrc} alt='알고리즘 예시'/>
+                    </BoxImageWapper>
+                    
 
                     <TagParent>
                         {tags.map((tag, index) => (

@@ -18,9 +18,10 @@ const Container = styled.div<{ $isOpen : boolean, $height: number, $theme: strin
     right: 0;
     width: 100%;
     min-width: 650px;
-    height: ${(props) => (props.$isOpen ? props.$height + 'px' : '0')};
+    height: ${(props) => (props.$isOpen ? props.$height + 'px' : '0px')};
     background-color: ${(props) => (props.$theme === 'light' ? '#f0f0f0' : '#333333')};
-    gap: 1%;
+    gap: 30px;
+    row-gap: 30px;
     overflow: hidden;
     transition: height 0.3s ease-in-out;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
@@ -82,8 +83,7 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, segmen
 
     return (
     <>
-        <Container $isOpen={isOpen} $height={height * 0.13} $theme={theme}>
-
+        <Container $isOpen={isOpen} $height={height * 0.1} $theme={theme}>
             <Button 
                 disabled={dataSize <= 0} 
                 rightImg={isRunning === 'play' ? `${process.env.PUBLIC_URL}/images/pause-button.svg` : `${process.env.PUBLIC_URL}/images/play-button.svg`} 
@@ -110,7 +110,7 @@ const SlideUI: React.FC<SlideUIProps> = ({ dataSize, isRunning, delayRef, segmen
 
             <DelaySlider onDelayChange={handleDelayChange}/> 
         </Container>
-        <ToggleButton $isOpen={isOpen} $height={height * 0.23} $theme={theme} onClick={toggleOpen}>
+        <ToggleButton $isOpen={isOpen} $height={height * 0.18} $theme={theme} onClick={toggleOpen}>
             {isOpen ? <ReactSVG src={`${process.env.PUBLIC_URL}/images/caret-down.svg`}/>  : <ReactSVG src={`${process.env.PUBLIC_URL}/images/caret-up.svg`}/>}
         </ToggleButton>
     </>

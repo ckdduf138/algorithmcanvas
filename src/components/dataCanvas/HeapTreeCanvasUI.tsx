@@ -13,8 +13,7 @@ const StyleCanvasUI = styled.div`
   justify-content: center;
   gap: 30px;
   position: relative;
-  row-gap: 20px;
-  padding-bottom: 10px;
+  row-gap: 30px;
   padding-top: 2%;
   padding-bottom: 2%;
 `;
