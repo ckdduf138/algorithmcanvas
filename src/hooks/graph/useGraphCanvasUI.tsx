@@ -138,7 +138,6 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
         }
       } while (isOverlapping);
 
-      console.log(x, y);
       
       nodes.push({
         id: generateUUID(),
