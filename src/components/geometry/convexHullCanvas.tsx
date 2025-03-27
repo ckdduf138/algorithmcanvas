@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { useWindowSize } from '../../hooks/getWindowSize';
-import { useTheme } from '../../context/themeContext';
 import Button from '../common/buttons';
 import SegmentedControl from '../common/segmentedControl';
 import DelaySlider from '../common/delaySlider';
@@ -25,12 +24,14 @@ const ConvexHullCanvasWapper = styled.svg`
     display: flex;
 `;
 
-const ConvexHullCanvasUIWapper = styled.div<{ $height: number, $theme: string}>`
+const ConvexHullCanvasUIWapper = styled.div`
     display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    row-gap: 30px;
     align-items: center;
     justify-content: center;
-    height: ${(props) => (props.$height + 'px' )};
-    gap: 1%;
+    padding-bottom: 2%;
 `;
 
 const dotCount_options = [
@@ -60,8 +61,6 @@ const ConvexHullCanvas: React.FC<ConvexHullCanvasProps> = () => {
     const delayRef = useRef<number>(500);
 
     const { width, height } = useWindowSize();
-
-    const {theme} = useTheme();
 
     const { sendAlert, resetAlert } = useAlert();
 
@@ -260,7 +259,7 @@ const ConvexHullCanvas: React.FC<ConvexHullCanvasProps> = () => {
             ))}
         </ConvexHullCanvasWapper>
 
-        <ConvexHullCanvasUIWapper $height={height * 0.1} $theme={theme}>
+        <ConvexHullCanvasUIWapper>
 
             <SegmentedControl options={dotCount_options} selectedValue={dotCountSelected.current} onChange={handleChangeDotCount} />
 

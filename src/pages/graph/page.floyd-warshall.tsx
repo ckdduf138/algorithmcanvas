@@ -7,7 +7,7 @@ import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
-import SlideUI from '../../components/graphCanvas/slideUI';
+import BottomUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const FloydWarshallPage: React.FC = () => {
@@ -250,7 +250,7 @@ const FloydWarshallPage: React.FC = () => {
       />
 
       {/* UI */}
-      <SlideUI 
+      <BottomUI 
         dataSize={nodeGraphDatas.nodes.length}
         isRunning={isRunningState}
         delayRef={delayRef} 
