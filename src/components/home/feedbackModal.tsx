@@ -100,7 +100,6 @@ const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   
       alert("피드백이 제출되었습니다.");
     } catch (error) {
-      console.error("Error:", error);
       alert("피드백 제출에 실패했습니다.");
     } finally {
       setPending(false);
