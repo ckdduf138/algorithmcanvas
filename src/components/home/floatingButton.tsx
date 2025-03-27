@@ -43,7 +43,7 @@ interface FloatingButtonProps {
 const FloatingButton: React.FC<FloatingButtonProps> = ({ onClick }) => {
   return (
     <Button onClick={onClick} aria-label="Open feedback form">
-      💬
+      <img src={`${process.env.PUBLIC_URL}/images/file-edit-02.svg`} alt="피드백"/>
     </Button>
   );
 };
