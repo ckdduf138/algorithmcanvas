@@ -1,31 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8" />
 
-        <!-- SEO Meta Tags -->
-        <meta name="keywords" content="알고리즘, 자료구조, 알고리즘 시각화, 알고리즘 캔버스, 데이터 시각화, 프로그래밍, 컴퓨터 과학" />
-        <meta name="description" content="알고리즘과 자료구조를 한눈에 쉽게 이해할 수 있는 시각화 도구입니다. 다양한 알고리즘을 실시간으로 시뮬레이션하며 학습해 보세요." />
-        <meta name="naver-site-verification" content="79ba8c21207bee1872f2cf3a862a387a67ddcd86" />
-        
-        <!-- Canonical URL -->
-        <link rel="canonical" href="https://algorithmcanvas.com" />
+    <!-- SEO Meta Tags -->
+    <meta name="keywords" content="알고리즘, 자료구조, 알고리즘 시각화, 알고리즘 캔버스, 데이터 시각화, 프로그래밍, 컴퓨터 과학" />
+    <meta name="description" content="알고리즘과 자료구조를 한눈에 쉽게 이해할 수 있는 시각화 도구입니다. 다양한 알고리즘을 실시간으로 시뮬레이션하며 학습해 보세요." />
+    <meta name="robots" content="index, follow" />
 
-        <!-- Open Graph Meta Tags -->
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Algorithm Canvas - 알고리즘 시각화 플랫폼" />
-        <meta property="og:description" content="알고리즘과 자료구조를 한눈에 쉽게 이해할 수 있는 시각화 도구입니다. 다양한 알고리즘을 실시간으로 시뮬레이션하며 학습해 보세요." />
-        <meta property="og:image" content="https://algorithmcanvas.com/images/favicon.svg" />
-        <meta property="og:url" content="https://algorithmcanvas.com" />
+    <!-- Naver Search Advisor 인증 -->
+    <meta name="naver-site-verification" content="79ba8c21207bee1872f2cf3a862a387a67ddcd86" />
 
-        <!-- Twitter Cards Meta Tags -->
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Algorithm Canvas - 알고리즘 시각화 플랫폼" />
-        <meta name="twitter:description" content="알고리즘과 자료구조를 시각화 도구로 쉽게 학습할 수 있습니다." />
-        <meta name="twitter:image" content="https://algorithmcanvas.com/images/favicon.svg" />
+    <!-- Twitter Cards Meta Tags (트위터 미리보기) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Algorithm Canvas - 알고리즘 시각화 플랫폼" />
+    <meta name="twitter:description" content="알고리즘과 자료구조를 시각화 도구로 쉽게 학습할 수 있습니다." />
+    <meta name="twitter:image" content="https://algorithmcanvas.com/images/favicon.svg" />
 
-        <!-- Structured Data (JSON-LD) for Schema.org -->
-        <script type="application/ld+json">
+    <!-- Open Graph Meta Tags (소셜 미디어 미리보기) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Algorithm Canvas - 알고리즘 시각화 플랫폼" />
+    <meta property="og:description" content="알고리즘과 자료구조를 한눈에 쉽게 이해할 수 있는 시각화 도구입니다. 다양한 알고리즘을 실시간으로 시뮬레이션하며 학습해 보세요." />
+    <meta property="og:image" content="https://algorithmcanvas.com/images/favicon.svg" />
+    <meta property="og:url" content="https://algorithmcanvas.com" />
+
+    <!-- 페이지 제목 -->
+    <title>Algorithm Canvas - 알고리즘 시각화 및 학습 플랫폼</title>
+
+    <!-- 정식 URL 지정 -->
+    <link rel="canonical" href="https://algorithmcanvas.com" />
+
+    <!-- 아이콘 설정 -->
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="https://algorithmcanvas.com/images/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="https://algorithmcanvas.com/images/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="48x48" href="https://algorithmcanvas.com/images/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="64x64" href="https://algorithmcanvas.com/images/favicon.svg" />
+
+    <!-- Sitemap 연결 -->
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://algorithmcanvas.com/sitemap.xml" />
+
+    <!-- 로고 -->
+    <img src="https://algorithmcanvas.com/images/favicon.svg" alt="Algorithm Canvas Logo" style="display:none;" />
+
+    <!-- 구조화된 데이터 (JSON-LD) - Schema.org -->
+    <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "WebSite",
@@ -37,42 +55,26 @@
                 "name": "Algorithm Canvas"
             }
         }
-        </script>
+    </script>
 
-        <!-- Title -->
-        <title>Algorithm Canvas - 알고리즘 시각화 및 학습 플랫폼</title>
+    <!-- URL 리디렉션 처리 스크립트 -->
+    <script type="text/javascript">
+        (function() {
+            var redirected = window.location.search.match(/^\?p=([^&]*)&q=(.*)$/);
+            if (redirected) {
+                var target = redirected[1];
+                var query = redirected[2].replace(/~and~/g, '&');
+                window.history.replaceState(
+                    null, 
+                    null,
+                    window.location.pathname.slice(0, -5) + target + (query ? '?' + query : '') + window.location.hash
+                );
+            }
+        })();
+    </script>
 
-        <!-- Icon -->
-        <link rel="icon" type="image/svg+xml" sizes="16x16" href="https://algorithmcanvas.com/images/favicon.svg" />
-        <link rel="icon" type="image/svg+xml" sizes="32x32" href="https://algorithmcanvas.com/images/favicon.svg" />
-        <link rel="icon" type="image/svg+xml" sizes="48x48" href="https://algorithmcanvas.com/images/favicon.svg" />
-        <link rel="icon" type="image/svg+xml" sizes="64x64" href="https://algorithmcanvas.com/images/favicon.svg" />
-
-        <!-- Alt Text for Image -->
-        <img src="https://algorithmcanvas.com/images/favicon.svg" alt="Algorithm Canvas Logo" style="display:none;" />
-
-        <!-- Sitemap -->
-        <link rel="sitemap" type="application/xml" title="Sitemap" href="https://algorithmcanvas.com/sitemap.xml" />
-
-        <!-- Robots Meta Tag -->
-        <meta name="robots" content="index, follow" />
-        
-        <script type="text/javascript">
-            (function() {
-                var redirected = window.location.search.match(/^\?p=([^&]*)&q=(.*)$/);
-                if (redirected) {
-                    var target = redirected[1];
-                    var query = redirected[2].replace(/~and~/g, '&');
-                    window.history.replaceState(
-                        null, 
-                        null,
-                        window.location.pathname.slice(0, -5) + target + (query ? '?' + query : '') + window.location.hash
-                    );
-                }
-            })();
-        </script>
-    </head>
-    <body>
-        <div id="root"></div>
-    </body>
+</head>
+<body>
+    <div id="root"></div>
+</body>
 </html>
