@@ -39,7 +39,7 @@ export const useDragCopy = (
     if (!isDragging.current) return;
 
     const newCx = e.clientX;
-    const newCy = e.clientY - headerHeight;
+    const newCy = e.clientY - headerHeight + window.scrollY;
 
     if (draggingCircleRef.current) {
       draggingCircleRef.current.cx = newCx;
