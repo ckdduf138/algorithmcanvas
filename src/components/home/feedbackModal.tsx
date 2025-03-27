@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Overlay = styled.div`
@@ -55,25 +55,19 @@ const ButtonGroup = styled.div`
   gap: 10px;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ $pending: boolean }>`
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
   font-size: 16px;
-  cursor: pointer;
-
-  &:first-child {
-    background: #ccc;
-    color: #333;
-  }
-
-  &:last-child {
-    background: #007bff;
-    color: white;
-  }
+  transition: background-color 0.3s ease;
+  
+  cursor: ${props => props.$pending ? "not-allowed" : "pointer"};
+  background-color: ${props => props.$pending ? "#a0a0a0" : "#007bff"};
+  color: ${props => props.$pending ? "#000000" : "#ffffff"};
 
   &:hover {
-    opacity: 0.9;
+    background-color: ${props => props.$pending ? "#a0a0a0" : "#0056b3"};
   }
 `;
 
@@ -83,9 +77,12 @@ interface ModalProps {
 }
 
 const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+  const [pending, setPending] = useState(false);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setPending(true);
     e.preventDefault();
     const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
     const content = (e.currentTarget.elements.namedItem("content") as HTMLTextAreaElement).value;
@@ -106,6 +103,7 @@ const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       console.error("Error:", error);
       alert("피드백 제출에 실패했습니다.");
     } finally {
+      setPending(false);
       onClose();
     }
   }  
@@ -120,10 +118,10 @@ const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <label htmlFor="content">내용</label>
           <TextArea id="content" name="content" placeholder="내용을 입력하세요" rows={5} required />
           <ButtonGroup>
-            <Button type="button" onClick={onClose}>
+            <Button type="button" $pending={pending} disabled={pending} onClick={onClose}>
               취소
             </Button>
-            <Button type="submit">제출</Button>
+            <Button type="submit" $pending={pending} disabled={pending}>제출</Button>
           </ButtonGroup>
         </Form>
       </ModalContainer>
