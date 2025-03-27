@@ -85,28 +85,32 @@ interface ModalProps {
 const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQH8rAMOmnTV5dVe_2PuwnObT6R8S-FcDBNHRr4ZUWfEmeFsWvhOIIgjrNXr1Hf4hsQg/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaEg4UlbEld_PwsNg6rOWbRoUT5vQSMep0uA4p6W_go4NaDDSpn1DsFsPqjYn05Rw3eg/exec";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
-      const content = (e.currentTarget.elements.namedItem("content") as HTMLTextAreaElement).value;
+    e.preventDefault();
+    const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
+    const content = (e.currentTarget.elements.namedItem("content") as HTMLTextAreaElement).value;
+    const DATA = { title, content };
+    try {
+      await fetch(SCRIPT_URL, {
+        redirect: "follow",
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(DATA),
+      });
   
-      try {
-          await fetch(SCRIPT_URL, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ title, content }),
-          });
-
-          alert("피드백이 제출되었습니다.");
-      } catch (error) {
-          alert("피드백 제출에 실패했습니다.");
-      }
-      finally {
-        onClose();
-      }
+      alert("피드백이 제출되었습니다.");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("피드백 제출에 실패했습니다.");
+    } finally {
+      onClose();
+    }
   };
+  
 
   return (
     <Overlay onClick={onClose}>
