@@ -1,6 +1,6 @@
 import { useWindowSize } from '../getWindowSize';
 import { distance, generateUUID } from '../../utils/common';
-import { Link, Node, NodeGraphData, NodeGraphHeightPadding, NodeRadius } from '../../utils/graphData';
+import { Link, Node, NodeGraphData, NodeGraphHeightPadding, NodeGraphWidthPadding, NodeRadius } from '../../utils/graphData';
 
 export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>) => {
   const { width, height } = useWindowSize();
@@ -126,8 +126,8 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
       let isOverlapping: boolean;
 
       do {
-        x = (Math.random() * (width - NodeGraphHeightPadding * 2)) + NodeGraphHeightPadding;
-        y = (Math.random() * (height * 0.8 - NodeGraphHeightPadding * 2)) + NodeGraphHeightPadding;
+        x = (Math.random() * (width - NodeGraphWidthPadding * 2)) + NodeGraphWidthPadding;
+        y = (Math.random() * (height * 0.7 - NodeGraphHeightPadding * 2)) + NodeGraphHeightPadding;
         isOverlapping = false;
 
         for (const node of nodes) {
@@ -138,6 +138,8 @@ export const useGraphCanvasUI = (setNodeGraphData: React.Dispatch<React.SetState
         }
       } while (isOverlapping);
 
+      console.log(x, y);
+      
       nodes.push({
         id: generateUUID(),
         x,
