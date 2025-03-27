@@ -75,10 +75,6 @@ const HomePage = () => {
         setQuery(tag);
         home_onSearch(tag);
     };
-    
-    const handleSubmitFeedback = () => {
-        alert("피드백이 제출되었습니다!");
-      };
 
     return (
         <Layout subTitle=''>
@@ -111,7 +107,6 @@ const HomePage = () => {
             <FeedbackModal
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
-                onSubmit={handleSubmitFeedback}
             />
         </Layout>
     );

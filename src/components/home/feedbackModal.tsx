@@ -1,6 +1,5 @@
-import React, { FC } from "react";
+import React from "react";
 import styled from "styled-components";
-import { formatTimestamp } from "../../utils/common";
 
 const Overlay = styled.div`
   position: fixed;
@@ -81,25 +80,32 @@ const Button = styled.button`
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: () => void;
 }
 
-const FeedbackModal: FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
-    const content = (e.currentTarget.elements.namedItem("content") as HTMLTextAreaElement).value;
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQH8rAMOmnTV5dVe_2PuwnObT6R8S-FcDBNHRr4ZUWfEmeFsWvhOIIgjrNXr1Hf4hsQg/exec";
 
-    const timestamp = new Date();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
+      const content = (e.currentTarget.elements.namedItem("content") as HTMLTextAreaElement).value;
+  
+      try {
+          await fetch(SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ title, content }),
+          });
 
-    const time = formatTimestamp(timestamp)
-
-    console.log("Feedback Submitted:", { title, content, time });
-
-    onSubmit();
-    onClose();
+          alert("피드백이 제출되었습니다.");
+      } catch (error) {
+          alert("피드백 제출에 실패했습니다.");
+      }
+      finally {
+        onClose();
+      }
   };
 
   return (
