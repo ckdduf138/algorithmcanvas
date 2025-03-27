@@ -92,15 +92,13 @@ const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     const title = (e.currentTarget.elements.namedItem("title") as HTMLInputElement).value;
     const content = (e.currentTarget.elements.namedItem("content") as HTMLTextAreaElement).value;
     const DATA = { title, content };
+  
     try {
-      await fetch(SCRIPT_URL, {
-        redirect: "follow",
+      await fetch("https://formspree.io/f/xzzeapkv", {
         method: "POST",
         headers: {
-          "Content-Type": "text/plain;charset=utf-8",
-          "Access-Control-Allow-Origin": "*",
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          "Access-Control-Allow-Headers": "Content-Type",
+          "Accept": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(DATA),
       });
@@ -112,8 +110,7 @@ const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     } finally {
       onClose();
     }
-  };
-  
+  }  
 
   return (
     <Overlay onClick={onClose}>
