@@ -85,7 +85,7 @@ interface ModalProps {
 const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaEg4UlbEld_PwsNg6rOWbRoUT5vQSMep0uA4p6W_go4NaDDSpn1DsFsPqjYn05Rw3eg/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJ1HfTaY5UvaGFAHAmVwX7WFvnQveVhOmfg2tUffU-lKtb6NyNTe0BkGrbsws_HbNh8w/exec";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,6 +98,9 @@ const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         method: "POST",
         headers: {
           "Content-Type": "text/plain;charset=utf-8",
+          "Access-Control-Allow-Origin": "*",
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          "Access-Control-Allow-Headers": "Content-Type",
         },
         body: JSON.stringify(DATA),
       });
