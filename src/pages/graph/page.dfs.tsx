@@ -7,7 +7,7 @@ import Layout from '../../components/layout/layout';
 import GraphCanvas from '../../components/graphCanvas/graphCanvas';
 
 import { EdgeFocusStatus, NodeFocusStatus } from '../../utils/graphData';
-import SlideUI from '../../components/graphCanvas/slideUI';
+import BottomUI from '../../components/graphCanvas/slideUI';
 import { useAlert } from '../../context/alertContext';
 
 const DFSPage: React.FC = () => {
@@ -205,7 +205,7 @@ const DFSPage: React.FC = () => {
       />
 
       {/* UI */}
-      <SlideUI 
+      <BottomUI 
         dataSize={nodeGraphDatas.nodes.length}
         isRunning={isRunningState}
         delayRef={delayRef} 
