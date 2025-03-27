@@ -45,7 +45,7 @@ const HomePage = () => {
     const [filteredBoxes, setFilteredBoxes] = useState(boxes);
     const [query, setQuery] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
-    
+
     const { theme } = useTheme();
 
     const home_onSearch = (query: string) => {
