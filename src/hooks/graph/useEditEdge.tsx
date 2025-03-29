@@ -93,7 +93,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     if (!isDragging.current) return;
 
     const newCx = e.clientX;
-    const newCy = e.clientY - headerHeight;
+    const newCy = e.clientY - headerHeight + window.scrollY;
 
     if (draggingEdgeRef.current) {
       setDraggingEdge({
@@ -105,7 +105,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
   };
 
   const edgeMouseUp = (e: PointerEvent) => {
-    const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight, radius: 50, text:'', focus: 'inactive' };
+    const newNode: Node = { id: '-1', x: e.clientX, y: e.clientY - headerHeight + window.scrollY, radius: 50, text:'', focus: 'inactive' };
 
     const hasOverlap = findOverlappingNode(newNode, nodeGraphData.nodes);
 
