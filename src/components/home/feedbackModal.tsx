@@ -71,6 +71,10 @@ const Button = styled.button<{ $pending: boolean }>`
   }
 `;
 
+const InfoText = styled.div`
+  font-size: 16px;
+`;
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -116,6 +120,7 @@ const FeedbackModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <Input type="text" id="title" name="title" placeholder="제목을 입력하세요" required />
           <label htmlFor="content">내용</label>
           <TextArea id="content" name="content" placeholder="내용을 입력하세요" rows={5} required />
+          <InfoText>*제목과 내용만 저장되며, 그 외 다른 정보는 저장되지 않습니다.</InfoText>
           <ButtonGroup>
             <Button type="button" $pending={pending} disabled={pending} onClick={onClose}>
               취소
