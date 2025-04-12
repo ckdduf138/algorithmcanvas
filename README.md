@@ -52,7 +52,7 @@ https://github.com/user-attachments/assets/666ce298-ee64-4921-a132-4397e9c14b16
 ## Skills
 - **프론트엔드**: HTML, CSS, TypeScript
 - **프레임워크**: ReactJS, visx, styled-components
-- **배포**: GitHub Pages, GitHub Actions를 통한 자동 배포
+- **배포**: Vercel을 통한 자동 배포
 
 ![react](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![styledcomponent](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
