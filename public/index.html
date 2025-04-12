@@ -62,22 +62,6 @@
         }
     </script>
 
-    <!-- URL 리디렉션 처리 스크립트 -->
-    <script type="text/javascript">
-        (function() {
-            var redirected = window.location.search.match(/^\?p=([^&]*)&q=(.*)$/);
-            if (redirected) {
-                var target = redirected[1];
-                var query = redirected[2].replace(/~and~/g, '&');
-                window.history.replaceState(
-                    null, 
-                    null,
-                    window.location.pathname.slice(0, -5) + target + (query ? '?' + query : '') + window.location.hash
-                );
-            }
-        })();
-    </script>
-
 </head>
 <body>
     <div id="root"></div>
