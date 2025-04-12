@@ -1,6 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<url>
-<loc>https://algorithmcanvas.com/</loc>
-<lastmod>2024-10-06T11:33:28+00:00</lastmod>
-</url>
+    <!-- 홈 -->
+    <url>
+        <loc>https://algorithmcanvas.com/</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+
+    <!-- 자료구조 페이지들 -->
+    <url>
+        <loc>https://algorithmcanvas.com/queue</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/stack</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/heap-tree</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/linked-list</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+
+    <!-- 정렬 알고리즘 페이지들 -->
+    <url>
+        <loc>https://algorithmcanvas.com/selection-sort</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/insertion-sort</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/bubble-sort</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/merge-sort</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/heap-sort</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/quick-sort</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+
+    <!-- 그래프 알고리즘 페이지들 -->
+    <url>
+        <loc>https://algorithmcanvas.com/bfs</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/dfs</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/dijkstra</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/bellman-ford</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://algorithmcanvas.com/minimum-spanning-tree</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+
+    <!-- 기하학 알고리즘 페이지들 -->
+    <url>
+        <loc>https://algorithmcanvas.com/convex-hull</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
+
+    <!-- 404 페이지 -->
+    <url>
+        <loc>https://algorithmcanvas.com/404</loc>
+        <lastmod>2024-10-06T11:33:28+00:00</lastmod>
+    </url>
 </urlset>
