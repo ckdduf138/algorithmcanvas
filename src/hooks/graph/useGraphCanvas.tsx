@@ -67,11 +67,13 @@ export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef 
 
       if(isRunning === 'play') return;
 
-      ResetData();
+      if(isRunning === 'ready') {
+        ResetData();
 
-      node.focus = 'selected';
-      node.text = 'node';
-
+        node.focus = 'selected';
+        node.text = 'node';
+      }
+  
       setNodeGraphData(prevData => {
         if (!prevData) return prevData;
       
@@ -98,7 +100,7 @@ export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef 
     };
 
     const handleNodeDelete = (nodeId: string) => {
-      if(isRunning === 'play') return;
+      if(isRunning === 'play' || isRunning === 'pause') return;
 
       ResetData();
 
@@ -134,7 +136,7 @@ export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef 
     if (!sourceNode || !targetNode) return null;
 
     const handleMouseDown = (e: React.PointerEvent) => {
-      if(isRunning === 'play') return;
+      if(isRunning === 'play' || isRunning === 'pause') return;
 
       ResetData();
 

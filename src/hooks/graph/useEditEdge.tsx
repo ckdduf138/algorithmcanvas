@@ -56,7 +56,7 @@ export const useEditEdge = (nodeGraphData: NodeGraphData, setNodeGraphData: Reac
     isDragging.current = true;
 
     const newCx = e.clientX;
-    const newCy = e.clientY - headerHeight;
+    const newCy = e.clientY - headerHeight + window.scrollY;
     
     if (draggingEdgeRef.current) {
       setDraggingEdge({
