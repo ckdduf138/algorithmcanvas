@@ -20,7 +20,7 @@ const MinimumSpanningTreePage: React.FC = () => {
   const isStopped = useRef(false);
 
   const { 
-    nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
+    nodeGraphData, setNodeGraphData, setSelectedNode, setSeletedEdge, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, ResetData } 
     = useGraphCanvas(isRunning.current, delayRef);
 
@@ -87,7 +87,8 @@ const MinimumSpanningTreePage: React.FC = () => {
   const handleKruskalStart = async () => {
     isRunning.current = 'play';
     setIsRunnigState('play');
-
+    setSeletedEdge(false);
+    
     const { nodes, links } = nodeGraphData;
     const parent = new Map<string, string>();
     const rank = new Map<string, number>();
@@ -203,18 +204,18 @@ const MinimumSpanningTreePage: React.FC = () => {
     isRunning.current = 'ready';
     setIsRunnigState('ready');
 
-    setSeletedNode(null);
+    setSelectedNode(null);
 
     if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
 
   const handleRandomizeGraphData = (numNodes: number) => {
-    setSeletedNode(null);
+    setSelectedNode(null);
     randomizeGraphDataInWeight(numNodes);
   };
 
   const handleResetGraphData = () => {
-    setSeletedNode(null);
+    setSelectedNode(null);
     resetGraphData();
   };
 

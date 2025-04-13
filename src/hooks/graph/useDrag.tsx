@@ -5,7 +5,7 @@ import { useSVGEvents } from './useSvgEvents';
 import { generateUUID } from '../../utils/common';
 
 export const useDragCopy = (
-  setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>, setSeletedNode: React.Dispatch<React.SetStateAction<Node | null>>
+  setNodeGraphData: React.Dispatch<React.SetStateAction<NodeGraphData>>, setSelectedNode: React.Dispatch<React.SetStateAction<Node | null>>
 ) => {
   const [draggingCircle, setDraggingCircle] = useState<CirclePosition | null>(null);
   const [draggingNode, setDraggingNode] = useState<Node | null>(null);
@@ -92,10 +92,10 @@ export const useDragCopy = (
       nodes: [...prevData.nodes, newNode],
     }));
 
-    setSeletedNode(newNode);
+    setSelectedNode(newNode);
 
     dragMouseUp();
-  }, [setNodeGraphData, dragMouseUp, setSeletedNode]);
+  }, [setNodeGraphData, dragMouseUp, setSelectedNode]);
 
   return {
     draggingCircle,

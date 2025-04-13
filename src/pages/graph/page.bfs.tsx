@@ -19,7 +19,7 @@ const BFSPage: React.FC = () => {
   const isStopped = useRef(false);
   
   const { 
-    nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
+    nodeGraphData, setNodeGraphData, setSelectedNode, setSeletedEdge, nodeGraphDatas, draggingCircle, selectedEdge, selectedNode,  draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick } 
     = useGraphCanvas(isRunning.current, delayRef);
 
@@ -81,7 +81,8 @@ const BFSPage: React.FC = () => {
   const handleStart = async (startNodeId: string) => {
     isRunning.current = 'play';
     setIsRunnigState('play');
-
+    setSeletedEdge(false);
+    
     const { nodes, links } = nodeGraphData;
   
     const visited = new Map<string, boolean>();
@@ -139,18 +140,18 @@ const BFSPage: React.FC = () => {
     isRunning.current = 'ready';
     setIsRunnigState('ready');
 
-    setSeletedNode(null);
+    setSelectedNode(null);
 
     if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
   
   const handleRandomizeGraphData = (numNodes: number) => {
-    setSeletedNode(null);
+    setSelectedNode(null);
     randomizeGraphData(numNodes);
   };
 
   const handleResetGraphData = () => {
-    setSeletedNode(null);
+    setSelectedNode(null);
     resetGraphData();
   };
 

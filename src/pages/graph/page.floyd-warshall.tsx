@@ -20,7 +20,7 @@ const FloydWarshallPage: React.FC = () => {
   const nodeMap = useRef<Map<string, string>>(new Map());
 
   const { 
-    nodeGraphData, setNodeGraphData, setSeletedNode, nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, 
+    nodeGraphData, setNodeGraphData, setSelectedNode, setSeletedEdge, nodeGraphDatas, draggingCircle, selectedEdge, draggingEdge, CustomNode, CustomLink, 
     handleMouseDown, handleEdgeClick, ResetData } 
     = useGraphCanvas(isRunning.current, delayRef, true, true);
 
@@ -96,7 +96,8 @@ const FloydWarshallPage: React.FC = () => {
   const handleStart = async () => {
     isRunning.current = 'play';
     setIsRunnigState('play');
-
+    setSeletedEdge(false);
+    
     const { nodes, links } = nodeGraphData;
 
     nodes.forEach((node, index) => {
@@ -167,7 +168,7 @@ const FloydWarshallPage: React.FC = () => {
 
         updateNodeFocus(node.id, 'error');
         isRunning.current = 'ready';
-        setSeletedNode(null);
+        setSelectedNode(null);
         return;
       }
     }
@@ -175,18 +176,18 @@ const FloydWarshallPage: React.FC = () => {
     isRunning.current = 'ready';
     setIsRunnigState('ready');
 
-    setSeletedNode(null);
+    setSelectedNode(null);
 
     if (!isStopped.current) sendAlert('success', '완료되었습니다.');
   };
 
   const handleRandomizeGraphData = (numNodes: number) => {
-    setSeletedNode(null);
+    setSelectedNode(null);
     randomizeGraphDataInWeightAndDirection(numNodes);
   };
 
   const handleResetGraphData = () => {
-    setSeletedNode(null);
+    setSelectedNode(null);
     resetGraphData();
   };
 

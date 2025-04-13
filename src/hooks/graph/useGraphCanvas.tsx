@@ -26,7 +26,7 @@ export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef 
   const {theme} = useTheme();
 
   const handleEdgeClick = (isWeighted: boolean) => {
-    if(isRunning === 'play') return;
+    if(isRunning !== 'ready') return;
 
     isWeightedRef.current = isWeighted;
     setSeletedEdge(!selectedEdge);
@@ -100,7 +100,7 @@ export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef 
     };
 
     const handleNodeDelete = (nodeId: string) => {
-      if(isRunning === 'play' || isRunning === 'pause') return;
+      if(isRunning !== 'ready') return;
 
       ResetData();
 
@@ -136,7 +136,7 @@ export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef 
     if (!sourceNode || !targetNode) return null;
 
     const handleMouseDown = (e: React.PointerEvent) => {
-      if(isRunning === 'play' || isRunning === 'pause') return;
+      if(isRunning !== 'ready') return;
 
       ResetData();
 
@@ -259,7 +259,8 @@ export const useGraphCanvas = (isRunning : 'play' | 'pause' | 'ready', delayRef 
   return {
     nodeGraphData,
     setNodeGraphData,
-    setSeletedNode: setSelectedNode,
+    setSelectedNode,
+    setSeletedEdge,
     nodeGraphDatas,
     draggingCircle,
     selectedEdge,
