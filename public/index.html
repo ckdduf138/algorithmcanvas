@@ -42,7 +42,7 @@
       name="twitter:description"
       content="알고리즘과 자료구조를 시각화 도구로 쉽게 학습할 수 있는 사이트입니다."
     />
-    <meta name="twitter:image" content="/images/favicon.svg" />
+    <meta name="twitter:image" content="https://algorithmcanvas.com/android-chrome-512x512.png" />
 
     <!-- Open Graph Meta Tags (소셜 미디어 미리보기) -->
     <meta property="og:type" content="website" />
@@ -54,37 +54,33 @@
       property="og:description"
       content="알고리즘과 자료구조를 한눈에 쉽게 이해할 수 있는 시각화 도구 및 학습 사이트입니다. 다양한 알고리즘을 실시간으로 시뮬레이션하며 학습해 보세요."
     />
-    <meta property="og:image" content="/images/favicon.svg" />
+    <meta property="og:image" content="https://algorithmcanvas.com/android-chrome-512x512.png" />
     <meta property="og:url" content="https://algorithmcanvas.com" />
 
     <!-- 정식 URL 지정 -->
     <link rel="canonical" href="https://algorithmcanvas.com" />
 
     <!-- 아이콘 설정 -->
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      sizes="16x16"
-      href="https://algorithmcanvas.com/images/favicon.svg"
-    />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      sizes="32x32"
-      href="https://algorithmcanvas.com/images/favicon.svg"
-    />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      sizes="48x48"
-      href="https://algorithmcanvas.com/images/favicon.svg"
-    />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      sizes="64x64"
-      href="https://algorithmcanvas.com/images/favicon.svg"
-    />
+    <!-- ICO favicon (구형 브라우저, 구글 검색 호환성) -->
+    <link rel="shortcut icon" href="https://algorithmcanvas.com/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="https://algorithmcanvas.com/favicon.ico" type="image/x-icon" sizes="16x16 32x32" />
+    
+    <!-- PNG favicon (다양한 크기) -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://algorithmcanvas.com/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://algorithmcanvas.com/favicon-32x32.png" />
+    
+    <!-- SVG favicon (최신 브라우저, 벡터 그래픽) -->
+    <link rel="icon" type="image/svg+xml" href="https://algorithmcanvas.com/favicon.svg" />
+    
+    <!-- Apple Touch Icon (iOS Safari, 구글 모바일 검색) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://algorithmcanvas.com/apple-touch-icon.png" />
+    
+    <!-- Android Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="https://algorithmcanvas.com/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="https://algorithmcanvas.com/android-chrome-512x512.png" />
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="https://algorithmcanvas.com/site.webmanifest" />
 
     <!-- Sitemap 연결 -->
     <link
@@ -94,9 +90,14 @@
       href="https://algorithmcanvas.com/sitemap.xml"
     />
 
-    <!-- 로고 -->
+    <!-- 로고 및 브랜드 정보 (구글 검색 최적화) -->
+    <meta name="msapplication-TileImage" content="https://algorithmcanvas.com/android-chrome-192x192.png" />
+    <meta name="msapplication-TileColor" content="#2563eb" />
+    <meta name="theme-color" content="#2563eb" />
+    
+    <!-- 브랜드 로고 (구조화된 데이터와 연동) -->
     <img
-      src="https://algorithmcanvas.com/images/favicon.svg"
+      src="https://algorithmcanvas.com/android-chrome-512x512.png"
       alt="Algorithm Canvas Logo"
       style="display: none"
     />
@@ -107,11 +108,39 @@
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Algorithm Canvas",
+        "alternateName": "알고리즘 캔버스",
         "url": "https://algorithmcanvas.com",
         "description": "알고리즘과 자료구조를 시각화 도구로 쉽게 학습할 수 있는 사이트.",
+        "inLanguage": "ko-KR",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://algorithmcanvas.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
         "publisher": {
           "@type": "Organization",
-          "name": "Algorithm Canvas"
+          "name": "Algorithm Canvas",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://algorithmcanvas.com/android-chrome-512x512.png",
+            "width": 512,
+            "height": 512
+          },
+          "sameAs": [
+            "https://algorithmcanvas.com"
+          ]
+        },
+        "mainEntity": {
+          "@type": "SoftwareApplication",
+          "name": "Algorithm Canvas",
+          "description": "알고리즘과 자료구조를 한눈에 쉽게 이해할 수 있는 시각화 도구 및 학습 사이트입니다.",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web Browser",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "KRW"
+          }
         }
       }
     </script>

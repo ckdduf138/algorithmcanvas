@@ -1,4 +1,11 @@
 User-agent: *
 Disallow:
 
+# 사이트맵
 Sitemap: https://algorithmcanvas.com/sitemap.xml
+
+# 아이콘 파일들 허용
+Allow: /images/favicon.svg
+Allow: /images/*.svg
+Allow: /images/*.png
+Allow: /manifest.json
