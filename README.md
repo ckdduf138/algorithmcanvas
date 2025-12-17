@@ -10,7 +10,7 @@
 
 https://github.com/user-attachments/assets/666ce298-ee64-4921-a132-4397e9c14b16
 
-<img src="https://algorithm-canvas.vercel.app/images/favicon.svg" style="width: 28px; height: 28px;" align='left' />
+<img src="https://algorithm-canvas.vercel.app/favicon.svg" style="width: 28px; height: 28px;" align='left' />
 <a href="https://algorithm-canvas.vercel.app" target="_blank">웹 사이트 보러 가기</a>
 
 ---
